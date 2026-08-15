@@ -16,11 +16,11 @@ nav a {
     gap: 30px;
     align-items: center;
     padding-bottom: 12px;
-    margin-left: 320px;
+    margin-left: 330px;
 }
 
 .logo {
-    width: 150px;
+    width: 120px;
 }
 
 body {
@@ -42,7 +42,7 @@ body {
     font-size: 25px;
 }
 
-p {
+.quote {
     display: flex;
     color: white;
     align-items: center;
@@ -71,4 +71,73 @@ button {
     font-size: 18px;
 
     font-weight: 600;
+}
+
+#signup-heading {
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-size: 45px;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0 0 15px 0;
+}
+
+.paragraph {
+    text-decoration: none;
+    padding: auto;
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: large;
+}
+
+.login {
+    text-decoration: none;
+    color: orange;
+    margin-left: 8px;
+}
+
+.signup {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    color: white;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid white;
+    border-radius: 12px;
+    background-color: transparent;
+    color: orange;
+    outline: none;
+
+}
+
+.signup-container {
+    width: 400px;
+    margin: 100px auto 0;
+    text-align: center;
 }

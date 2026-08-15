@@ -25,7 +25,7 @@
     </section>
      <p class="quote">“Every movie tells a story, Are you ready to share yours?”</p>
      <section id="button">
-        <button>Get Started!</button>
+        <button onclick="window.location.href='signup.php'">Get Started</button>
      </section>
 </body>
 </html>
