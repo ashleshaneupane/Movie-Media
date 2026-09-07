@@ -1,95 +1,147 @@
-document.getElementById("signupForm").addEventListener("submit", function (event) {
+const signupForm = document.getElementById("signupForm");
 
-    let name = document.getElementById("name");
-    let username = document.getElementById("username");
-    let email = document.getElementById("email");
-    let password = document.getElementById("password");
-    let confirmPassword = document.getElementById("confirmPassword");
+const nameInput = document.getElementById("name");
+const usernameInput = document.getElementById("username");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirmPassword");
 
-    let namePattern = /^[A-Za-z ]{2,50}$/;
-    let usernamePattern = /^[a-z0-9]{8,12}$/;
+const nameError = document.getElementById("nameError");
+const usernameError = document.getElementById("usernameError");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+const confirmPasswordError = document.getElementById("confirmPasswordError");
 
-    // Clear old custom errors
-    name.setCustomValidity("");
-    username.setCustomValidity("");
-    email.setCustomValidity("");
-    password.setCustomValidity("");
-    confirmPassword.setCustomValidity("");
 
-    let firstInvalidField = null;
+signupForm.addEventListener("submit", function (event) {
+
+    event.preventDefault();
+
+    let valid = true;
+
 
     // FULL NAME
-    if (name.value.trim() === "") {
-        name.setCustomValidity("Please enter your full name");
-        firstInvalidField = name;
+    if (nameInput.value.trim() === "") {
+        nameError.textContent = "Please enter your full name.";
+        valid = false;
+    } else {
+        nameError.textContent = "";
     }
-    else if (!namePattern.test(name.value.trim())) {
-        name.setCustomValidity("Name must contain at least 2 letters");
-        firstInvalidField = name;
-    }
+
 
     // USERNAME
-    if (username.value.trim() === "") {
-        username.setCustomValidity("Please enter a username");
+    const username = usernameInput.value.trim();
 
-        if (firstInvalidField === null) {
-            firstInvalidField = username;
-        }
-    }
-    else if (!usernamePattern.test(username.value.trim())) {
-        username.setCustomValidity(
-            "Username must be 8-12 lowercase letters or numbers"
-        );
+    if (username === "") {
 
-        if (firstInvalidField === null) {
-            firstInvalidField = username;
-        }
+        usernameError.textContent = "Please enter a username.";
+        valid = false;
+
+    } else if (username.length < 3) {
+
+        usernameError.textContent = "Username must be at least 3 characters.";
+        valid = false;
+
+    } else if (username.length > 30) {
+
+        usernameError.textContent = "Username cannot exceed 30 characters.";
+        valid = false;
+
+    } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+
+        usernameError.textContent =
+            "Username can only contain letters, numbers and underscores.";
+        valid = false;
+
+    } else {
+
+        usernameError.textContent = "";
     }
+
 
     // EMAIL
-    if (email.value.trim() === "") {
-        email.setCustomValidity("Please enter your email address");
+    const email = emailInput.value.trim();
 
-        if (firstInvalidField === null) {
-            firstInvalidField = email;
-        }
+    if (email === "") {
+
+        emailError.textContent = "Please enter your email address.";
+        valid = false;
+
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+        emailError.textContent = "Please enter a valid email address.";
+        valid = false;
+
+    } else {
+
+        emailError.textContent = "";
     }
+
 
     // PASSWORD
-    if (password.value === "") {
-        password.setCustomValidity("Please enter a password");
+    const password = passwordInput.value;
 
-        if (firstInvalidField === null) {
-            firstInvalidField = password;
-        }
-    }
-    else if (password.value.length < 8) {
-        password.setCustomValidity("Password must be at least 8 characters");
+    if (password === "") {
 
-        if (firstInvalidField === null) {
-            firstInvalidField = password;
-        }
+        passwordError.textContent = "Please enter a password.";
+        valid = false;
+
+    } else if (password.length < 8) {
+
+        passwordError.textContent =
+            "Password must be at least 8 characters.";
+        valid = false;
+
+    } else if (!/[A-Za-z]/.test(password)) {
+
+        passwordError.textContent =
+            "Password must contain at least one letter.";
+        valid = false;
+
+    } else if (!/[0-9]/.test(password)) {
+
+        passwordError.textContent =
+            "Password must contain at least one number.";
+        valid = false;
+
+    } else if (!/[!@#$%^&*(),.?":{}|<>_\-+=\/\\[\];'`~]/.test(password)) {
+
+        passwordError.textContent =
+            "Password must contain at least one special character.";
+        valid = false;
+
+    } else {
+
+        passwordError.textContent = "";
     }
+
 
     // CONFIRM PASSWORD
-    if (confirmPassword.value === "") {
-        confirmPassword.setCustomValidity("Please confirm your password");
+    const confirmPassword = confirmPasswordInput.value;
 
-        if (firstInvalidField === null) {
-            firstInvalidField = confirmPassword;
-        }
-    }
-    else if (confirmPassword.value !== password.value) {
-        confirmPassword.setCustomValidity("Passwords do not match");
+    if (confirmPassword === "") {
 
-        if (firstInvalidField === null) {
-            firstInvalidField = confirmPassword;
-        }
+        confirmPasswordError.textContent =
+            "Please confirm your password.";
+        valid = false;
+
+    } else if (password !== confirmPassword) {
+
+        confirmPasswordError.textContent =
+            "Passwords do not match.";
+        valid = false;
+
+    } else {
+
+        confirmPasswordError.textContent = "";
     }
 
-    // STOP FORM IF THERE IS AN ERROR
-    if (firstInvalidField !== null) {
-        event.preventDefault();
-        firstInvalidField.reportValidity();
+
+    // EVERYTHING VALID
+    if (valid) {
+
+        window.location.href = "login.php";
+
     }
+
 });

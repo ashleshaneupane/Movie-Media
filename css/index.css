@@ -25,9 +25,12 @@ nav a {
 
 body {
     background-image: url("../images/bg.jpg");
+
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+
     margin: 0;
     min-height: 100vh;
 }
@@ -91,7 +94,7 @@ button {
     font-size: large;
 }
 
-.login {
+.loginn {
     text-decoration: none;
     color: orange;
     margin-left: 8px;
@@ -140,4 +143,1723 @@ form {
     width: 400px;
     margin: 100px auto 0;
     text-align: center;
+}
+
+#login-heading {
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-size: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0 0 15px 0;
+}
+
+.login {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+}
+
+.form-groupLogin {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin-bottom: 12px;
+}
+
+.form-groupLogin label {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.form-groupLogin input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid white;
+    border-radius: 12px;
+    background-color: transparent;
+    color: orange;
+    outline: none;
+
+}
+
+.login-container {
+    width: 400px;
+    margin: 100px auto 0;
+    text-align: center;
+}
+
+.paragraph {
+    text-decoration: none;
+    padding: auto;
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: large;
+}
+
+.signup {
+    text-decoration: none;
+    color: orange;
+    margin-left: 8px;
+}
+
+.forgotpw {
+    display: block;
+    text-align: right;
+    color: white;
+    font-size: large;
+    text-decoration: none;
+    margin-top: 10px;
+    width: 570px;
+}
+
+#signupForm,
+#loginForm {
+    background: rgba(0, 0, 0, 1);
+    padding: 30px 40px;
+    border-radius: 15px;
+    width: 620px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.error {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-top: 5px;
+    min-height: 18px;
+}
+
+
+
+
+
+
+
+
+
+/* Forgot page */
+.forgot-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.forgot-card {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#forgot-heading {
+    color: white;
+    font-size: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0 0 10px;
+    text-align: center;
+}
+
+.subtitle {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+#forgotForm {
+    background: black;
+    padding: 40px;
+    border-radius: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#forgotForm .form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+#forgotForm label {
+    color: white;
+    margin-bottom: 12px;
+    font-size: 20px;
+}
+
+#forgotForm input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 1px solid white;
+    border-radius: 25px;
+    background-color: transparent;
+    color: orange;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.back-link {
+    text-decoration: none;
+    color: orange;
+    margin-top: 15px;
+    display: inline-block;
+    font-size: large;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+/* RESET PASSWORD PAGE*/
+
+.reset-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.reset-card {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#reset-heading {
+    color: white;
+    font-size: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0 0 10px;
+    text-align: center;
+}
+
+#resetForm {
+    background: black;
+    padding: 40px;
+    border-radius: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   HOME PAGE
+========================= */
+
+.home-layout {
+    width: 94%;
+    max-width: 1450px;
+    margin: 30px auto;
+
+    display: grid;
+    grid-template-columns: 320px minmax(450px, 650px) 320px;
+
+    justify-content: center;
+    gap: 40px;
+}
+
+
+/* =========================
+   LEFT PROFILE
+========================= */
+
+.left-sidebar {
+    width: 100%;
+}
+
+.profile-card {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 25px 20px;
+
+    color: white;
+
+    text-align: center;
+}
+
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 50%;
+
+    background: #2a2a2a;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 40px;
+
+    border: 1px solid #444;
+}
+
+
+.profile-card h2 {
+    margin: 5px 0;
+    font-size: 25px;
+    color: white;
+}
+
+
+.username {
+    margin: 0 0 15px;
+    color: #aaa;
+    font-size: 15px;
+}
+
+
+.profile-bio {
+    font-size: 14px;
+    line-height: 1.5;
+
+    margin: 0 auto 20px;
+
+    max-width: 260px;
+
+    color: #ccc;
+}
+
+
+/* =========================
+   PROFILE STATS
+========================= */
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+
+    padding: 15px 0;
+
+    margin-bottom: 15px;
+}
+
+
+.profile-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.profile-stat strong {
+    font-size: 20px;
+    color: white;
+}
+
+
+.profile-stat span {
+    font-size: 12px;
+    color: #999;
+}
+
+
+/* =========================
+   MOVIE STATS
+========================= */
+
+.movie-stats {
+    margin-bottom: 20px;
+}
+
+
+.movie-stat-row {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 8px 5px;
+
+    border-bottom: 1px solid #333;
+
+    font-size: 14px;
+
+    color: #ccc;
+}
+
+
+.movie-stat-row strong {
+    font-size: 15px;
+    color: white;
+}
+
+
+/* =========================
+   PROFILE SECTIONS
+========================= */
+
+.profile-section {
+    text-align: left;
+
+    margin-top: 20px;
+}
+
+
+.profile-section h3 {
+    font-size: 17px;
+
+    margin-bottom: 10px;
+
+    border-bottom: 1px solid #444;
+
+    padding-bottom: 7px;
+
+    color: white;
+}
+
+
+/* =========================
+   GENRES
+========================= */
+
+.genre-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+
+.genre-list span {
+    background: #1c1c1c;
+
+    border: 1px solid #444;
+
+    color: #ddd;
+
+    padding: 6px 10px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   TOP 5
+========================= */
+
+.top-movies {
+    margin: 0;
+    padding-left: 25px;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+    color: #ccc;
+}
+
+
+.top-movies li::marker {
+    color: orange;
+}
+
+
+/* =========================
+   VIEW PROFILE
+========================= */
+
+.view-profile-btn {
+    display: block;
+
+    margin-top: 25px;
+
+    padding: 11px;
+
+    border: 1px solid #555;
+
+    border-radius: 20px;
+
+    text-decoration: none;
+
+    color: white;
+
+    font-weight: bold;
+
+    background: #151515;
+}
+
+
+.view-profile-btn:hover {
+    background: orange;
+    border-color: orange;
+    color: black;
+}
+
+
+/* =========================
+   CENTER FEED
+========================= */
+
+.home-feed {
+    width: 100%;
+}
+
+
+/* =========================
+   CREATE POST
+========================= */
+
+.create-post-link {
+    margin-bottom: 20px;
+}
+
+
+.create-post-link a {
+    color: white;
+
+    text-decoration: underline;
+
+    font-size: 22px;
+
+    font-weight: bold;
+}
+
+
+.plus-icon {
+    display: inline-flex;
+
+    width: 25px;
+    height: 25px;
+
+    justify-content: center;
+    align-items: center;
+
+    border: 2px solid white;
+
+    margin-right: 5px;
+
+    font-size: 24px;
+    line-height: 20px;
+
+    color: white;
+}
+
+
+/* =========================
+   POST CARD
+========================= */
+
+.post-card {
+    margin-bottom: 30px;
+
+    padding: 20px;
+
+    background: #000;
+
+    border: 1px solid #333;
+
+    border-radius: 16px;
+
+    color: white;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   POST HEADER
+========================= */
+
+.post-header {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+
+.post-profile-image {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    background: #2a2a2a;
+
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 22px;
+
+    border: 1px solid #444;
+}
+
+
+.post-user-info h3 {
+    margin: 0 0 3px;
+
+    font-size: 18px;
+
+    color: white;
+}
+
+
+.post-user-info p {
+    margin: 0;
+
+    color: #999;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   POST CONTENT
+========================= */
+
+.post-content {
+    padding-left: 10px;
+}
+
+
+.post-content>p {
+    font-size: 17px;
+
+    line-height: 1.5;
+
+    margin-bottom: 15px;
+
+    color: #eee;
+}
+
+
+/* =========================
+   MOVIE ATTACHMENT
+========================= */
+
+.movie-attachment {
+    display: flex;
+
+    gap: 15px;
+
+    background: #181818;
+
+    border: 1px solid #333;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    color: white;
+}
+
+
+.movie-poster-placeholder {
+    width: 90px;
+    height: 125px;
+
+    background: #292929;
+
+    color: #999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+
+.movie-attachment-info {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+
+.movie-attachment-info h3 {
+    margin: 0 0 10px;
+
+    font-size: 20px;
+
+    color: white;
+}
+
+
+.movie-attachment-info p {
+    margin: 4px 0;
+
+    font-size: 14px;
+
+    color: #bbb;
+}
+
+
+.movie-attachment-info p:first-of-type {
+    color: orange;
+}
+
+
+/* =========================
+   PHOTO ATTACHMENT
+========================= */
+
+.photo-attachment {
+    width: 100%;
+
+    margin-top: 15px;
+}
+
+
+.photo-placeholder {
+    height: 300px;
+
+    background: #181818;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #777;
+}
+
+
+/* =========================
+   WATCHED INFO
+========================= */
+
+.watched-info {
+    margin-top: 12px;
+
+    font-size: 14px;
+
+    color: #aaa;
+}
+
+
+.watched-info span {
+    margin: 0 7px;
+}
+
+
+/* =========================
+   POST ACTIONS
+========================= */
+
+.post-actions {
+    display: flex;
+
+    gap: 25px;
+
+    margin-top: 18px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #333;
+}
+
+
+.post-actions button {
+    background: transparent;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 20px;
+
+    padding: 5px;
+
+    color: #aaa;
+}
+
+
+.post-actions button:hover {
+    color: orange;
+}
+
+
+.post-actions .liked {
+    color: orange;
+}
+
+
+/* =========================
+   RIGHT SIDEBAR
+========================= */
+
+.right-sidebar {
+    width: 100%;
+}
+
+
+/* =========================
+   SIDEBAR SEARCH
+========================= */
+
+.sidebar-search {
+    display: flex;
+
+    border: 2px solid orange;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    margin-bottom: 25px;
+}
+
+
+.sidebar-search input {
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    padding: 10px 15px;
+
+    font-size: 15px;
+}
+
+
+.sidebar-search input::placeholder {
+    color: #aaa;
+}
+
+
+.sidebar-search button {
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 25px;
+
+    padding: 0 15px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   COMMENTS
+========================= */
+
+.comments-card {
+    background: #000;
+
+    border: 1px solid #333;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    color: white;
+}
+
+
+.comments-card h2 {
+    text-align: center;
+
+    font-size: 22px;
+
+    margin: 0;
+
+    padding: 17px;
+
+    border-bottom: 1px solid #444;
+
+    color: white;
+}
+
+
+.comment {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 18px 15px;
+}
+
+
+.comment-profile {
+    width: 45px;
+    height: 45px;
+
+    min-width: 45px;
+
+    border-radius: 50%;
+
+    background: #2a2a2a;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.comment-content {
+    background: #181818;
+
+    border: 1px solid #333;
+
+    border-radius: 15px;
+
+    padding: 10px 14px;
+
+    flex: 1;
+
+    color: white;
+}
+
+
+.comment-content strong {
+    font-size: 13px;
+
+    color: white;
+}
+
+
+.comment-content p {
+    margin: 5px 0 0;
+
+    font-size: 13px;
+
+    color: #ccc;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .home-layout {
+        grid-template-columns: 250px minmax(400px, 1fr);
+    }
+
+    .right-sidebar {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .home-layout {
+        grid-template-columns: 1fr;
+        width: 92%;
+    }
+
+    .left-sidebar {
+        order: 2;
+    }
+
+    .home-feed {
+        order: 1;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   CREATE POST PAGE
+========================= */
+#page-title {
+    color: #ffb52e;
+}
+
+.create-post-container {
+
+    width: 90%;
+    max-width: 750px;
+
+    margin: 50px auto;
+
+}
+
+
+/* =========================
+   PAGE TITLE
+========================= */
+
+.create-post-container h1 {
+
+    font-size: 32px;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* =========================
+   CREATE POST FORM
+========================= */
+
+.create-post-form {
+
+    background: #111;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    color: white;
+
+}
+
+
+/* =========================
+   TEXT AREA
+========================= */
+
+.create-post-form textarea {
+
+    width: 100%;
+
+    min-height: 180px;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    background: #1c1c1c;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    font-size: 17px;
+
+    font-family: inherit;
+
+    outline: none;
+
+}
+
+
+.create-post-form textarea::placeholder {
+
+    color: #999;
+
+}
+
+
+.create-post-form textarea:focus {
+
+    border-color: orange;
+
+}
+
+
+/* =========================
+   POST OPTIONS
+========================= */
+
+.post-options {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.post-option {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    background: #1c1c1c;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    border-radius: 10px;
+
+    padding: 10px 14px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+}
+
+
+.post-option:hover {
+
+    border-color: orange;
+
+    color: orange;
+
+}
+
+
+/* =========================
+   WATCHED DATE
+========================= */
+
+.post-option input {
+
+    background: transparent;
+
+    color: white;
+
+    border: none;
+
+    outline: none;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   MOVIE SELECTION
+========================= */
+
+.movie-selection {
+
+    display: none;
+
+    margin-top: 20px;
+
+}
+
+
+.movie-selection.active {
+
+    display: block;
+
+}
+
+
+.movie-selection input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    border: 1px solid #444;
+
+    background: #1c1c1c;
+
+    color: white;
+
+    outline: none;
+
+}
+
+
+.movie-selection input:focus {
+
+    border-color: orange;
+
+}
+
+
+/* =========================
+   PHOTO SELECTION
+========================= */
+
+.photo-selection {
+
+    display: none;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: #1c1c1c;
+
+    border-radius: 10px;
+
+}
+
+
+.photo-selection.active {
+
+    display: block;
+
+}
+
+
+.photo-selection input {
+
+    color: white;
+
+}
+
+
+/* =========================
+   POST BUTTON
+========================= */
+
+.post-submit {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 25px;
+
+}
+
+
+.post-submit button {
+
+    background: orange;
+
+    color: black;
+
+    border: none;
+
+    border-radius: 20px;
+
+    padding: 10px 28px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.post-submit button:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .create-post-container {
+
+        width: 92%;
+
+        margin: 30px auto;
+
+    }
+
+
+    .create-post-form {
+
+        padding: 20px;
+
+    }
+
+
+    .post-options {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .post-option {
+
+        justify-content: center;
+
+    }
+
+
+    .post-submit {
+
+        justify-content: center;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   NOTIFICATIONS PAGE
+========================= */
+#noti-title {
+    color: #ffb52e;
+}
+
+.notification-container {
+
+    width: 90%;
+    max-width: 850px;
+
+    margin: 45px auto;
+
+}
+
+
+/* =========================
+   NOTIFICATION HEADER
+========================= */
+
+.notification-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.notification-header h1 {
+
+    margin: 0;
+
+    font-size: 32px;
+
+}
+
+
+.notification-header button {
+
+    background: transparent;
+
+    border: none;
+
+    color: orange;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.notification-header button:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================
+   NOTIFICATION LIST
+========================= */
+
+.notification-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+}
+
+
+/* =========================
+   NOTIFICATION
+========================= */
+
+.notification {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    background: #111;
+
+    color: white;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.notification:hover {
+
+    background: #181818;
+
+}
+
+
+.notification.unread {
+
+    border-left: 4px solid orange;
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.notification-profile {
+
+    width: 50px;
+    height: 50px;
+
+    min-width: 50px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 18px;
+
+    color: white;
+
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.notification-content {
+
+    flex: 1;
+
+}
+
+
+.notification-content p {
+
+    margin: 0 0 6px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+}
+
+
+.notification-content strong {
+
+    color: white;
+
+}
+
+
+.notification-content span {
+
+    display: block;
+
+    color: #aaa;
+
+    font-size: 14px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.notification-content small {
+
+    color: #777;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   UNREAD DOT
+========================= */
+
+.unread-dot {
+
+    width: 9px;
+    height: 9px;
+
+    background: orange;
+
+    border-radius: 50%;
+
+    margin-top: 8px;
+
+}
+
+
+/* =========================
+   FRIEND REQUEST BUTTONS
+========================= */
+
+.friend-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin: 12px 0;
+
+}
+
+
+.friend-actions button {
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 7px 16px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.accept-btn {
+
+    background: orange;
+
+    color: black;
+
+}
+
+
+.accept-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+.decline-btn {
+
+    background: #333;
+
+    color: white;
+
+}
+
+
+.decline-btn:hover {
+
+    background: #444;
+
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-notifications {
+
+    display: none;
+
+    text-align: center;
+
+    padding: 80px 20px;
+
+}
+
+
+.empty-icon {
+
+    font-size: 45px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.empty-notifications h2 {
+
+    margin-bottom: 8px;
+
+}
+
+
+.empty-notifications p {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .notification-container {
+
+        width: 92%;
+
+        margin: 30px auto;
+
+    }
+
+
+    .notification-header {
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+
+    .notification-header h1 {
+
+        font-size: 26px;
+
+    }
+
+
+    .notification {
+
+        padding: 15px;
+
+    }
+
+
+    .notification-profile {
+
+        width: 42px;
+        height: 42px;
+
+        min-width: 42px;
+
+        font-size: 15px;
+
+    }
+
+
+    .friend-actions {
+
+        flex-wrap: wrap;
+
+    }
+
 }

@@ -10,16 +10,7 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <nav>
-        <img class="logo" src="images/logo.png" alt="logo">
-        <div class="nav-links">
-        <a href="home.php">Home</a>
-        <a href="search.php">Search</a>
-        <a href="connect.php">Connect</a>
-        <a href="notifications.php">Notifications</a>
-        <a href="account.php">Account</a>
-        </div>
-    </nav>
+<?php include 'includes/header.php'; ?>
     <section id="heading">
         <h1>DISCOVER, CONNECT,<br>RATE AND REVIEW.</h1>
     </section>
