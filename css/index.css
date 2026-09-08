@@ -6367,3 +6367,225 @@ form {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   WRITE REVIEW
+========================= */
+
+.write-review-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 35px auto 60px;
+}
+
+.write-review-card {
+    background: rgba(17, 17, 17, 0.94);
+    border: 1px solid #333;
+    border-radius: 22px;
+    padding: 35px 45px 45px;
+    color: white;
+}
+
+.write-review-card h1 {
+    text-align: center;
+    font-size: 30px;
+    margin: 0 0 30px;
+}
+
+
+/* Movie Information */
+
+.review-movie {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    background: #1c1c1c;
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 30px;
+}
+
+.review-movie-poster {
+    width: 85px;
+    height: 115px;
+
+    background: #333;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+
+.review-movie-info h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.review-movie-info p {
+    margin: 0;
+    color: #aaa;
+    font-size: 14px;
+}
+
+
+/* Review Fields */
+
+.review-field {
+    margin-bottom: 25px;
+}
+
+.review-field label {
+    display: block;
+    margin-bottom: 9px;
+
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+}
+
+
+/* Rating */
+
+.rating-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.rating-container input {
+    display: none;
+}
+
+.rating-container label {
+    font-size: 32px;
+    color: #555;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.rating-container label:hover,
+.rating-container label:hover~label,
+.rating-container input:checked~label {
+    color: orange;
+}
+
+
+/* Review Text */
+
+.review-field textarea {
+    width: 100%;
+    min-height: 180px;
+
+    box-sizing: border-box;
+
+    background: #1c1c1c;
+    color: white;
+
+    border: 1px solid #444;
+    border-radius: 12px;
+
+    padding: 15px;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    resize: vertical;
+    outline: none;
+}
+
+.review-field textarea::placeholder {
+    color: #888;
+}
+
+.review-field textarea:focus {
+    border-color: orange;
+}
+
+
+/* Submit */
+
+.review-submit {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.review-submit button {
+    background: orange;
+    color: black;
+
+    border: none;
+    border-radius: 20px;
+
+    padding: 11px 28px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.review-submit button:hover {
+    background: #ffb52e;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .write-review-container {
+        width: 92%;
+    }
+
+    .write-review-card {
+        padding: 25px 20px 30px;
+    }
+
+    .write-review-card h1 {
+        font-size: 26px;
+    }
+
+    .review-movie {
+        padding: 14px;
+    }
+
+}
+
+.review-button {
+    background: orange;
+    color: black;
+
+    border: none;
+    border-radius: 20px;
+
+    padding: 11px 28px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+}

@@ -98,13 +98,9 @@
                         ✓ Watched
                     </button>
 
-
-                    <a
-                        href="createReview.php?movie=interstellar"
-                        class="review-movie-btn"
-                    >
-                        ★ Review
-                    </a>
+        <a href="writeReview.php?movie=interstellar" class="review-button">
+        Review
+        </a>
 
                 </div>
 
@@ -179,7 +175,7 @@
                     </div>
 
                     <strong>
-                        Ash Neupane
+                        Ash 
                     </strong>
 
                 </div>
