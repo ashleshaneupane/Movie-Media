@@ -67,7 +67,7 @@
                     </p>
 
                     <span>
-                        "Just watched Interstellar..."
+                        "Just watched BirdBox..."
                     </span>
 
                     <small>
@@ -125,14 +125,14 @@
             <div class="notification unread">
 
                 <div class="notification-profile">
-                    S
+                    A
                 </div>
 
 
                 <div class="notification-content">
 
                     <p>
-                        <strong>@sarah</strong>
+                        <strong>@ash</strong>
                         started following you
                     </p>
 
@@ -163,7 +163,7 @@
                 <div class="notification-content">
 
                     <p>
-                        <strong>@jane</strong>
+                        <strong>@jack</strong>
                         sent you a friend request
                     </p>
 
@@ -216,7 +216,7 @@
 
                     <p>
                         Your review of
-                        <strong>Interstellar</strong>
+                        <strong>"I Will Find You"</strong>
                         received 5 likes
                     </p>
 

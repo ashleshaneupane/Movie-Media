@@ -1863,3 +1863,769 @@ form {
     }
 
 }
+
+
+
+
+
+
+
+
+
+/* =========================
+   FIND FRIENDS PAGE
+========================= */
+
+.find-friends-container {
+
+    width: 94%;
+    max-width: 1200px;
+
+    margin: 40px auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(500px, 1fr) 320px;
+
+    gap: 40px;
+
+}
+
+
+/* =========================
+   MAIN SECTION
+========================= */
+
+.friends-main {
+
+    width: 100%;
+
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.friends-heading {
+
+    margin-bottom: 25px;
+
+}
+
+
+.friends-heading h1 {
+
+    margin: 0 0 8px;
+
+    font-size: 32px;
+
+    color: white;
+
+}
+
+
+.friends-heading p {
+
+    margin: 0;
+
+    color: #ffb52e;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.friends-search {
+
+    display: flex;
+
+    width: 100%;
+
+    margin-bottom: 35px;
+
+    border: 2px solid white;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    background: black;
+
+
+}
+
+
+.friends-search input {
+
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    padding: 13px 18px;
+
+    font-size: 15px;
+    background-color: black;
+    color: white;
+
+}
+
+
+.friends-search button {
+
+    border: none;
+
+    background: black;
+
+    color: white;
+
+    padding: 0 22px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.friends-search button:hover {
+
+    background: orange;
+
+    color: black;
+
+}
+
+
+/* =========================
+   SUGGESTED FRIENDS
+========================= */
+
+.suggested-friends h2 {
+
+    font-size: 22px;
+
+    margin-bottom: 18px;
+    color: white;
+
+}
+
+
+/* =========================
+   FRIEND CARD
+========================= */
+
+.friend-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    background: #111;
+
+    color: white;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.friend-profile {
+
+    width: 55px;
+    height: 55px;
+
+    min-width: 55px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 22px;
+
+}
+
+
+.friend-info {
+
+    flex: 1;
+
+}
+
+
+.friend-info h3 {
+
+    margin: 0 0 3px;
+
+    font-size: 17px;
+
+}
+
+
+.friend-info p {
+
+    margin: 0 0 5px;
+
+    color: #aaa;
+
+    font-size: 13px;
+
+}
+
+
+.friend-info span {
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   ADD FRIEND BUTTON
+========================= */
+
+.add-friend-btn {
+
+    border: none;
+
+    background: orange;
+
+    color: black;
+
+    border-radius: 18px;
+
+    padding: 9px 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+}
+
+
+.add-friend-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+.add-friend-btn.request-sent {
+
+    background: #333;
+
+    color: #aaa;
+
+}
+
+
+.add-friend-btn:disabled {
+
+    cursor: default;
+
+}
+
+
+/* =========================
+   RIGHT SIDEBAR
+========================= */
+
+.friend-sidebar {
+
+    width: 100%;
+
+}
+
+
+/* =========================
+   FRIEND REQUEST CARD
+========================= */
+
+.friend-requests-card {
+
+    background: #111;
+
+    color: white;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+}
+
+
+.friend-requests-card h2 {
+
+    margin: 0;
+
+    padding: 18px;
+
+    text-align: center;
+
+    font-size: 21px;
+
+    border-bottom: 1px solid #444;
+
+}
+
+
+/* =========================
+   FRIEND REQUEST
+========================= */
+
+.friend-request {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 18px 15px;
+
+    border-bottom: 1px solid #333;
+
+}
+
+
+.friend-request:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.request-profile {
+
+    width: 45px;
+    height: 45px;
+
+    min-width: 45px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 17px;
+
+}
+
+
+.request-info {
+
+    flex: 1;
+
+}
+
+
+.request-info strong {
+
+    display: block;
+
+    font-size: 14px;
+
+    margin-bottom: 2px;
+
+}
+
+
+.request-info>span {
+
+    display: block;
+
+    color: #888;
+
+    font-size: 12px;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================
+   REQUEST ACTIONS
+========================= */
+
+.request-actions {
+
+    display: flex;
+
+    gap: 6px;
+
+}
+
+
+.request-actions button {
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 6px 9px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.accept-request {
+
+    background: orange;
+
+    color: black;
+
+}
+
+
+.accept-request:hover {
+
+    background: #ffb52e;
+
+}
+
+
+.decline-request {
+
+    background: #333;
+
+    color: white;
+
+}
+
+
+.decline-request:hover {
+
+    background: #444;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .find-friends-container {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .friend-sidebar {
+
+        order: -1;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .find-friends-container {
+
+        width: 92%;
+
+        margin: 30px auto;
+
+    }
+
+
+    .friends-heading h1 {
+
+        font-size: 27px;
+
+    }
+
+
+    .friend-card {
+
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .add-friend-btn {
+
+        margin-left: 70px;
+
+    }
+
+
+    .friends-search button {
+
+        padding: 0 15px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   CONNECT PAGE
+========================= */
+
+.connect-container {
+
+    min-height: calc(100vh - 70px);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+.connect-card {
+
+    width: 90%;
+
+    max-width: 550px;
+
+    background: #111;
+
+    color: white;
+
+    border-radius: 25px;
+
+    padding: 50px 40px;
+
+    text-align: center;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================
+   WELCOME LABEL
+========================= */
+
+.connect-label {
+
+    color: orange;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* =========================
+   PEOPLE ICON
+========================= */
+
+.connect-icon {
+
+    width: 90px;
+
+    height: 90px;
+
+    margin: 0 auto 25px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 40px;
+
+}
+
+#icon-user {
+    width: 55px;
+    height: 55px;
+}
+
+/* =========================
+   HEADING
+========================= */
+
+.connect-card h1 {
+
+    margin: 0 0 15px;
+
+    font-size: 40px;
+
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.connect-description {
+
+    max-width: 430px;
+
+    margin: 0 auto 30px;
+
+    color: #aaa;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================
+   FIND FRIENDS BUTTON
+========================= */
+
+.find-friends-btn {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    width: 220px;
+
+    height: 55px;
+
+    margin: 0 auto;
+
+    background: orange;
+
+    color: black;
+
+    text-decoration: none;
+
+    border-radius: 28px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+}
+
+
+.find-friends-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   SKIP
+========================= */
+
+.skip-link {
+
+    display: block;
+
+    margin-top: 20px;
+
+    color: #888;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+}
+
+
+.skip-link:hover {
+
+    color: white;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .connect-container {
+
+        padding: 20px;
+
+    }
+
+
+    .connect-card {
+
+        padding: 40px 25px;
+
+    }
+
+
+    .connect-card h1 {
+
+        font-size: 32px;
+
+    }
+
+
+    .connect-description {
+
+        font-size: 14px;
+
+    }
+
+}
