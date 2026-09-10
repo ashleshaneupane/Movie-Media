@@ -2629,3 +2629,3741 @@ form {
     }
 
 }
+
+
+
+
+
+
+
+
+
+/* =========================
+   ACCOUNT PAGE
+========================= */
+
+.account-container {
+
+    width: 92%;
+
+    max-width: 1100px;
+
+    margin: 40px auto 60px;
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.account-profile {
+
+    text-align: center;
+
+    position: relative;
+
+    padding: 20px 0 30px;
+
+}
+
+
+.profile-picture {
+
+    width: 120px;
+
+    height: 120px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 45px;
+
+}
+
+
+.account-profile h1 {
+
+    margin: 0 0 15px;
+
+    font-size: 24px;
+    color: white;
+
+}
+
+
+.edit-profile-btn {
+
+    display: inline-block;
+
+    background: orange;
+
+    color: black;
+
+    text-decoration: none;
+
+    padding: 9px 18px;
+
+    border-radius: 18px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+}
+
+
+.edit-profile-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   ACCOUNT NAVIGATION
+========================= */
+
+.account-nav {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    border-bottom: 1px solid #555;
+
+    margin-bottom: 30px;
+
+}
+
+
+.account-nav a {
+
+    text-align: center;
+
+    padding: 15px;
+
+    color: white;
+
+    background: #111;
+
+    text-decoration: none;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    border-right: 1px solid #444;
+
+}
+
+
+.account-nav a:last-child {
+
+    border-right: none;
+
+}
+
+
+.account-nav a:hover {
+
+    color: orange;
+
+}
+
+
+/* =========================
+   TOP FIVE SECTION
+========================= */
+
+.top-five-section {
+
+    margin-top: 25px;
+
+}
+
+
+.top-five-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+    color: white;
+
+}
+
+
+.top-five-heading h2 {
+
+    margin: 0;
+
+    font-size: 20px;
+    color: white;
+
+}
+
+
+/* =========================
+   EDIT TOP FIVE
+========================= */
+
+.edit-top-five-btn {
+
+    background: orange;
+
+    color: black;
+
+    text-decoration: none;
+
+    padding: 7px 13px;
+
+    border-radius: 15px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+}
+
+
+.edit-top-five-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   TOP FIVE MOVIES
+========================= */
+
+.top-five-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 15px;
+
+}
+
+
+.top-five-card {
+
+    background: #111;
+
+    color: white;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    text-align: center;
+
+}
+
+
+.movie-poster {
+
+    height: 240px;
+
+    background: #292929;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 30px;
+
+    color: #777;
+
+}
+
+
+.top-five-card h3 {
+
+    margin: 12px 5px;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+    .top-five-list {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .account-container {
+
+        width: 92%;
+
+        margin-top: 25px;
+
+    }
+
+
+    .profile-picture {
+
+        width: 100px;
+
+        height: 100px;
+
+        font-size: 35px;
+
+    }
+
+
+    .account-profile h1 {
+
+        font-size: 20px;
+        color: white;
+
+    }
+
+
+    .account-nav a {
+
+        padding: 12px 5px;
+
+        font-size: 13px;
+
+    }
+
+
+    .top-five-heading {
+
+        align-items: flex-start;
+
+    }
+
+
+    .top-five-heading h2 {
+
+        font-size: 17px;
+
+    }
+
+
+    .top-five-list {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .movie-poster {
+
+        height: 210px;
+
+    }
+
+}
+
+/* =========================
+   PROFILE NAME
+========================= */
+
+.profile-name {
+
+    margin: 0 0 15px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+    color: white;
+
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   EDIT PROFILE PAGE
+========================= */
+
+.edit-profile-container {
+
+    width: 100%;
+
+    min-height: calc(100vh - 70px);
+
+    position: relative;
+
+    padding: 25px 20px 60px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+
+    position: absolute;
+
+    left: 6%;
+
+    top: 25px;
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #111;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 50%;
+
+    font-size: 25px;
+
+}
+
+
+.back-button:hover {
+
+    color: orange;
+
+}
+
+
+/* =========================
+   PROFILE CONTAINER
+========================= */
+
+.edit-profile-form {
+
+    width: 620px;
+
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    padding: 35px 55px 40px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   PROFILE PHOTO
+========================= */
+
+.edit-photo-section {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+
+}
+
+
+.edit-profile-picture {
+
+    width: 120px;
+
+    height: 120px;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 46px;
+
+}
+
+
+.change-photo-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 8px 16px;
+
+    background: #111;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    border-radius: 18px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+}
+
+
+
+
+
+#profilePhoto {
+
+    display: none;
+
+}
+
+
+/* =========================
+   FORM FIELDS
+========================= */
+
+.profile-field {
+
+    width: 100%;
+
+    margin-bottom: 20px;
+
+}
+
+
+.profile-field label {
+
+    display: block;
+
+    width: 100%;
+
+    margin-bottom: 8px;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+}
+
+
+.profile-field input,
+.profile-field textarea,
+.profile-field select {
+
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-radius: 11px;
+
+    padding: 12px 15px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    outline: none;
+
+}
+
+
+.profile-field input,
+.profile-field select {
+
+    height: 50px;
+
+}
+
+
+.profile-field textarea {
+
+    height: 115px;
+
+    resize: none;
+
+}
+
+
+.profile-field input:focus,
+.profile-field textarea:focus,
+.profile-field select:focus {
+
+    border-color: orange;
+
+}
+
+
+.profile-field input::placeholder,
+.profile-field textarea::placeholder {
+
+    color: #888;
+
+}
+
+
+/* =========================
+   SAVE BUTTON
+========================= */
+
+.save-profile-btn {
+
+    display: block;
+
+    margin: 28px auto 0;
+
+    padding: 9px 20px;
+
+    border: 1px solid #444;
+
+    border-radius: 18px;
+
+    background: orange;
+
+    color: black;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .edit-profile-container {
+
+        padding-left: 15px;
+
+        padding-right: 15px;
+
+    }
+
+
+    .back-button {
+
+        left: 20px;
+
+        top: 20px;
+
+    }
+
+
+    .edit-profile-form {
+
+        width: 100%;
+
+        margin: 0;
+
+    }
+
+    .edit-profile-picture {
+
+        width: 105px;
+
+        height: 105px;
+
+        font-size: 40px;
+
+    }
+
+}
+
+.edit-profile-card {
+
+    width: 620px;
+
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    padding: 35px 55px 40px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+.edit-profile-title {
+    color: white;
+    justify-content: center;
+    display: flex;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   EDIT TOP 5 PAGE
+========================= */
+
+.edit-top5-container {
+
+    width: 90%;
+
+    max-width: 550px;
+
+    margin: 35px auto 60px;
+
+    padding: 40px 50px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.edit-top5-title {
+
+    text-align: center;
+
+    font-size: 30px;
+
+    margin: 0 0 35px;
+    color: white;
+
+}
+
+
+/* =========================
+   TOP 5 FORM
+========================= */
+
+.top5-form {
+
+    width: 100%;
+
+}
+
+
+.top5-field {
+
+    display: flex;
+
+    align-items: center;
+
+    position: relative;
+
+    margin-bottom: 18px;
+
+}
+
+
+.top5-field label {
+
+    width: 75px;
+
+    min-width: 75px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+    color: white;
+
+}
+
+
+.top5-field input {
+
+    flex: 1;
+
+    box-sizing: border-box;
+
+    background: #111;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-radius: 20px;
+
+    padding: 10px 40px 10px 15px;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+
+.top5-field input:focus {
+
+    border-color: orange;
+
+}
+
+
+.top5-field input::placeholder {
+
+    color: #888;
+
+}
+
+
+/* =========================
+   SEARCH ICON
+========================= */
+
+.movie-search-icon {
+
+    position: absolute;
+
+    right: 13px;
+
+    font-size: 13px;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+.save-top5-btn {
+
+    display: block;
+
+    margin: 30px auto 0;
+
+    border: none;
+
+    background: orange;
+
+    color: black;
+
+    padding: 10px 22px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.save-top5-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .edit-top5-container {
+
+        width: 92%;
+
+
+    }
+
+
+    .edit-top5-title {
+
+        font-size: 26px;
+
+    }
+
+
+    .top5-field {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 7px;
+
+    }
+
+
+    .top5-field label {
+
+        width: auto;
+
+    }
+
+
+    .top5-field input {
+
+        width: 100%;
+
+    }
+
+
+    .movie-search-icon {
+
+        top: 36px;
+
+    }
+
+}
+
+.change-photo-btn {
+    background: orange;
+    color: black;
+}
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+
+    position: absolute;
+
+    left: 6%;
+
+    top: 150px;
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #111;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 50%;
+
+    font-size: 25px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   WATCHLIST PAGE
+========================= */
+
+.watchlist-container {
+
+    width: 90%;
+
+    max-width: 750px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 45px 45px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   PAGE TITLE
+========================= */
+
+.account-page-title {
+
+    margin: 0 0 30px;
+
+    color: white;
+
+    font-size: 30px;
+
+}
+
+
+/* =========================
+   WATCHLIST ITEM
+========================= */
+
+.watchlist-item {
+
+    display: flex;
+
+    gap: 20px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid #333;
+
+}
+
+
+.watchlist-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+/* =========================
+   POSTER
+========================= */
+
+.watchlist-poster {
+
+    width: 130px;
+
+    height: 180px;
+
+    flex-shrink: 0;
+
+    background: #333;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+    font-size: 28px;
+
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.watchlist-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+}
+
+
+.watchlist-info h2 {
+
+    margin: 0 0 10px;
+
+    color: white;
+
+    font-size: 20px;
+
+}
+
+
+.watchlist-info p {
+
+    margin: 3px 0;
+
+    color: #aaa;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.watchlist-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+}
+
+
+.watchlist-actions button {
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 7px 12px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.remove-btn {
+
+    background: #292929;
+
+    color: white;
+
+}
+
+
+.remove-btn:hover {
+
+    color: orange;
+
+}
+
+
+.watched-btn {
+
+    background: orange;
+
+    color: black;
+
+}
+
+
+.watched-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .watchlist-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+
+    .watchlist-item {
+
+        gap: 15px;
+
+    }
+
+
+    .watchlist-poster {
+
+        width: 100px;
+
+        height: 145px;
+
+    }
+
+
+    .watchlist-info h2 {
+
+        font-size: 17px;
+
+    }
+
+
+    .watchlist-actions {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   WATCHED PAGE
+========================= */
+
+.watched-container {
+
+    width: 94%;
+
+    max-width: 1100px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 35px 45px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   MOVIE GRID
+========================= */
+
+.watched-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 20px;
+
+}
+
+
+/* =========================
+   MOVIE CARD
+========================= */
+
+.watched-card {
+
+    color: white;
+
+    text-align: center;
+
+}
+
+
+.watched-poster {
+
+    width: 100%;
+
+    height: 250px;
+
+    background: #333;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+    font-size: 28px;
+
+}
+
+
+.watched-card h2 {
+
+    margin: 10px 3px 0;
+
+    font-size: 14px;
+
+    font-weight: normal;
+
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.watched-card:hover .watched-poster {
+
+    border: 1px solid orange;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .watched-grid {
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .watched-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+
+    .watched-poster {
+
+        height: 210px;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .watched-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+
+    .watched-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 15px;
+
+    }
+
+
+    .watched-poster {
+
+        height: 220px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   REVIEWS PAGE
+========================= */
+
+.reviews-container {
+
+    width: 90%;
+
+    max-width: 900px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 40px 45px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   REVIEW GRID
+========================= */
+
+.reviews-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 40px;
+
+}
+
+
+/* =========================
+   REVIEW CARD
+========================= */
+
+.review-card {
+
+    color: white;
+
+    text-align: center;
+
+}
+
+
+/* =========================
+   POSTER
+========================= */
+
+.review-poster {
+
+    width: 150px;
+
+    height: 210px;
+
+    margin: 0 auto 12px;
+
+    background: #333;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+    font-size: 28px;
+
+}
+
+
+.review-card h2 {
+
+    margin: 0 0 7px;
+
+    font-size: 16px;
+
+}
+
+
+/* =========================
+   RATING
+========================= */
+
+.rating {
+
+    color: orange;
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================
+   REVIEW TEXT
+========================= */
+
+.review-text {
+
+    width: 90%;
+
+    min-height: 45px;
+
+    margin: 0 auto 15px;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    background: #292929;
+
+    color: #bbb;
+
+    border-radius: 5px;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.review-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 35px;
+
+}
+
+
+.review-actions button {
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 7px 13px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.review-edit-btn {
+
+    background: #292929;
+
+    color: white;
+
+}
+
+
+.review-edit-btn:hover {
+
+    color: orange;
+
+}
+
+
+.review-delete-btn {
+
+    background: #292929;
+
+    color: white;
+
+}
+
+
+.review-delete-btn:hover {
+
+    color: #ff5555;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 650px) {
+
+    .reviews-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+
+    .reviews-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   SEARCH PAGE
+========================= */
+
+.search-container {
+
+    width: 94%;
+
+    max-width: 1100px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 40px 45px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.search-heading h1 {
+
+    margin: 0 0 8px;
+
+    color: white;
+
+    font-size: 32px;
+
+}
+
+
+.search-heading p {
+
+    margin: 0;
+
+    color: #999;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   SEARCH CONTROLS
+========================= */
+
+.search-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.search-box {
+
+    display: flex;
+
+    width: 330px;
+
+    height: 43px;
+
+}
+
+
+.search-box input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 0 15px;
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-right: none;
+
+    border-radius: 10px 0 0 10px;
+
+    outline: none;
+
+    font-size: 14px;
+
+}
+
+
+.search-box input:focus {
+
+    border-color: orange;
+
+}
+
+
+.search-box button {
+
+    width: 48px;
+
+    border: 1px solid #555;
+
+    background: #181818;
+
+    color: white;
+
+    border-radius: 0 10px 10px 0;
+
+    cursor: pointer;
+
+}
+
+
+.search-box button:hover {
+
+    color: orange;
+
+}
+
+
+.random-movie-btn,
+.create-review-btn {
+
+    height: 43px;
+
+    padding: 0 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+}
+
+
+.random-movie-btn {
+
+    background: #292929;
+
+    border: 1px solid #444;
+
+    color: white;
+
+}
+
+
+.random-movie-btn:hover {
+
+    color: orange;
+
+    border-color: orange;
+
+}
+
+
+.create-review-btn {
+
+    background: orange;
+
+    color: black;
+
+}
+
+
+.create-review-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   GENRE
+========================= */
+
+.genre-section {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+}
+
+
+.genre-section label {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+}
+
+
+.genre-section select {
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-radius: 9px;
+
+    padding: 8px 12px;
+
+    outline: none;
+
+}
+
+
+.genre-section select:focus {
+
+    border-color: orange;
+
+}
+
+
+/* =========================
+   RESULTS
+========================= */
+
+.search-results {
+
+    margin-top: 35px;
+
+}
+
+
+.search-results h2 {
+
+    color: white;
+
+    font-size: 22px;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* =========================
+   MOVIE GRID
+========================= */
+
+.movie-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 25px;
+
+}
+
+
+/* =========================
+   MOVIE CARD
+========================= */
+
+.movie-card {
+
+    color: white;
+
+}
+
+
+.movie-card a {
+
+    text-decoration: none;
+
+}
+
+
+.movie-poster {
+
+    width: 100%;
+
+    height: 250px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 15px;
+
+    box-sizing: border-box;
+
+    background: #292929;
+
+    border: 1px solid #444;
+
+    border-radius: 9px;
+
+    color: #777;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+}
+
+
+.movie-card:hover .movie-poster {
+
+    border-color: orange;
+
+}
+
+
+.movie-card-info h3 {
+
+    margin: 10px 0 4px;
+
+    color: white;
+
+    font-size: 15px;
+
+}
+
+
+.movie-card-info p {
+
+    margin: 0 0 5px;
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+.movie-card-info span {
+
+    color: orange;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   NO RESULTS
+========================= */
+
+.no-results {
+
+    display: none;
+
+    color: #999;
+
+    text-align: center;
+
+    padding: 40px;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 950px) {
+
+    .movie-grid {
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .movie-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+
+    .search-container {
+
+        width: 92%;
+
+        padding: 25px 25px 35px;
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .movie-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .search-controls {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .search-box {
+
+        width: 100%;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   MOVIE DETAILS
+========================= */
+
+.movie-details-container {
+
+    width: 90%;
+
+    max-width: 950px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 45px 50px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   MOVIE HEADER
+========================= */
+
+.movie-details-header {
+
+    display: flex;
+
+    gap: 40px;
+
+    margin-top: 20px;
+
+}
+
+
+.details-poster {
+
+    width: 240px;
+
+    height: 350px;
+
+    flex-shrink: 0;
+
+    background: #292929;
+
+    border: 1px solid #444;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    color: #777;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+}
+
+
+.movie-main-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+}
+
+
+.movie-main-info h1 {
+
+    margin: 0 0 10px;
+
+    color: white;
+
+    font-size: 38px;
+
+}
+
+
+.movie-meta {
+
+    color: #999;
+
+    font-size: 14px;
+
+}
+
+
+.movie-rating {
+
+    margin: 15px 0;
+
+    color: orange;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+.movie-rating span {
+
+    color: #777;
+
+    font-size: 13px;
+
+}
+
+
+.movie-overview {
+
+    max-width: 520px;
+
+    color: #bbb;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   MOVIE ACTIONS
+========================= */
+
+.movie-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-top: 20px;
+
+}
+
+
+.movie-actions button,
+.review-movie-btn {
+
+    padding: 10px 16px;
+
+    border-radius: 18px;
+
+    border: 1px solid #444;
+
+    background: #292929;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+}
+
+
+.movie-actions button:hover,
+.review-movie-btn:hover {
+
+    color: orange;
+
+    border-color: orange;
+
+}
+
+
+.review-movie-btn {
+
+    background: orange;
+
+    color: black;
+
+    border-color: orange;
+
+}
+
+
+.review-movie-btn:hover {
+
+    color: black;
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.movie-information {
+
+    margin-top: 45px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #333;
+
+}
+
+
+.movie-information h2,
+.movie-reviews h2 {
+
+    color: white;
+
+    font-size: 21px;
+
+}
+
+
+.movie-information p {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   REVIEWS
+========================= */
+
+.movie-reviews {
+
+    margin-top: 35px;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.section-heading a {
+
+    color: orange;
+
+    font-size: 12px;
+
+    text-decoration: none;
+
+}
+
+
+.movie-review {
+
+    padding: 18px 0;
+
+    border-bottom: 1px solid #333;
+
+}
+
+
+.review-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: white;
+
+}
+
+
+.small-profile {
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.review-rating {
+
+    margin: 8px 0;
+
+    color: orange;
+
+    letter-spacing: 2px;
+
+}
+
+
+.movie-review p {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .movie-details-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+
+    .movie-details-header {
+
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 25px;
+
+    }
+
+
+    .details-poster {
+
+        width: 190px;
+
+        height: 280px;
+
+    }
+
+
+    .movie-main-info h1 {
+
+        font-size: 30px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   REVIEW PAGE
+========================= */
+
+.review-page-container {
+
+    width: 92%;
+
+    max-width: 1050px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 40px 45px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   TOP
+========================= */
+
+.review-page-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+
+.review-page-top h1 {
+
+    margin: 0 0 7px;
+
+    color: white;
+
+    font-size: 30px;
+
+}
+
+
+.review-page-top p {
+
+    margin: 0;
+
+    color: #999;
+
+    font-size: 13px;
+
+}
+
+
+.create-review-page-btn {
+
+    padding: 10px 16px;
+
+    background: orange;
+
+    color: black;
+
+    border-radius: 18px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.create-review-page-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.review-search {
+
+    display: flex;
+
+    width: 330px;
+
+    height: 42px;
+
+    margin: 25px 0;
+
+}
+
+
+.review-search input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-right: none;
+
+    border-radius: 10px 0 0 10px;
+
+    padding: 0 14px;
+
+    outline: none;
+
+}
+
+
+.review-search button {
+
+    width: 45px;
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-radius: 0 10px 10px 0;
+
+}
+
+
+/* =========================
+   LAYOUT
+========================= */
+
+.review-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap: 35px;
+
+}
+
+
+.my-reviews h2,
+.community-reviews h2 {
+
+    color: white;
+
+    font-size: 20px;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* =========================
+   REVIEW CARD
+========================= */
+
+.review-feed-card {
+
+    display: flex;
+
+    gap: 18px;
+
+    padding: 18px 0;
+
+    border-bottom: 1px solid #333;
+
+}
+
+
+.review-feed-poster {
+
+    width: 115px;
+
+    height: 160px;
+
+    flex-shrink: 0;
+
+    background: #292929;
+
+    border: 1px solid #444;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+}
+
+
+.review-feed-content h3 {
+
+    margin: 5px 0 8px;
+
+    color: white;
+
+    font-size: 18px;
+
+}
+
+
+.large-stars {
+
+    color: orange;
+
+    letter-spacing: 2px;
+
+}
+
+
+.review-feed-content p {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+.review-feed-content a {
+
+    color: orange;
+
+    font-size: 12px;
+
+    text-decoration: none;
+
+}
+
+
+/* =========================
+   COMMUNITY
+========================= */
+
+.community-reviews {
+
+    background: #181818;
+
+    border: 1px solid #333;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+}
+
+
+.community-review {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #333;
+
+}
+
+
+.community-review:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.community-poster {
+
+    width: 48px;
+
+    height: 65px;
+
+    background: #333;
+
+    border-radius: 5px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+    font-size: 11px;
+
+}
+
+
+.community-review strong {
+
+    color: white;
+
+    font-size: 13px;
+
+}
+
+
+.community-stars {
+
+    margin-top: 5px;
+
+    color: orange;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .review-page-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+
+    .review-page-top {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .review-search {
+
+        width: 100%;
+
+    }
+
+
+    .review-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   CREATE REVIEW
+========================= */
+
+.create-review-container {
+
+    width: 100%;
+
+    min-height: calc(100vh - 70px);
+
+    padding: 35px 20px 60px;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+}
+
+
+.create-review-card {
+
+    width: 600px;
+
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    padding: 35px 50px 40px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.create-review-card h1 {
+
+    margin: 0;
+
+    text-align: center;
+
+    color: white;
+
+    font-size: 30px;
+
+}
+
+
+.create-review-subtitle {
+
+    margin: 8px 0 30px;
+
+    text-align: center;
+
+    color: #888;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   FIELD
+========================= */
+
+.create-review-field {
+
+    margin-bottom: 22px;
+
+}
+
+
+.create-review-field label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   MOVIE INPUT
+========================= */
+
+.movie-input-wrapper {
+
+    display: flex;
+
+    height: 46px;
+
+}
+
+
+.movie-input-wrapper input {
+
+    flex: 1;
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-right: none;
+
+    border-radius: 10px 0 0 10px;
+
+    padding: 0 14px;
+
+    outline: none;
+
+}
+
+
+.movie-input-wrapper input:focus {
+
+    border-color: orange;
+
+}
+
+
+.movie-input-wrapper span {
+
+    width: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #181818;
+
+    border: 1px solid #555;
+
+    border-radius: 0 10px 10px 0;
+
+}
+
+
+/* =========================
+   STARS
+========================= */
+
+.star-rating {
+
+    display: flex;
+
+    gap: 5px;
+
+}
+
+
+.star-rating span {
+
+    color: #555;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+
+}
+
+
+.star-rating span:hover,
+.star-rating span.selected {
+
+    color: orange;
+
+}
+
+
+.rating-value {
+
+    margin: 5px 0 0;
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   REVIEW TEXT
+========================= */
+
+.create-review-field textarea {
+
+    width: 100%;
+
+    height: 140px;
+
+    box-sizing: border-box;
+
+    padding: 14px;
+
+    background: #181818;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-radius: 11px;
+
+    resize: none;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+}
+
+
+.create-review-field textarea:focus {
+
+    border-color: orange;
+
+}
+
+
+/* =========================
+   SPOILER
+========================= */
+
+.spoiler-option {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+}
+
+
+.spoiler-option input {
+
+    accent-color: orange;
+
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.create-review-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    margin-top: 30px;
+
+    gap: 12px;
+
+}
+
+
+.post-review-btn {
+
+    border: none;
+
+    background: orange;
+
+    color: black;
+
+    padding: 9px 25px;
+
+    border-radius: 18px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.post-review-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+.cancel-review-btn {
+
+    color: #999;
+
+    font-size: 12px;
+
+    text-decoration: underline;
+
+}
+
+
+.cancel-review-btn:hover {
+
+    color: white;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .create-review-container {
+
+        padding: 25px 15px 40px;
+
+    }
+
+
+    .create-review-card {
+
+        padding: 28px 22px 35px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   RANDOM MOVIE PAGE
+========================= */
+
+.random-movie-container {
+
+    width: 90%;
+
+    max-width: 950px;
+
+    margin: 35px auto 60px;
+
+    padding: 30px 45px 50px;
+
+    box-sizing: border-box;
+
+    background: rgba(17, 17, 17, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 22px;
+
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.random-heading {
+
+    text-align: center;
+
+    margin: 15px 0 30px;
+
+}
+
+
+.random-label {
+
+    margin: 0 0 8px;
+
+    color: orange;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+.random-heading h1 {
+
+    margin: 0 0 8px;
+
+    color: white;
+
+    font-size: 32px;
+
+}
+
+
+.random-heading>p:last-child {
+
+    margin: 0;
+
+    color: #888;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   MOVIE CARD
+========================= */
+
+.random-movie-card {
+
+    display: flex;
+
+    gap: 40px;
+
+    padding: 30px;
+
+    background: #181818;
+
+    border: 1px solid #333;
+
+    border-radius: 18px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* =========================
+   POSTER
+========================= */
+
+.random-movie-poster {
+
+    width: 260px;
+
+    height: 370px;
+
+    flex-shrink: 0;
+
+    background: #292929;
+
+    border: 1px solid #444;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.random-movie-poster img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+.random-movie-poster span {
+
+    padding: 20px;
+
+    color: #777;
+
+    text-align: center;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.random-movie-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+}
+
+
+.random-movie-info h2 {
+
+    margin: 0 0 10px;
+
+    color: white;
+
+    font-size: 32px;
+
+}
+
+
+.random-movie-meta {
+
+    margin: 0;
+
+    color: #888;
+
+    font-size: 14px;
+
+}
+
+
+.random-movie-rating {
+
+    margin: 18px 0;
+
+    color: orange;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+.random-movie-overview {
+
+    max-width: 470px;
+
+    color: #aaa;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.random-movie-actions {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.random-view-btn,
+.random-again-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 10px 18px;
+
+    border-radius: 18px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.random-view-btn {
+
+    background: orange;
+
+    color: black;
+
+}
+
+
+.random-view-btn:hover {
+
+    background: #ffb52e;
+
+}
+
+
+.random-again-btn {
+
+    background: #292929;
+
+    color: white;
+
+    border: 1px solid #444;
+
+}
+
+
+.random-again-btn:hover {
+
+    color: orange;
+
+    border-color: orange;
+
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.random-empty {
+
+    text-align: center;
+
+    padding: 70px 20px;
+
+}
+
+
+.random-empty-icon {
+
+    font-size: 45px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.random-empty h1 {
+
+    color: white;
+
+    font-size: 28px;
+
+}
+
+
+.random-empty p {
+
+    max-width: 450px;
+
+    margin: 0 auto 25px;
+
+    color: #888;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .random-movie-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+
+    .random-movie-card {
+
+        flex-direction: column;
+
+        align-items: center;
+
+        padding: 25px 20px;
+
+    }
+
+
+    .random-movie-poster {
+
+        width: 200px;
+
+        height: 290px;
+
+    }
+
+
+    .random-movie-info {
+
+        width: 100%;
+
+    }
+
+
+    .random-movie-info h2 {
+
+        font-size: 26px;
+
+    }
+
+
+    .random-movie-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .random-view-btn,
+    .random-again-btn {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+}
