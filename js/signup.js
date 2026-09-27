@@ -140,7 +140,7 @@ signupForm.addEventListener("submit", function (event) {
     // EVERYTHING VALID
     if (valid) {
 
-        window.location.href = "login.php";
+        signupForm.submit();
 
     }
 

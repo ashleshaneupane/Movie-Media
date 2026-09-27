@@ -1,3 +1,32 @@
+<?php
+
+include 'includes/auth.php';
+
+include 'includes/config.php';
+
+
+/*
+ * Get one random movie from the database
+ */
+
+$sql = "SELECT * FROM movie ORDER BY RAND() LIMIT 1";
+
+$result = $conn->query($sql);
+
+
+if (!$result) {
+    die("Something went wrong while finding a random movie.");
+}
+
+
+if ($result->num_rows === 0) {
+    $movie = null;
+} else {
+    $movie = $result->fetch_assoc();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,223 +67,182 @@
         </a>
 
 
-        <?php
-
-        /*
-         * TEMPORARY MOVIE DATA
-         *
-         * This is only being used until
-         * the Movie Media database is created.
-         */
-
-        $movies = [
-
-            [
-                "title" => "Interstellar",
-                "year" => "2014",
-                "genre" => "Sci-Fi",
-                "rating" => "8.7",
-                "overview" => "A group of explorers travel through a wormhole in space in search of a new home for humanity."
-            ],
-
-            [
-                "title" => "Inception",
-                "year" => "2010",
-                "genre" => "Thriller",
-                "rating" => "8.8",
-                "overview" => "A skilled thief who steals secrets through dreams is given a chance to erase his past."
-            ],
-
-            [
-                "title" => "Oppenheimer",
-                "year" => "2023",
-                "genre" => "Drama",
-                "rating" => "8.6",
-                "overview" => "The story of the scientist who played a major role in the development of the atomic bomb."
-            ],
-
-            [
-                "title" => "Avatar",
-                "year" => "2009",
-                "genre" => "Action",
-                "rating" => "7.5",
-                "overview" => "A marine becomes part of the world of Pandora and joins its inhabitants in their fight."
-            ],
-
-            [
-                "title" => "The Notebook",
-                "year" => "2004",
-                "genre" => "Romance",
-                "rating" => "7.8",
-                "overview" => "A young couple fall deeply in love despite the obstacles that separate them."
-            ],
-
-            [
-                "title" => "The Conjuring",
-                "year" => "2013",
-                "genre" => "Horror",
-                "rating" => "7.5",
-                "overview" => "Paranormal investigators help a family experiencing terrifying events in their new home."
-            ]
-
-        ];
+        <?php if ($movie): ?>
 
 
-        /*
-         * Choose a random movie
-         */
+            <!-- HEADING -->
 
-        $randomIndex =
-            rand(
-                0,
-                count($movies) - 1
-            );
+            <div class="random-heading">
+
+                <p class="random-label">
+                    MOVIE MEDIA
+                </p>
 
 
-        $movie =
-            $movies[$randomIndex];
-
-        ?>
-
-
-        <!-- HEADING -->
-
-        <div class="random-heading">
-
-            <p class="random-label">
-                MOVIE MEDIA
-            </p>
+                <h1>
+                    What should you watch?
+                </h1>
 
 
-            <h1>
-                What should you watch?
-            </h1>
-
-
-            <p>
-                Here's a random movie for you.
-            </p>
-
-        </div>
-
-
-
-        <!-- RANDOM MOVIE CARD -->
-
-        <section class="random-movie-card">
-
-
-            <!-- POSTER -->
-
-            <div class="random-movie-poster">
-
-                <span>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $movie["title"]
-                    );
-                    ?>
-
-                </span>
+                <p>
+                    Here's a random movie for you.
+                </p>
 
             </div>
 
 
 
-            <!-- INFORMATION -->
+            <!-- RANDOM MOVIE CARD -->
 
-            <div class="random-movie-info">
-
-
-                <h2>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $movie["title"]
-                    );
-                    ?>
-
-                </h2>
+            <section class="random-movie-card">
 
 
+                <!-- POSTER -->
 
-                <p class="random-movie-meta">
+                <div class="random-movie-poster">
 
-                    <?php
-                    echo htmlspecialchars(
-                        $movie["year"]
-                    );
-                    ?>
-
-                    •
-
-                    <?php
-                    echo htmlspecialchars(
-                        $movie["genre"]
-                    );
-                    ?>
-
-                </p>
-
-
-
-                <div class="random-movie-rating">
-
-                    ⭐
-
-                    <?php
-                    echo htmlspecialchars(
-                        $movie["rating"]
-                    );
-                    ?>
-
-                    / 10
+                    <img
+                        src="<?php echo htmlspecialchars($movie['poster']); ?>"
+                        alt="<?php echo htmlspecialchars($movie['title']); ?>"
+                    >
 
                 </div>
 
 
 
-                <p class="random-movie-overview">
+                <!-- INFORMATION -->
 
-                    <?php
-                    echo htmlspecialchars(
-                        $movie["overview"]
-                    );
-                    ?>
-
-                </p>
+                <div class="random-movie-info">
 
 
+                    <h2>
 
-                <!-- BUTTONS -->
+                        <?php
+                        echo htmlspecialchars($movie['title']);
+                        ?>
 
-                <div class="random-movie-actions">
-
-
-                    <a
-                        href="search.php"
-                        class="random-view-btn"
-                    >
-                        Back to Search
-                    </a>
+                    </h2>
 
 
-                    <a
-                        href="randomMovie.php"
-                        class="random-again-btn"
-                    >
-                        🎲 Try Another
-                    </a>
+
+                    <p class="random-movie-meta">
+
+                        <?php
+                        echo htmlspecialchars($movie['releaseDate']);
+                        ?>
+
+                        •
+
+                        <?php
+                        echo htmlspecialchars($movie['genre']);
+                        ?>
+
+                    </p>
+
+
+
+                    <p class="random-movie-meta">
+
+                        <?php
+                        echo htmlspecialchars($movie['language']);
+                        ?>
+
+                        •
+
+                        <?php
+                        echo htmlspecialchars($movie['runtime']);
+                        ?>
+
+                        minutes
+
+                    </p>
+
+
+
+                    <div class="random-movie-rating">
+
+                        ⭐ No rating yet
+
+                    </div>
+
+
+
+                    <p class="random-movie-overview">
+
+                        <?php
+                        echo htmlspecialchars($movie['description']);
+                        ?>
+
+                    </p>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="random-movie-actions">
+
+
+                        <a
+                            href="movieDetails.php?movie=<?php echo $movie['movieID']; ?>"
+                            class="random-view-btn"
+                        >
+                            View Movie Details
+                        </a>
+
+
+                        <a
+                            href="randomMovie.php"
+                            class="random-again-btn"
+                        >
+                            🎲 Try Another
+                        </a>
+
+
+                    </div>
 
 
                 </div>
 
 
-            </div>
+            </section>
 
 
-        </section>
+        <?php else: ?>
+
+
+            <!-- EMPTY STATE -->
+
+            <section class="random-empty">
+
+
+                <div class="random-empty-icon">
+                    🎬
+                </div>
+
+
+                <h1>
+                    No Movies Found
+                </h1>
+
+
+                <p>
+                    There are currently no movies available
+                    in Movie Media.
+                </p>
+
+
+                <a
+                    href="search.php"
+                    class="random-view-btn"
+                >
+                    Back to Search
+                </a>
+
+
+            </section>
+
+
+        <?php endif; ?>
 
 
     </main>

@@ -1,3 +1,37 @@
+<?php
+include 'includes/auth.php';
+include 'includes/config.php';
+
+
+// Get movie ID from URL
+
+if (!isset($_GET['movie']) || !is_numeric($_GET['movie'])) {
+
+    die("Invalid movie.");
+
+}
+
+$movieID = (int) $_GET['movie'];
+
+
+// Get movie from database
+
+$sql = "SELECT * FROM movie WHERE movieID = $movieID";
+
+$result = $conn->query($sql);
+
+
+if ($result->num_rows === 0) {
+
+    die("Movie not found.");
+
+}
+
+
+$movie = $result->fetch_assoc();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +44,10 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Movie Details - Movie Media</title>
+    <title>
+        <?php echo htmlspecialchars($movie['title']); ?>
+        - Movie Media
+    </title>
 
     <link
         rel="stylesheet"
@@ -45,25 +82,40 @@
 
 
             <div class="details-poster">
-                INTERSTELLAR
+
+                <img
+                    src="<?php echo htmlspecialchars($movie['poster']); ?>"
+                    alt="<?php echo htmlspecialchars($movie['title']); ?>"
+                >
+
             </div>
 
 
             <div class="movie-main-info">
 
+
                 <h1>
-                    Interstellar
+
+                    <?php echo htmlspecialchars($movie['title']); ?>
+
                 </h1>
 
 
                 <p class="movie-meta">
-                    2014 • Sci-Fi • Drama • Adventure
+
+                    <?php echo htmlspecialchars($movie['releaseDate']); ?>
+
+                    • 
+
+                    <?php echo htmlspecialchars($movie['genre']); ?>
+
                 </p>
+
 
 
                 <div class="movie-rating">
 
-                    ⭐ 8.7
+                    ⭐ No rating yet
 
                     <span>
                         / 10
@@ -72,16 +124,17 @@
                 </div>
 
 
+
                 <p class="movie-overview">
 
-                    A team of explorers travel through a
-                    wormhole in space in an attempt to ensure
-                    humanity's survival.
+                    <?php echo htmlspecialchars($movie['description']); ?>
 
                 </p>
 
 
+
                 <div class="movie-actions">
+
 
                     <button
                         type="button"
@@ -98,11 +151,17 @@
                         ✓ Watched
                     </button>
 
-        <a href="writeReview.php?movie=interstellar" class="review-button">
-        Review
-        </a>
+
+                    <a
+                        href="writeReview.php?movie=<?php echo $movie['movieID']; ?>"
+                        class="review-button"
+                    >
+                        Review
+                    </a>
+
 
                 </div>
+
 
             </div>
 
@@ -118,24 +177,56 @@
 
             <div>
 
+
                 <h2>
                     Details
                 </h2>
 
-                <p>
-                    <strong>Director:</strong>
-                    Christopher Nolan
-                </p>
 
                 <p>
-                    <strong>Release:</strong>
-                    2014
+
+                    <strong>
+                        Release:
+                    </strong>
+
+                    <?php echo htmlspecialchars($movie['releaseDate']); ?>
+
                 </p>
 
+
                 <p>
-                    <strong>Genre:</strong>
-                    Sci-Fi, Drama, Adventure
+
+                    <strong>
+                        Genre:
+                    </strong>
+
+                    <?php echo htmlspecialchars($movie['genre']); ?>
+
                 </p>
+
+
+                <p>
+
+                    <strong>
+                        Language:
+                    </strong>
+
+                    <?php echo htmlspecialchars($movie['language']); ?>
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Runtime:
+                    </strong>
+
+                    <?php echo htmlspecialchars($movie['runtime']); ?>
+                    minutes
+
+                </p>
+
 
             </div>
 
@@ -151,75 +242,25 @@
 
             <div class="section-heading">
 
+
                 <h2>
                     Reviews
                 </h2>
 
 
                 <a
-                    href="createReview.php?movie=interstellar"
+                    href="writeReview.php?movie=<?php echo $movie['movieID']; ?>"
                 >
                     Write a Review
                 </a>
 
+
             </div>
 
 
-
-            <article class="movie-review">
-
-                <div class="review-user">
-
-                    <div class="small-profile">
-                        A
-                    </div>
-
-                    <strong>
-                        Ash 
-                    </strong>
-
-                </div>
-
-
-                <div class="review-rating">
-                    ★★★★★
-                </div>
-
-
-                <p>
-                    One of the best sci-fi movies I've watched.
-                    The visuals and story are incredible.
-                </p>
-
-            </article>
-
-
-
-            <article class="movie-review">
-
-                <div class="review-user">
-
-                    <div class="small-profile">
-                        M
-                    </div>
-
-                    <strong>
-                        Maya
-                    </strong>
-
-                </div>
-
-
-                <div class="review-rating">
-                    ★★★★☆
-                </div>
-
-
-                <p>
-                    Beautiful movie with an emotional story.
-                </p>
-
-            </article>
+            <p>
+                No reviews yet.
+            </p>
 
 
         </section>
@@ -230,6 +271,7 @@
 
 
     <script>
+
 
         const watchlistBtn =
             document.getElementById(
@@ -243,6 +285,7 @@
             );
 
 
+
         watchlistBtn.addEventListener(
             "click",
             function() {
@@ -252,6 +295,7 @@
 
             }
         );
+
 
 
         watchedBtn.addEventListener(
@@ -265,6 +309,7 @@
 
             }
         );
+
 
     </script>
 

@@ -1,3 +1,23 @@
+<?php
+
+include 'includes/auth.php';
+include 'includes/config.php';
+
+$userID = $_SESSION["userID"];
+
+$userQuery = $conn->prepare(
+    "SELECT name, username, profilePicture, bio, favoriteGenre
+     FROM Users
+     WHERE userID = ?"
+);
+
+$userQuery->bind_param("i", $userID);
+$userQuery->execute();
+
+$userResult = $userQuery->get_result();
+$user = $userResult->fetch_assoc();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,27 +49,33 @@
 <section class="account-profile">
 
     <h2 class="profile-name">
-        Ash
-    </h2>
+    <?php echo htmlspecialchars($user["name"]); ?>
+</h2>
+
+   <div class="profile-picture">
+    <?php if (!empty($user["profilePicture"])): ?>
+        <img src="<?php echo htmlspecialchars($user["profilePicture"]); ?>" alt="Profile Picture">
+    <?php else: ?>
+        <?php echo strtoupper(substr($user["name"], 0, 1)); ?>
+    <?php endif; ?>
+</div>
 
 
-    <div class="profile-picture">
-        A
-    </div>
+<h1>
+    @<?php echo htmlspecialchars($user["username"]); ?>
+</h1>
 
+<p class="profile-bio">
+    <?php echo htmlspecialchars($user["bio"] ?? ""); ?>
+</p>
 
-    <h1>
-        @ashmovies
-    </h1>
+<?php if (!empty($user["favoriteGenre"])): ?>
+    <p class="profile-genre">
+        Favorite Genre: <?php echo htmlspecialchars($user["favoriteGenre"]); ?>
+    </p>
+<?php endif; ?>
 
-
-    <a
-        href="editProfile.php"
-        class="edit-profile-btn"
-    >
-        Edit Profile
-    </a>
-
+<a href="editProfile.php" class="edit-profile-btn">Edit Profile</a>
 </section>
 
 
@@ -84,10 +110,9 @@
 
 
             <div class="top-five-heading">
-
-                <h2>
-                    @ashmovies's Top 5 Movies/TV Shows of All Time
-                </h2>
+<h2>
+    @<?php echo htmlspecialchars($user["username"]); ?>'s Top 5 Movies/TV Shows of All Time
+</h2>
 
 
                 <a
@@ -192,7 +217,9 @@
 
         </section>
 
-
+<a href="logout.php" class="logout-btn">
+    Logout
+</a>
     </main>
 
 

@@ -1,3 +1,13 @@
+<?php
+include 'includes/auth.php';
+include 'includes/config.php';
+
+$sql = "SELECT * FROM movie ORDER BY title ASC";
+
+$result = $conn->query($sql);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -152,225 +162,89 @@
             >
 
 
-                <!-- MOVIE 1 -->
+                <?php
 
-                <article
-                    class="movie-card"
-                    data-title="Interstellar"
-                    data-genre="Sci-Fi"
-                >
+                if ($result->num_rows > 0) {
 
-                    <a href="movieDetails.php?movie=interstellar">
+                    while ($movie = $result->fetch_assoc()) {
 
-                        <div class="movie-poster">
-                            INTERSTELLAR
+                ?>
+
+
+                    <article
+                        class="movie-card"
+                        data-title="<?php echo htmlspecialchars($movie['title']); ?>"
+                        data-genre="<?php echo htmlspecialchars($movie['genre']); ?>"
+                    >
+
+
+                        <a
+                            href="movieDetails.php?movie=<?php echo $movie['movieID']; ?>"
+                        >
+
+                            <div class="movie-poster">
+
+                                <img
+                                    src="<?php echo htmlspecialchars($movie['poster']); ?>"
+                                    alt="<?php echo htmlspecialchars($movie['title']); ?>"
+                                >
+
+                            </div>
+
+                        </a>
+
+
+                        <div class="movie-card-info">
+
+
+                            <h3>
+
+                                <?php echo htmlspecialchars($movie['title']); ?>
+
+                            </h3>
+
+
+                            <p>
+
+                                <?php echo htmlspecialchars($movie['genre']); ?>
+
+                                •
+
+                                <?php echo htmlspecialchars($movie['releaseDate']); ?>
+
+                            </p>
+
+
+                            <span>
+
+                                ⭐ No rating yet
+
+                            </span>
+
+
                         </div>
 
-                    </a>
 
+                    </article>
 
-                    <div class="movie-card-info">
 
-                        <h3>
-                            Interstellar
-                        </h3>
+                <?php
 
-                        <p>
-                            Sci-Fi • 2014
-                        </p>
+                    }
 
-                        <span>
-                            ⭐ 8.7
-                        </span>
+                } else {
 
-                    </div>
+                ?>
 
-                </article>
+                    <p>
+                        No movies found.
+                    </p>
 
+                <?php
 
+                }
 
-                <!-- MOVIE 2 -->
-
-                <article
-                    class="movie-card"
-                    data-title="Inception"
-                    data-genre="Thriller"
-                >
-
-                    <a href="movieDetails.php?movie=inception">
-
-                        <div class="movie-poster">
-                            INCEPTION
-                        </div>
-
-                    </a>
-
-
-                    <div class="movie-card-info">
-
-                        <h3>
-                            Inception
-                        </h3>
-
-                        <p>
-                            Thriller • 2010
-                        </p>
-
-                        <span>
-                            ⭐ 8.8
-                        </span>
-
-                    </div>
-
-                </article>
-
-
-
-                <!-- MOVIE 3 -->
-
-                <article
-                    class="movie-card"
-                    data-title="Oppenheimer"
-                    data-genre="Drama"
-                >
-
-                    <a href="movieDetails.php?movie=oppenheimer">
-
-                        <div class="movie-poster">
-                            OPPENHEIMER
-                        </div>
-
-                    </a>
-
-
-                    <div class="movie-card-info">
-
-                        <h3>
-                            Oppenheimer
-                        </h3>
-
-                        <p>
-                            Drama • 2023
-                        </p>
-
-                        <span>
-                            ⭐ 8.6
-                        </span>
-
-                    </div>
-
-                </article>
-
-
-
-                <!-- MOVIE 4 -->
-
-                <article
-                    class="movie-card"
-                    data-title="Avatar"
-                    data-genre="Action"
-                >
-
-                    <a href="movieDetails.php?movie=avatar">
-
-                        <div class="movie-poster">
-                            AVATAR
-                        </div>
-
-                    </a>
-
-
-                    <div class="movie-card-info">
-
-                        <h3>
-                            Avatar
-                        </h3>
-
-                        <p>
-                            Action • 2009
-                        </p>
-
-                        <span>
-                            ⭐ 7.5
-                        </span>
-
-                    </div>
-
-                </article>
-
-
-
-                <!-- MOVIE 5 -->
-
-                <article
-                    class="movie-card"
-                    data-title="The Notebook"
-                    data-genre="Romance"
-                >
-
-                    <a href="movieDetails.php?movie=notebook">
-
-                        <div class="movie-poster">
-                            THE NOTEBOOK
-                        </div>
-
-                    </a>
-
-
-                    <div class="movie-card-info">
-
-                        <h3>
-                            The Notebook
-                        </h3>
-
-                        <p>
-                            Romance • 2004
-                        </p>
-
-                        <span>
-                            ⭐ 7.8
-                        </span>
-
-                    </div>
-
-                </article>
-
-
-
-                <!-- MOVIE 6 -->
-
-                <article
-                    class="movie-card"
-                    data-title="The Conjuring"
-                    data-genre="Horror"
-                >
-
-                    <a href="movieDetails.php?movie=conjuring">
-
-                        <div class="movie-poster">
-                            THE CONJURING
-                        </div>
-
-                    </a>
-
-
-                    <div class="movie-card-info">
-
-                        <h3>
-                            The Conjuring
-                        </h3>
-
-                        <p>
-                            Horror • 2013
-                        </p>
-
-                        <span>
-                            ⭐ 7.5
-                        </span>
-
-                    </div>
-
-                </article>
+                ?>
 
 
             </div>
@@ -396,6 +270,7 @@
 
     <script>
 
+
         const movieSearch =
             document.getElementById("movieSearch");
 
@@ -419,6 +294,7 @@
 
         function filterMovies() {
 
+
             const searchValue =
                 movieSearch.value
                 .toLowerCase()
@@ -432,7 +308,9 @@
             let foundMovies = 0;
 
 
+
             movieCards.forEach(function(card) {
+
 
                 const title =
                     card.dataset.title
@@ -440,16 +318,20 @@
 
 
                 const genre =
-                    card.dataset.genre;
+                    card.dataset.genre
+                    .toLowerCase();
+
 
 
                 const matchesSearch =
                     title.includes(searchValue);
 
 
+
                 const matchesGenre =
                     selectedGenre === "all" ||
-                    genre === selectedGenre;
+                    genre.includes(selectedGenre.toLowerCase());
+
 
 
                 if (
@@ -457,28 +339,40 @@
                     matchesGenre
                 ) {
 
+
                     card.style.display = "block";
+
 
                     foundMovies++;
 
+
                 } else {
+
 
                     card.style.display = "none";
 
+
                 }
+
 
             });
 
 
+
             if (foundMovies === 0) {
+
 
                 noResults.style.display = "block";
 
+
             } else {
+
 
                 noResults.style.display = "none";
 
+
             }
+
 
         }
 
@@ -508,6 +402,7 @@
             "change",
             filterMovies
         );
+
 
     </script>
 
