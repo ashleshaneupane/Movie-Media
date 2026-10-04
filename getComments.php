@@ -19,7 +19,8 @@ $commentQuery = $conn->prepare(
         PostComment.userID,
         PostComment.commentText,
         Users.username,
-        Users.name
+Users.name,
+Users.role
      FROM PostComment
      INNER JOIN Users
         ON PostComment.userID = Users.userID
