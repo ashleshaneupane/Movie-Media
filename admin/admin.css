@@ -784,3 +784,100 @@ textarea {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   USERS PAGE
+========================= */
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+
+/* Search toolbar */
+
+.users-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: rgba(10, 10, 15, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+}
+
+.users-toolbar input[type="search"] {
+    flex: 1;
+    min-width: 200px;
+}
+
+.users-toolbar select {
+    min-width: 130px;
+}
+
+.clear-filter {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.clear-filter:hover {
+    color: #fff;
+}
+
+
+/* Protected admin */
+
+.protected-user {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+}
+
+
+/* Empty table */
+
+.empty-state {
+    padding: 30px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .users-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .users-toolbar input[type="search"],
+    .users-toolbar select {
+        width: 100%;
+    }
+
+}
