@@ -133,6 +133,32 @@ $postCount =
     ->get_result()
     ->fetch_assoc()["total"];
 
+    /* =========================
+   FRIEND COUNT
+========================= */
+
+$friendCountQuery = $conn->prepare(
+    "SELECT COUNT(*) AS total
+     FROM FriendRequest
+     WHERE status = 'accepted'
+     AND (
+         senderID = ?
+         OR receiverID = ?
+     )"
+);
+
+$friendCountQuery->bind_param(
+    "ii",
+    $userID,
+    $userID
+);
+
+$friendCountQuery->execute();
+
+$friendCount =
+    $friendCountQuery
+    ->get_result()
+    ->fetch_assoc()["total"];
 
 /* =========================
    TOP 5 MOVIES

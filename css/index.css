@@ -8392,3 +8392,326 @@ form {
 .public-top-movie-title {
     color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+.profile-picture {
+    display: block;
+    width: 90px;
+    height: 90px;
+    max-width: 90px;
+    max-height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+
+
+
+
+
+
+
+
+.friend-profile {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #333;
+}
+
+.friend-profile img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: cover;
+    display: block;
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   FRIEND REQUEST PROFILE IMAGE
+========================= */
+
+.request-profile {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #333;
+
+    flex-shrink: 0;
+}
+
+.request-profile img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: cover;
+    display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.friends-list {
+    width: 100%;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.friend-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 10px;
+}
+
+.friend-item-profile {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.friend-item-profile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.friend-item-placeholder {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.friend-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: left;
+}
+
+.friend-item-info strong {
+    color: #fff;
+    font-size: 15px;
+}
+
+.friend-item-info span {
+    color: #aaa;
+    font-size: 13px;
+}
+
+
+
+
+
+
+
+
+
+/* FRIEND SEARCH */
+
+.friends-search {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0 30px;
+}
+
+.friends-search input {
+    flex: 1;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+
+.friends-search input::placeholder {
+    color: #aaa;
+}
+
+.friends-search input:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.friends-search button {
+    padding: 12px 18px;
+    background: rgba(255, 166, 0, 0.88);
+    color: #151515;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.friends-search button:hover {
+    background: #ffb52e;
+}
+
+
+/* SEARCH RESULT MESSAGE */
+
+#noFriendSearchResults {
+    color: #fff !important;
+    font-size: 15px;
+    padding: 20px 0;
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   ACCOUNT PROFILE
+========================= */
+
+.account-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    margin-bottom: 25px;
+}
+
+.account-profile .profile-picture {
+    width: 110px;
+    height: 110px;
+    min-width: 110px;
+    min-height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #333;
+    color: #fff;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.account-profile .profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.account-profile .profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-profile .profile-name {
+    margin: 0;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.account-profile .profile-username {
+    margin: 4px 0 12px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.account-profile .profile-bio {
+    max-width: 500px;
+    margin: 0 0 8px;
+    color: #ddd;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.account-profile .profile-genre {
+    margin: 0 0 18px;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.account-profile .edit-profile-btn {
+    display: inline-block;
+    padding: 9px 17px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 7px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.account-profile .edit-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.22);
+}

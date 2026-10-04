@@ -833,14 +833,24 @@ $isOwnProfile =
                     $profilePicture !== ""
                 ): ?>
 
-                    <img
-                        src="<?php
-                            echo htmlspecialchars(
-                                $profilePicture
-                            );
-                        ?>"
-                        alt="Profile Picture"
-                    >
+<img
+    class="profile-picture"
+    src="<?php
+        echo htmlspecialchars(
+            $profilePicture
+        );
+    ?>"
+    alt="Profile Picture"
+    style="
+        width: 90px !important;
+        height: 90px !important;
+        max-width: 90px !important;
+        max-height: 90px !important;
+        object-fit: cover !important;
+        border-radius: 50%;
+        display: block;
+    "
+>
 
                 <?php else: ?>
 
