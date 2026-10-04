@@ -1,6 +1,37 @@
 <?php
+
 include 'includes/auth.php';
+include 'includes/config.php';
+
+$userID = $_SESSION["userID"];
+
+
+/* GET USER'S REVIEWS */
+
+$reviewQuery = $conn->prepare(
+    "SELECT
+        Review.reviewID,
+        Review.movieID,
+        Review.rating,
+        Review.reviewText,
+        Review.spoiler,
+        Review.reviewDate,
+        movie.title,
+        movie.poster
+     FROM Review
+     INNER JOIN movie
+        ON Review.movieID = movie.movieID
+     WHERE Review.userID = ?
+     ORDER BY Review.reviewDate DESC"
+);
+
+$reviewQuery->bind_param("i", $userID);
+$reviewQuery->execute();
+
+$reviewResult = $reviewQuery->get_result();
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,147 +81,150 @@ include 'includes/auth.php';
         <section class="reviews-grid">
 
 
-            <!-- REVIEW 1 -->
+            <?php if ($reviewResult->num_rows === 0): ?>
 
-            <article class="review-card">
-
-
-                <div class="review-poster">
-                    1
-                </div>
-
-
-                <h2>
-                    Interstellar
-                </h2>
+              <p
+    class="empty-reviews"
+    style="color: white;"
+>
+    You haven't written any reviews yet.
+</p>
 
 
-                <div class="rating">
-                    ★★★★★
-                </div>
+            <?php else: ?>
 
 
-                <p class="review-text">
-                    One of the best sci-fi movies I have ever watched.
-                </p>
+                <?php while ($review = $reviewResult->fetch_assoc()): ?>
 
 
-                <div class="review-actions">
-
-                    <button
-                        type="button"
-                        class="review-edit-btn"
+                    <article
+                        class="review-card"
+                        data-review-id="<?php echo $review["reviewID"]; ?>"
                     >
-                        Edit
-                    </button>
-
-                    <button
-                        type="button"
-                        class="review-delete-btn"
-                    >
-                        Delete
-                    </button>
-
-                </div>
 
 
-            </article>
+                        <!-- MOVIE POSTER -->
+
+                        <div class="review-poster">
+
+                            <img
+                                src="<?php echo htmlspecialchars($review["poster"]); ?>"
+                                alt="<?php echo htmlspecialchars($review["title"]); ?>"
+                            >
+
+                        </div>
 
 
+                        <!-- MOVIE TITLE -->
 
-            <!-- REVIEW 2 -->
-
-            <article class="review-card">
-
-
-                <div class="review-poster">
-                    2
-                </div>
+                        <h2>
+                            <?php echo htmlspecialchars($review["title"]); ?>
+                        </h2>
 
 
-                <h2>
-                    Inception
-                </h2>
+                        <!-- RATING -->
+
+                        <div class="rating">
+
+                            <?php
+
+                            $rating = (float) $review["rating"];
+
+                            $fullStars = floor($rating);
+
+                            $hasHalfStar = ($rating - $fullStars) == 0.5;
+
+                            $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
 
 
-                <div class="rating">
-                    ★★★★☆
-                </div>
+                            for ($i = 0; $i < $fullStars; $i++) {
+                                echo "★";
+                            }
 
 
-                <p class="review-text">
-                    A mind-bending story with amazing visuals.
-                </p>
+                            if ($hasHalfStar) {
+                                echo "⯨";
+                            }
 
 
-                <div class="review-actions">
+                            for ($i = 0; $i < $emptyStars; $i++) {
+                                echo "☆";
+                            }
 
-                    <button
-                        type="button"
-                        class="review-edit-btn"
-                    >
-                        Edit
-                    </button>
+                            ?>
 
-                    <button
-                        type="button"
-                        class="review-delete-btn"
-                    >
-                        Delete
-                    </button>
-
-                </div>
+                        </div>
 
 
-            </article>
+                        <!-- REVIEW TEXT -->
+
+                        <p class="review-text">
+
+                            <?php
+                            echo htmlspecialchars($review["reviewText"]);
+                            ?>
+
+                        </p>
 
 
+                        <!-- SPOILER -->
 
-            <!-- REVIEW 3 -->
+                        <?php if ($review["spoiler"]): ?>
 
-            <article class="review-card">
+                            <p class="review-spoiler">
+                                ⚠ Contains spoilers
+                            </p>
 
-
-                <div class="review-poster">
-                    3
-                </div>
-
-
-                <h2>
-                    Oppenheimer
-                </h2>
+                        <?php endif; ?>
 
 
-                <div class="rating">
-                    ★★★★★
-                </div>
+                        <!-- REVIEW DATE -->
+
+                        <p class="review-date">
+
+                            <?php
+                            echo date(
+                                "M d, Y",
+                                strtotime($review["reviewDate"])
+                            );
+                            ?>
+
+                        </p>
 
 
-                <p class="review-text">
-                    Brilliant performances and storytelling.
-                </p>
+                        <!-- ACTIONS -->
+
+                        <div class="review-actions">
 
 
-                <div class="review-actions">
-
-                    <button
-                        type="button"
-                        class="review-edit-btn"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        type="button"
-                        class="review-delete-btn"
-                    >
-                        Delete
-                    </button>
-
-                </div>
+                            <button
+                                type="button"
+                                class="review-edit-btn"
+                                data-review-id="<?php echo $review["reviewID"]; ?>"
+                            >
+                                Edit
+                            </button>
 
 
-            </article>
+                            <button
+                                type="button"
+                                class="review-delete-btn"
+                                data-review-id="<?php echo $review["reviewID"]; ?>"
+                            >
+                                Delete
+                            </button>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                <?php endwhile; ?>
+
+
+            <?php endif; ?>
 
 
         </section>
@@ -199,8 +233,12 @@ include 'includes/auth.php';
     </main>
 
 
-
     <script>
+
+
+        /*
+         * DELETE REVIEW
+         */
 
         const deleteButtons =
             document.querySelectorAll(
@@ -214,17 +252,93 @@ include 'includes/auth.php';
                 "click",
                 function() {
 
+
+                    const reviewID =
+                        button.dataset.reviewId;
+
+
                     const review =
                         button.closest(".review-card");
 
 
-                    review.remove();
+                    const confirmDelete =
+                        confirm(
+                            "Are you sure you want to delete this review?"
+                        );
+
+
+                    if (!confirmDelete) {
+                        return;
+                    }
+
+
+                    const formData =
+                        new FormData();
+
+
+                    formData.append(
+                        "reviewID",
+                        reviewID
+                    );
+
+
+                    fetch("deleteReview.php", {
+
+                        method: "POST",
+
+                        body: formData
+
+                    })
+
+                    .then(function(response) {
+
+                        return response.text();
+
+                    })
+
+                    .then(function(result) {
+
+
+                        if (result === "success") {
+
+                            review.remove();
+
+                        }
+
+                        else {
+
+                            alert(
+                                "Could not delete the review."
+                            );
+
+                            console.log(
+                                "Delete review result:",
+                                result
+                            );
+
+                        }
+
+                    })
+
+                    .catch(function(error) {
+
+                        console.log(
+                            "Delete review error:",
+                            error
+                        );
+
+                    });
+
 
                 }
             );
 
         });
 
+
+        /*
+         * EDIT REVIEW
+         */
 
         const editButtons =
             document.querySelectorAll(
@@ -238,14 +352,21 @@ include 'includes/auth.php';
                 "click",
                 function() {
 
-                    alert(
-                        "Review editing will be available soon."
-                    );
+
+                    const reviewID =
+                        button.dataset.reviewId;
+
+
+                   window.location.href =
+    "editReview.php?review=" +
+    reviewID;
+
 
                 }
             );
 
         });
+
 
     </script>
 

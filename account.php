@@ -5,6 +5,11 @@ include 'includes/config.php';
 
 $userID = $_SESSION["userID"];
 
+
+/*
+    Get user information
+*/
+
 $userQuery = $conn->prepare(
     "SELECT name, username, profilePicture, bio, favoriteGenre
      FROM Users
@@ -16,6 +21,37 @@ $userQuery->execute();
 
 $userResult = $userQuery->get_result();
 $user = $userResult->fetch_assoc();
+
+
+/*
+    Get user's Top 5 movies
+*/
+
+$top5Query = $conn->prepare(
+    "SELECT
+        UserTopMovies.position,
+        movie.movieID,
+        movie.title,
+        movie.poster
+     FROM UserTopMovies
+     INNER JOIN movie
+        ON UserTopMovies.movieID = movie.movieID
+     WHERE UserTopMovies.userID = ?
+     ORDER BY UserTopMovies.position ASC"
+);
+
+$top5Query->bind_param("i", $userID);
+$top5Query->execute();
+
+$top5Result = $top5Query->get_result();
+
+$top5Movies = [];
+
+while ($row = $top5Result->fetch_assoc()) {
+
+    $top5Movies[$row["position"]] = $row;
+
+}
 
 ?>
 <!DOCTYPE html>
@@ -127,101 +163,54 @@ $user = $userResult->fetch_assoc();
 
 
             <!-- =========================
-                 TOP 5 MOVIES
-            ========================== -->
+     TOP 5 MOVIES
+========================== -->
 
-            <div class="top-five-list">
+<div class="top-five-list">
 
+    <?php for ($position = 1; $position <= 5; $position++): ?>
 
-                <!-- Movie 1 -->
+        <div class="top-five-card">
 
-                <div class="top-five-card">
+            <?php if (isset($top5Movies[$position])): ?>
 
-                    <div class="movie-poster">
-                        1
-                    </div>
+                <div class="movie-poster">
 
-                    <h3>
-                        BirdBox
-                    </h3>
-
-                </div>
-
-
-
-                <!-- Movie 2 -->
-
-                <div class="top-five-card">
-
-                    <div class="movie-poster">
-                        2
-                    </div>
-
-                    <h3>
-                        I Will Find you
-                    </h3>
+                    <img
+                        src="<?php echo htmlspecialchars($top5Movies[$position]["poster"]); ?>"
+                        alt="<?php echo htmlspecialchars($top5Movies[$position]["title"]); ?>"
+                    >
 
                 </div>
 
+                <h3>
+                    <?php echo htmlspecialchars($top5Movies[$position]["title"]); ?>
+                </h3>
 
+            <?php else: ?>
 
-                <!-- Movie 3 -->
-
-                <div class="top-five-card">
-
-                    <div class="movie-poster">
-                        3
-                    </div>
-
-                    <h3>
-                        The 5<sup>th</sup> Wave
-                    </h3>
-
+                <div class="movie-poster">
+                    <?php echo $position; ?>
                 </div>
 
+                <h3>
+                    No movie selected
+                </h3>
 
+            <?php endif; ?>
 
-                <!-- Movie 4 -->
+        </div>
 
-                <div class="top-five-card">
+    <?php endfor; ?>
 
-                    <div class="movie-poster">
-                        4
-                    </div>
+</div>
 
-                    <h3>
-                        Until Dawn
-                    </h3>
-
-                </div>
-
-
-
-                <!-- Movie 5 -->
-
-                <div class="top-five-card">
-
-                    <div class="movie-poster">
-                        5
-                    </div>
-
-                    <h3>
-                        People We Meet On Vacation
-                    </h3>
-
-                </div>
-
-
-            </div>
-
-
-        </section>
+</section>
 
 <a href="logout.php" class="logout-btn">
     Logout
 </a>
-    </main>
-
+</main>
 
 </body>
 

@@ -1,6 +1,43 @@
 <?php
+
 include 'includes/auth.php';
+include 'includes/config.php';
+
+
+/*
+    Get all reviews
+*/
+
+$sql = "
+    SELECT
+        Review.reviewID,
+        Review.rating,
+        Review.reviewText,
+        Review.spoiler,
+        Review.reviewDate,
+
+        movie.movieID,
+        movie.title,
+        movie.poster,
+
+        Users.username,
+        Users.profilePicture
+
+    FROM Review
+
+    INNER JOIN movie
+        ON Review.movieID = movie.movieID
+
+    INNER JOIN Users
+        ON Review.userID = Users.userID
+
+    ORDER BY Review.reviewDate DESC
+";
+
+$result = $conn->query($sql);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,297 +62,407 @@ include 'includes/auth.php';
 
 <body>
 
-    <?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 
-    <main class="review-page-container">
+<main class="review-page-container">
 
 
-        <!-- TOP -->
+    <!-- BACK BUTTON -->
 
-        <section class="review-page-top">
+    <a
+        href="search.php"
+        class="back-button"
+    >
+        ←
+    </a>
 
 
-            <div>
 
-                <h1>
-                    Reviews
-                </h1>
+    <!-- PAGE TOP -->
+
+    <section class="review-page-top">
+
+        <div>
+
+            <h1>
+                Reviews
+            </h1>
+
+            <p>
+                Discover what other movie lovers think.
+            </p>
+
+        </div>
+
+
+        <a
+            href="createReview.php"
+            class="create-review-page-btn"
+        >
+            + Create Review
+        </a>
+
+    </section>
+
+
+
+    <!-- SEARCH -->
+
+    <div class="review-search">
+
+        <input
+            type="text"
+            id="reviewSearch"
+            placeholder="Search reviews by movie..."
+        >
+
+        <button
+            type="button"
+            id="reviewSearchBtn"
+        >
+            🔎
+        </button>
+
+    </div>
+
+
+
+    <!-- REVIEWS -->
+
+    <section class="review-feed">
+
+        <?php if ($result->num_rows === 0): ?>
+
+            <div class="no-reviews-message">
+
+                <h2>
+                    No reviews yet
+                </h2>
 
                 <p>
-                    Share your thoughts and discover what
-                    other movie lovers think.
+                    Be the first person to share your thoughts.
                 </p>
 
             </div>
 
-
-            <a
-                href="createReview.php"
-                class="create-review-page-btn"
-            >
-                + Create Review
-            </a>
+        <?php else: ?>
 
 
-        </section>
+            <div id="reviewList">
 
 
-
-        <!-- SEARCH -->
-
-        <div class="review-search">
-
-            <input
-                type="text"
-                id="reviewSearch"
-                placeholder="Search reviews..."
-            >
-
-            <button
-                type="button"
-                id="reviewSearchBtn"
-            >
-                🔎
-            </button>
-
-        </div>
+                <?php while ($review = $result->fetch_assoc()): ?>
 
 
-
-        <!-- CONTENT -->
-
-        <div class="review-layout">
-
-
-            <!-- YOUR REVIEWS -->
-
-            <section class="my-reviews">
-
-                <h2>
-                    My Reviews
-                </h2>
+                    <article
+                        class="review-feed-card"
+                        data-movie="<?php echo htmlspecialchars($review["title"]); ?>"
+                    >
 
 
-                <article
-                    class="review-feed-card"
-                    data-movie="Interstellar"
-                >
-
-                    <div class="review-feed-poster">
-                        INTERSTELLAR
-                    </div>
-
-
-                    <div class="review-feed-content">
-
-                        <h3>
-                            Interstellar
-                        </h3>
-
-                        <div class="large-stars">
-                            ★★★★★
-                        </div>
-
-                        <p>
-                            One of the best sci-fi movies
-                            I've ever watched.
-                        </p>
-
+                        <!-- MOVIE POSTER -->
 
                         <a
-                            href="movieDetails.php?movie=interstellar"
+                            href="movieDetails.php?movie=<?php echo $review["movieID"]; ?>"
+                            class="review-feed-poster"
                         >
-                            View Movie
+
+                            <img
+                                src="<?php echo htmlspecialchars($review["poster"]); ?>"
+                                alt="<?php echo htmlspecialchars($review["title"]); ?>"
+                            >
+
                         </a>
 
-                    </div>
-
-                </article>
 
 
+                        <!-- REVIEW CONTENT -->
 
-                <article
-                    class="review-feed-card"
-                    data-movie="Inception"
-                >
-
-                    <div class="review-feed-poster">
-                        INCEPTION
-                    </div>
+                        <div class="review-feed-content">
 
 
-                    <div class="review-feed-content">
+                            <div class="review-feed-header">
 
-                        <h3>
-                            Inception
-                        </h3>
 
-                        <div class="large-stars">
-                            ★★★★☆
+                                <div>
+
+                                    <h2>
+
+                                        <?php echo htmlspecialchars($review["title"]); ?>
+
+                                    </h2>
+
+
+                                    <p class="review-by">
+
+                                        by
+                                        <strong>
+                                            <?php echo htmlspecialchars($review["username"]); ?>
+                                        </strong>
+
+                                    </p>
+
+                                </div>
+
+
+                                <p class="review-date">
+
+                                    <?php
+                                    echo date(
+                                        "M d, Y",
+                                        strtotime($review["reviewDate"])
+                                    );
+                                    ?>
+
+                                </p>
+
+
+                            </div>
+
+
+
+                            <!-- RATING -->
+
+                            <div class="large-stars">
+
+                                <?php
+
+                                $rating = (float) $review["rating"];
+
+                                $starRating = $rating / 2;
+
+                                $fullStars = floor($starRating);
+
+                                $hasHalfStar =
+                                    ($starRating - $fullStars) == 0.5;
+
+                                $emptyStars =
+                                    5
+                                    - $fullStars
+                                    - ($hasHalfStar ? 1 : 0);
+
+
+                                for (
+                                    $i = 0;
+                                    $i < $fullStars;
+                                    $i++
+                                ) {
+
+                                    echo "★";
+
+                                }
+
+
+                                if ($hasHalfStar) {
+
+                                    echo "⯨";
+
+                                }
+
+
+                                for (
+                                    $i = 0;
+                                    $i < $emptyStars;
+                                    $i++
+                                ) {
+
+                                    echo "☆";
+
+                                }
+
+                                ?>
+
+                                <span class="rating-number">
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $review["rating"]
+                                    );
+                                    ?>/10
+
+                                </span>
+
+                            </div>
+
+
+
+                            <!-- REVIEW TEXT -->
+
+                            <p
+                                class="review-feed-text
+                                <?php
+                                echo $review["spoiler"]
+                                    ? "spoiler-blurred"
+                                    : "";
+                                ?>"
+                                <?php
+                                if ($review["spoiler"]) {
+                                    echo 'onclick="this.classList.toggle(\'spoiler-revealed\')"';
+                                }
+                                ?>
+                            >
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $review["reviewText"]
+                                );
+                                ?>
+
+                            </p>
+
+
+
+                            <!-- SPOILER -->
+
+                            <?php if ($review["spoiler"]): ?>
+
+                                <p class="review-spoiler">
+
+                                    ⚠ Contains spoilers
+                                    <span>
+                                        Click to reveal
+                                    </span>
+
+                                </p>
+
+                            <?php endif; ?>
+
+
+
+                            <!-- VIEW MOVIE -->
+
+                            <a
+                                href="movieDetails.php?movie=<?php echo $review["movieID"]; ?>"
+                                class="view-movie-btn"
+                            >
+                                View Movie
+                            </a>
+
+
                         </div>
 
-                        <p>
-                            A brilliant and complicated
-                            story with amazing visuals.
-                        </p>
 
+                    </article>
 
-                        <a
-                            href="movieDetails.php?movie=inception"
-                        >
-                            View Movie
-                        </a>
 
-                    </div>
+                <?php endwhile; ?>
 
-                </article>
 
+            </div>
 
-            </section>
 
+            <!-- NO SEARCH RESULTS -->
 
+            <p
+                id="noReviewResults"
+                class="no-results"
+                style="display: none;"
+            >
+                No reviews found.
+            </p>
 
-            <!-- COMMUNITY -->
 
-            <aside class="community-reviews">
+        <?php endif; ?>
 
-                <h2>
-                    Reviews from the Community
-                </h2>
 
+    </section>
 
-                <article class="community-review">
 
-                    <div class="community-poster">
-                        O
-                    </div>
+</main>
 
 
-                    <div>
 
-                        <strong>
-                            Oppenheimer
-                        </strong>
+<script>
 
-                        <div class="community-stars">
-                            ★★★★★
-                        </div>
 
-                    </div>
+const reviewSearch =
+    document.getElementById("reviewSearch");
 
-                </article>
 
+const reviewCards =
+    document.querySelectorAll(".review-feed-card");
 
 
-                <article class="community-review">
+const noReviewResults =
+    document.getElementById("noReviewResults");
 
-                    <div class="community-poster">
-                        A
-                    </div>
 
 
-                    <div>
+/*
+    SEARCH REVIEWS
+*/
 
-                        <strong>
-                            Avatar
-                        </strong>
+if (reviewSearch) {
 
-                        <div class="community-stars">
-                            ★★★★☆
-                        </div>
+    reviewSearch.addEventListener(
+        "input",
+        function() {
 
-                    </div>
+            const value =
+                reviewSearch.value
+                .toLowerCase()
+                .trim();
 
-                </article>
 
+            let foundReviews = 0;
 
 
-                <article class="community-review">
+            reviewCards.forEach(
+                function(card) {
 
-                    <div class="community-poster">
-                        D
-                    </div>
+                    const movie =
+                        card.dataset.movie
+                        .toLowerCase();
 
 
-                    <div>
+                    if (
+                        movie.includes(value)
+                    ) {
 
-                        <strong>
-                            Dune
-                        </strong>
+                        card.style.display =
+                            "flex";
 
-                        <div class="community-stars">
-                            ★★★★★
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-            </aside>
-
-
-        </div>
-
-
-    </main>
-
-
-
-    <script>
-
-        const reviewSearch =
-            document.getElementById(
-                "reviewSearch"
-            );
-
-
-        const reviewCards =
-            document.querySelectorAll(
-                ".review-feed-card"
-            );
-
-
-        reviewSearch.addEventListener(
-            "input",
-            function() {
-
-                const value =
-                    reviewSearch.value
-                    .toLowerCase()
-                    .trim();
-
-
-                reviewCards.forEach(
-                    function(card) {
-
-                        const movie =
-                            card.dataset.movie
-                            .toLowerCase();
-
-
-                        if (
-                            movie.includes(value)
-                        ) {
-
-                            card.style.display =
-                                "flex";
-
-                        } else {
-
-                            card.style.display =
-                                "none";
-
-                        }
+                        foundReviews++;
 
                     }
-                );
+                    else {
+
+                        card.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+            if (
+                noReviewResults
+            ) {
+
+                if (foundReviews === 0) {
+
+                    noReviewResults.style.display =
+                        "block";
+
+                }
+                else {
+
+                    noReviewResults.style.display =
+                        "none";
+
+                }
 
             }
-        );
 
-    </script>
+        }
+    );
+
+}
+
+
+</script>
 
 
 </body>

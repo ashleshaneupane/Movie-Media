@@ -1,465 +1,1831 @@
 <?php
+
 include 'includes/auth.php';
+include 'includes/config.php';
+
+$userID = $_SESSION["userID"];
+
+
+/* =========================
+   GET CURRENT USER
+========================= */
+
+$userQuery = $conn->prepare(
+    "SELECT
+        userID,
+        username,
+        name,
+        profilePicture,
+        bio,
+        favoriteGenre
+     FROM Users
+     WHERE userID = ?"
+);
+
+$userQuery->bind_param(
+    "i",
+    $userID
+);
+
+$userQuery->execute();
+
+$user = $userQuery
+    ->get_result()
+    ->fetch_assoc();
+
+
+/* =========================
+   WATCHED COUNT
+========================= */
+
+$watchedQuery = $conn->prepare(
+    "SELECT COUNT(*) AS total
+     FROM Watched
+     WHERE userID = ?"
+);
+
+$watchedQuery->bind_param(
+    "i",
+    $userID
+);
+
+$watchedQuery->execute();
+
+$watchedCount =
+    $watchedQuery
+    ->get_result()
+    ->fetch_assoc()["total"];
+
+
+/* =========================
+   WATCHLIST COUNT
+========================= */
+
+$watchlistQuery = $conn->prepare(
+    "SELECT COUNT(*) AS total
+     FROM Watchlist
+     WHERE userID = ?"
+);
+
+$watchlistQuery->bind_param(
+    "i",
+    $userID
+);
+
+$watchlistQuery->execute();
+
+$watchlistCount =
+    $watchlistQuery
+    ->get_result()
+    ->fetch_assoc()["total"];
+
+
+/* =========================
+   REVIEW COUNT + AVERAGE
+========================= */
+
+$reviewQuery = $conn->prepare(
+    "SELECT
+        COUNT(*) AS total,
+        AVG(rating) AS averageRating
+     FROM Review
+     WHERE userID = ?"
+);
+
+$reviewQuery->bind_param(
+    "i",
+    $userID
+);
+
+$reviewQuery->execute();
+
+$reviewStats =
+    $reviewQuery
+    ->get_result()
+    ->fetch_assoc();
+
+$reviewCount =
+    $reviewStats["total"];
+
+$averageRating =
+    $reviewStats["averageRating"];
+
+
+/* =========================
+   POST COUNT
+========================= */
+
+$postCountQuery = $conn->prepare(
+    "SELECT COUNT(*) AS total
+     FROM Post
+     WHERE userID = ?"
+);
+
+$postCountQuery->bind_param(
+    "i",
+    $userID
+);
+
+$postCountQuery->execute();
+
+$postCount =
+    $postCountQuery
+    ->get_result()
+    ->fetch_assoc()["total"];
+
+
+/* =========================
+   TOP 5 MOVIES
+========================= */
+
+$topMovieQuery = $conn->prepare(
+    "SELECT
+        movie.title
+     FROM UserTopMovies
+     INNER JOIN movie
+        ON UserTopMovies.movieID = movie.movieID
+     WHERE UserTopMovies.userID = ?
+     ORDER BY UserTopMovies.position ASC
+     LIMIT 5"
+);
+
+$topMovieQuery->bind_param(
+    "i",
+    $userID
+);
+
+$topMovieQuery->execute();
+
+$topMovieResult =
+    $topMovieQuery->get_result();
+
+
+/* =========================
+   FAVORITE GENRES
+========================= */
+
+$favoriteGenres = [];
+
+if (!empty($user["favoriteGenre"])) {
+
+    $favoriteGenres =
+        array_filter(
+            array_map(
+                "trim",
+                explode(
+                    ",",
+                    $user["favoriteGenre"]
+                )
+            )
+        );
+
+}
+
+
+/* =========================
+   GET POSTS
+========================= */
+
+$postQuery = $conn->prepare(
+    "SELECT
+        Post.postID,
+        Post.userID,
+        Post.movieID,
+        Post.caption,
+        Post.imageURL,
+        Post.watchedDate,
+        Post.postDate,
+
+        Users.username,
+        Users.name,
+        Users.profilePicture,
+
+        movie.title AS movieTitle,
+        movie.poster AS moviePoster,
+
+        (
+            SELECT COUNT(*)
+            FROM PostLike
+            WHERE PostLike.postID = Post.postID
+        ) AS likeCount,
+
+        (
+            SELECT COUNT(*)
+            FROM PostLike
+            WHERE PostLike.postID = Post.postID
+            AND PostLike.userID = ?
+        ) AS userLiked,
+
+        (
+            SELECT COUNT(*)
+            FROM PostComment
+            WHERE PostComment.postID = Post.postID
+        ) AS commentCount
+
+     FROM Post
+
+     INNER JOIN Users
+        ON Post.userID = Users.userID
+
+     LEFT JOIN movie
+        ON Post.movieID = movie.movieID
+
+     WHERE
+        Post.userID = ?
+
+        OR
+
+        Post.userID IN (
+            SELECT
+                CASE
+                    WHEN senderID = ? THEN receiverID
+                    ELSE senderID
+                END
+
+            FROM FriendRequest
+
+            WHERE
+                status = 'accepted'
+
+                AND (
+                    senderID = ?
+                    OR receiverID = ?
+                )
+        )
+
+     ORDER BY Post.postDate DESC"
+);
+
+$postQuery->bind_param(
+    "iiiii",
+    $userID,
+    $userID,
+    $userID,
+    $userID,
+    $userID
+);
+
+$postQuery->execute();
+
+$postQuery =
+    $postQuery->get_result();
+
+/* =========================
+   PROFILE IMAGE
+========================= */
+
+$profilePicture =
+    !empty($user["profilePicture"])
+    ? $user["profilePicture"]
+    : "";
+
 ?>
+
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Home - Movie Media</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="css/index.css">
+    <title>
+        Home - Movie Media
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/index.css"
+    >
+
 </head>
+
 
 <body>
 
-    <?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 
-    <main class="home-layout">
-
-        <!-- =========================
-             LEFT SIDEBAR
-        ========================== -->
-
-        <aside class="left-sidebar">
-
-            <div class="profile-card">
-
-                <!-- Profile Picture -->
-                <div class="profile-image">
-                    <span>U</span>
-                </div>
-
-                <!-- User Information -->
-                <h2>User Name</h2>
-
-                <p class="username">@username</p>
-
-                <p class="profile-bio">
-                    Movie lover, escaping reality.
-                </p>
+<main class="home-layout">
 
 
-                <!-- Profile Stats -->
-                <div class="profile-stats">
+    <!-- =========================
+         LEFT SIDEBAR
+    ========================== -->
 
-                    <div class="profile-stat">
-                        <strong>24</strong>
-                        <span>Posts</span>
-                    </div>
+    <aside class="left-sidebar">
 
-                    <div class="profile-stat">
-                        <strong>81</strong>
-                        <span>Watched</span>
-                    </div>
-
-                    <div class="profile-stat">
-                        <strong>36</strong>
-                        <span>Friends</span>
-                    </div>
-
-                </div>
+        <div class="profile-card">
 
 
-                <!-- Movie Statistics -->
-                <div class="movie-stats">
+            <!-- PROFILE IMAGE -->
 
-                    <div class="movie-stat-row">
-                        <span>Watchlist</span>
-                        <strong>17</strong>
-                    </div>
+            <div class="profile-image">
 
-                    <div class="movie-stat-row">
-                        <span>Reviews</span>
-                        <strong>29</strong>
-                    </div>
+                <?php if ($profilePicture !== ""): ?>
 
-                    <div class="movie-stat-row">
-                        <span>Avg. Rating</span>
-                        <strong>8.2</strong>
-                    </div>
+                    <img
+                        src="<?php
+                            echo htmlspecialchars(
+                                $profilePicture
+                            );
+                        ?>"
+                        alt="Profile Picture"
+                    >
 
-                </div>
+                <?php else: ?>
 
+                    <span>
 
-                <!-- Favorite Genres -->
-                <div class="profile-section">
+                        <?php
 
-                    <h3>Favorite Genres</h3>
+                        echo strtoupper(
+                            substr(
+                                $user["name"]
+                                ?: $user["username"],
+                                0,
+                                1
+                            )
+                        );
 
-                    <div class="genre-list">
-                        <span>Thriller</span>
-                        <span>Sci-Fi</span>
-                        <span>Romance</span>
-                        <span>Drama</span>
-                    </div>
+                        ?>
 
-                </div>
+                    </span>
 
-
-                <!-- Top Movies -->
-                <div class="profile-section">
-
-                    <h3>My Top 5</h3>
-
-                    <ol class="top-movies">
-                        <li>Interstellar</li>
-                        <li>Inception</li>
-                        <li>Parasite</li>
-                        <li>Arrival</li>
-                        <li>La La Land</li>
-                    </ol>
-
-                </div>
-
-
-                <!-- View Profile -->
-                <a href="account.php" class="view-profile-btn">
-                    View Profile
-                </a>
+                <?php endif; ?>
 
             </div>
 
-        </aside>
 
+            <!-- NAME -->
+
+            <h2>
+
+                <?php
+
+                echo htmlspecialchars(
+                    $user["name"]
+                    ?: $user["username"]
+                );
+
+                ?>
+
+            </h2>
+
+
+            <!-- USERNAME -->
+
+            <p class="username">
+
+                @<?php
+                echo htmlspecialchars(
+                    $user["username"]
+                );
+                ?>
+
+            </p>
+
+
+            <!-- BIO -->
+
+            <p class="profile-bio">
+
+                <?php
+
+                if (!empty($user["bio"])) {
+
+                    echo htmlspecialchars(
+                        $user["bio"]
+                    );
+
+                } else {
+
+                    echo "Movie lover, escaping reality.";
+
+                }
+
+                ?>
+
+            </p>
+
+
+            <!-- PROFILE STATS -->
+
+            <div class="profile-stats">
+
+
+                <div class="profile-stat">
+
+                    <strong>
+
+                        <?php
+                        echo $postCount;
+                        ?>
+
+                    </strong>
+
+                    <span>
+                        Posts
+                    </span>
+
+                </div>
+
+
+                <div class="profile-stat">
+
+                    <strong>
+
+                        <?php
+                        echo $watchedCount;
+                        ?>
+
+                    </strong>
+
+                    <span>
+                        Watched
+                    </span>
+
+                </div>
+
+
+                <div class="profile-stat">
+
+                    <strong>
+
+                        <?php
+                        echo $friendCount;
+                        ?>
+
+                    </strong>
+
+                    <span>
+                        Friends
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- MOVIE STATS -->
+
+            <div class="movie-stats">
+
+
+                <div class="movie-stat-row">
+
+                    <span>
+                        Watchlist
+                    </span>
+
+                    <strong>
+
+                        <?php
+                        echo $watchlistCount;
+                        ?>
+
+                    </strong>
+
+                </div>
+
+
+                <div class="movie-stat-row">
+
+                    <span>
+                        Reviews
+                    </span>
+
+                    <strong>
+
+                        <?php
+                        echo $reviewCount;
+                        ?>
+
+                    </strong>
+
+                </div>
+
+
+                <div class="movie-stat-row">
+
+                    <span>
+                        Avg. Rating
+                    </span>
+
+                    <strong>
+
+                        <?php
+
+                        if ($averageRating === null) {
+
+                            echo "0.0";
+
+                        } else {
+
+                            echo number_format(
+                                (float) $averageRating,
+                                1
+                            );
+
+                        }
+
+                        ?>
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FAVORITE GENRES -->
+
+            <div class="profile-section">
+
+                <h3>
+                    Favorite Genres
+                </h3>
+
+
+                <div class="genre-list">
+
+                    <?php if (!empty($favoriteGenres)): ?>
+
+                        <?php foreach (
+                            $favoriteGenres as $genre
+                        ): ?>
+
+                            <span>
+
+                                <?php
+
+                                echo htmlspecialchars(
+                                    $genre
+                                );
+
+                                ?>
+
+                            </span>
+
+                        <?php endforeach; ?>
+
+                    <?php else: ?>
+
+                        <span>
+                            No genres selected
+                        </span>
+
+                    <?php endif; ?>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOP 5 -->
+
+            <div class="profile-section">
+
+                <h3>
+                    My Top 5
+                </h3>
+
+
+                <?php if (
+                    $topMovieResult->num_rows > 0
+                ): ?>
+
+                    <ol class="top-movies">
+
+                        <?php while (
+                            $topMovie =
+                            $topMovieResult->fetch_assoc()
+                        ): ?>
+
+                            <li>
+
+                                <?php
+
+                                echo htmlspecialchars(
+                                    $topMovie["title"]
+                                );
+
+                                ?>
+
+                            </li>
+
+                        <?php endwhile; ?>
+
+                    </ol>
+
+                <?php else: ?>
+
+                    <p>
+                        No top movies added yet.
+                    </p>
+
+                <?php endif; ?>
+
+
+            </div>
+
+
+            <!-- VIEW PROFILE -->
+
+            <a
+                href="account.php"
+                class="view-profile-btn"
+            >
+                View Profile
+            </a>
+
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         CENTER FEED
+    ========================== -->
+
+    <section class="home-feed">
+
+
+        <!-- CREATE POST -->
+
+        <div class="create-post-link">
+
+            <a href="createPost.php">
+
+                <span class="plus-icon">
+                    +
+                </span>
+
+                Create Post
+
+            </a>
+
+        </div>
 
 
         <!-- =========================
-             CENTER FEED
+             POSTS
         ========================== -->
 
-        <section class="home-feed">
+        <?php if (
+            $postQuery->num_rows === 0
+        ): ?>
 
-            <!-- Create Post -->
-            <div class="create-post-link">
+            <article class="post-card">
 
-    <a href="createPost.php">
-        <span class="plus-icon">+</span>
-        Create Post
+                <p
+                    style="
+                        color: white;
+                        text-align: center;
+                    "
+                >
+                    No posts yet. Be the first to post!
+                </p>
+
+            </article>
+
+
+        <?php else: ?>
+
+
+            <?php while (
+                $post =
+                $postQuery->fetch_assoc()
+            ): ?>
+
+
+                <article
+                    class="post-card"
+                    data-post-id="<?php
+                        echo $post["postID"];
+                    ?>"
+                >
+<!-- POST HEADER -->
+
+<div class="post-header">
+
+    <a
+        href="profile.php?user=<?php
+            echo $post["userID"];
+        ?>"
+        class="post-user-link"
+    >
+
+        <div class="post-profile-image">
+
+            <?php if (
+                !empty(
+                    $post["profilePicture"]
+                )
+            ): ?>
+
+                <img
+                    src="<?php
+                        echo htmlspecialchars(
+                            $post["profilePicture"]
+                        );
+                    ?>"
+                    alt="Profile Picture"
+                >
+
+            <?php else: ?>
+
+                <?php
+
+                echo strtoupper(
+                    substr(
+                        $post["name"]
+                        ?: $post["username"],
+                        0,
+                        1
+                    )
+                );
+
+                ?>
+
+            <?php endif; ?>
+
+        </div>
+
+
+        <div class="post-user-info">
+
+            <h3>
+
+                <?php
+
+                echo htmlspecialchars(
+                    $post["name"]
+                    ?: $post["username"]
+                );
+
+                ?>
+
+            </h3>
+
+
+            <p>
+
+                @<?php
+
+                echo htmlspecialchars(
+                    $post["username"]
+                );
+
+                ?>
+
+            </p>
+
+        </div>
+
     </a>
+
+
+    <?php if (
+        (int) $post["userID"] ===
+        (int) $userID
+    ): ?>
+
+        <button
+            type="button"
+            class="delete-post"
+            data-post-id="<?php
+                echo $post["postID"];
+            ?>"
+        >
+            Delete
+        </button>
+
+    <?php endif; ?>
 
 </div>
 
+                    <!-- POST CONTENT -->
+
+                    <div class="post-content">
 
 
-            <!-- =========================
-                 POST 1
-            ========================== -->
+                        <!-- CAPTION -->
 
-            <article class="post-card">
-
-                <!-- Post Header -->
-                <div class="post-header">
-
-                    <div class="post-profile-image">
-                        A
-                    </div>
-
-                    <div class="post-user-info">
-                        <h3>Ash</h3>
-                        <p>@ash</p>
-                    </div>
-
-                </div>
-
-
-                <!-- Post Content -->
-                <div class="post-content">
-
-                    <p>
-                        Finally watched Interstellar tonight. I genuinely don't know
-                        how a movie can make me stare at the ceiling for twenty minutes
-                        after it ends. 🚀
-                    </p>
-
-
-                    <!-- Movie Attachment -->
-                    <div class="movie-attachment">
-
-                        <div class="movie-poster-placeholder">
-                            Movie Poster
-                        </div>
-
-                        <div class="movie-attachment-info">
-
-                            <h3>Interstellar</h3>
-
-                            <p>⭐ 8.7 / 10</p>
+                        <?php if (
+                            !empty(
+                                $post["caption"]
+                            )
+                        ): ?>
 
                             <p>
-                                Watched: September 7, 2026
+
+                                <?php
+
+                                echo nl2br(
+                                    htmlspecialchars(
+                                        $post["caption"]
+                                    )
+                                );
+
+                                ?>
+
                             </p>
 
-                        </div>
+                        <?php endif; ?>
+
+
+
+                        <!-- MOVIE -->
+
+                        <?php if (
+                            !empty(
+                                $post["movieID"]
+                            )
+                            &&
+                            !empty(
+                                $post["movieTitle"]
+                            )
+                        ): ?>
+
+
+                            <div
+                                class="movie-attachment"
+                            >
+
+
+                                <?php if (
+                                    !empty(
+                                        $post[
+                                            "moviePoster"
+                                        ]
+                                    )
+                                ): ?>
+
+                                    <img
+                                        src="<?php
+                                            echo htmlspecialchars(
+                                                $post[
+                                                    "moviePoster"
+                                                ]
+                                            );
+                                        ?>"
+                                        alt="<?php
+                                            echo htmlspecialchars(
+                                                $post[
+                                                    "movieTitle"
+                                                ]
+                                            );
+                                        ?>"
+                                        class="movie-poster"
+                                    >
+
+                                <?php endif; ?>
+
+
+                                <div
+                                    class="movie-attachment-info"
+                                >
+
+                                    <h3>
+
+                                        <?php
+
+                                        echo htmlspecialchars(
+                                            $post[
+                                                "movieTitle"
+                                            ]
+                                        );
+
+                                        ?>
+
+                                    </h3>
+
+
+                                    <?php if (
+                                        !empty(
+                                            $post[
+                                                "watchedDate"
+                                            ]
+                                        )
+                                    ): ?>
+
+                                        <p>
+
+                                            Watched:
+
+                                            <?php
+
+                                            echo date(
+                                                "F d, Y",
+                                                strtotime(
+                                                    $post[
+                                                        "watchedDate"
+                                                    ]
+                                                )
+                                            );
+
+                                            ?>
+
+                                        </p>
+
+                                    <?php endif; ?>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        <?php endif; ?>
+
+
+
+                        <!-- PHOTO -->
+
+                        <?php if (
+                            !empty(
+                                $post["imageURL"]
+                            )
+                        ): ?>
+
+                            <div
+                                class="photo-attachment"
+                            >
+
+                                <img
+                                    src="<?php
+                                        echo htmlspecialchars(
+                                            $post["imageURL"]
+                                        );
+                                    ?>"
+                                    alt="Post Image"
+                                    class="post-image"
+                                >
+
+                            </div>
+
+                        <?php endif; ?>
+
 
                     </div>
 
-                </div>
 
 
-                <!-- Post Actions -->
-                <div class="post-actions">
+                    <!-- =========================
+                         POST ACTIONS
+                    ========================== -->
 
-                    <button type="button" class="like-button">
-                        ☆ <span>24</span>
-                    </button>
-
-                    <button type="button">
-                        ▤ <span>8</span>
-                    </button>
-
-                </div>
-
-            </article>
+                    <div class="post-actions">
 
 
+                        <!-- LIKE -->
 
-            <!-- =========================
-                 POST 2
-            ========================== -->
+                        <button
+                            type="button"
+                            class="like-button <?php
+                                echo $post["userLiked"] > 0
+                                    ? "liked"
+                                    : "";
+                            ?>"
+                            data-post-id="<?php
+                                echo $post["postID"];
+                            ?>"
+                        >
 
-            <article class="post-card">
+                            <?php
 
-                <div class="post-header">
+                            echo $post["userLiked"] > 0
+                                ? "★"
+                                : "☆";
 
-                    <div class="post-profile-image">
-                        M
+                            ?>
+
+                            <span>
+
+                                <?php
+                                echo $post["likeCount"];
+                                ?>
+
+                            </span>
+
+                        </button>
+
+
+                        <!-- COMMENT -->
+
+                        <button
+                            type="button"
+                            class="comment-toggle"
+                            data-post-id="<?php
+                                echo $post["postID"];
+                            ?>"
+                        >
+
+                            ▤
+
+                            <span
+                                class="comment-count"
+                            >
+
+                                <?php
+                                echo $post["commentCount"];
+                                ?>
+
+                            </span>
+
+                        </button>
+
+
                     </div>
 
-                    <div class="post-user-info">
-                        <h3>Movie Lover</h3>
-                        <p>@movielover</p>
-                    </div>
 
-                </div>
+                </article>
 
 
-                <div class="post-content">
-
-                    <p>
-                        Sometimes you just need a good movie and some peace.
-                        This one was surprisingly beautiful.
-                    </p>
+            <?php endwhile; ?>
 
 
-                    <!-- Photo Attachment -->
-                    <div class="photo-attachment">
-
-                        <div class="photo-placeholder">
-                            Your Photo
-                        </div>
-
-                    </div>
+        <?php endif; ?>
 
 
-                    <div class="watched-info">
-                        🎬 Watched a movie
-                        <span>•</span>
-                        September 6, 2026
-                    </div>
-
-                </div>
-
-
-                <div class="post-actions">
-
-                    <button type="button" class="like-button">
-                        ☆ <span>18</span>
-                    </button>
-
-                    <button type="button">
-                        ▤ <span>3</span>
-                    </button>
-
-                </div>
-
-            </article>
+    </section>
 
 
 
-            <!-- =========================
-                 POST 3
-            ========================== -->
+  <!-- =========================
+     RIGHT SIDEBAR
+========================= -->
 
-            <article class="post-card">
+<aside class="right-sidebar" id="rightSidebar">
 
-                <div class="post-header">
+    <div class="comments-card" id="commentsCard">
 
-                    <div class="post-profile-image">
-                        S
-                    </div>
+        <div class="comments-header">
 
-                    <div class="post-user-info">
-                        <h3>Sarah</h3>
-                        <p>@sarahmovies</p>
-                    </div>
+            <h2>
+                Comments
+            </h2>
 
-                </div>
+            <button
+                type="button"
+                id="closeComments"
+            >
+                ×
+            </button>
 
-
-                <div class="post-content">
-
-                    <p>
-                        What a movie. The soundtrack alone deserves its own review.
-                    </p>
-
-                </div>
+        </div>
 
 
-                <div class="post-actions">
+        <div
+            class="sidebar-comment-list"
+            id="sidebarCommentList"
+        >
+        </div>
 
-                    <button type="button" class="like-button">
-                        ☆ <span>31</span>
-                    </button>
 
-                    <button type="button">
-                        ▤ <span>12</span>
-                    </button>
+        <div class="sidebar-comment-form">
 
-                </div>
+            <input
+                type="text"
+                id="sidebarCommentInput"
+                placeholder="Write a comment..."
+            >
 
-            </article>
+            <button
+                type="button"
+                id="sidebarCommentButton"
+            >
+                Post
+            </button>
 
-        </section>
+        </div>
+
+    </div>
+
+</aside>
 
 
 
         <!-- =========================
-             RIGHT SIDEBAR
+             COMMENTS
         ========================== -->
 
-        <aside class="right-sidebar">
+        <div class="comments-card">
+
+            <h2>
+                Comments
+            </h2>
 
 
-            <!-- Search -->
-            <div class="sidebar-search">
+            <div
+                class="sidebar-comment-list"
+                id="sidebarCommentList"
+            >
 
-                <input type="text" placeholder="Search...">
+                <p class="no-comments">
+                    Click the comment icon on a post.
+                </p>
 
-                <button type="button">
-                    ⌕
+            </div>
+
+
+            <div
+                class="sidebar-comment-form"
+            >
+
+                <input
+                    type="text"
+                    id="sidebarCommentInput"
+                    placeholder="Write a comment..."
+                    disabled
+                >
+
+                <button
+                    type="button"
+                    id="sidebarCommentButton"
+                    disabled
+                >
+                    Post
                 </button>
 
             </div>
 
 
-
-            <!-- Comments -->
-            <div class="comments-card">
-
-                <h2>Comments</h2>
+        </div>
 
 
-                <div class="comment">
-
-                    <div class="comment-profile">
-                        A
-                    </div>
-
-                    <div class="comment-content">
-                        <strong>@alex</strong>
-                        <p>That ending 😭</p>
-                    </div>
-
-                </div>
+    </aside>
 
 
-                <div class="comment">
-
-                    <div class="comment-profile">
-                        M
-                    </div>
-
-                    <div class="comment-content">
-                        <strong>@mike</strong>
-                        <p>One of my favorites!</p>
-                    </div>
-
-                </div>
-
-
-                <div class="comment">
-
-                    <div class="comment-profile">
-                        S
-                    </div>
-
-                    <div class="comment-content">
-                        <strong>@sarah</strong>
-                        <p>Need to watch this!</p>
-                    </div>
-
-                </div>
-
-
-                <div class="comment">
-
-                    <div class="comment-profile">
-                        J
-                    </div>
-
-                    <div class="comment-content">
-                        <strong>@jane</strong>
-                        <p>The soundtrack is amazing.</p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </aside>
-
-    </main>
+</main>
 
 
 
-    <script>
+<script>
 
-        /*
-         * Temporary Like Interaction
-         * Database functionality will be added later.
-         */
-
-        const likeButtons = document.querySelectorAll(".like-button");
-
-        likeButtons.forEach(function(button) {
-
-            button.addEventListener("click", function() {
-
-                const count = button.querySelector("span");
-
-                let likes = parseInt(count.textContent);
+const currentUserID =
+    <?php echo (int) $userID; ?>;
 
 
-                if (button.classList.contains("liked")) {
+/* =========================
+   LIKE SYSTEM
+========================= */
 
-                    likes--;
+const likeButtons =
+    document.querySelectorAll(
+        ".like-button"
+    );
 
-                    button.classList.remove("liked");
 
-                    button.firstChild.textContent = "☆ ";
+likeButtons.forEach(function(button) {
 
-                } else {
+    button.addEventListener(
+        "click",
+        function() {
 
-                    likes++;
+            const postID =
+                button.dataset.postId;
 
-                    button.classList.add("liked");
 
-                    button.firstChild.textContent = "★ ";
+            const count =
+                button.querySelector(
+                    "span"
+                );
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "postID",
+                postID
+            );
+
+
+            fetch(
+                "likePost.php",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            )
+
+            .then(function(response) {
+
+                return response.text();
+
+            })
+
+            .then(function(result) {
+
+                if (
+                    result === "liked"
+                ) {
+
+                    button.classList.add(
+                        "liked"
+                    );
+
+
+                    button.firstChild.textContent =
+                        "★ ";
+
+
+                    count.textContent =
+                        parseInt(
+                            count.textContent
+                        ) + 1;
 
                 }
 
 
-                count.textContent = likes;
+                else if (
+                    result === "unliked"
+                ) {
+
+                    button.classList.remove(
+                        "liked"
+                    );
+
+
+                    button.firstChild.textContent =
+                        "☆ ";
+
+
+                    count.textContent =
+                        Math.max(
+                            0,
+                            parseInt(
+                                count.textContent
+                            ) - 1
+                        );
+
+                }
 
             });
 
+        }
+    );
+
+});
+
+
+
+/* =========================
+   COMMENTS
+========================= */
+
+let selectedPostID = null;
+
+
+
+/* =========================
+   COMMENT BUTTONS
+========================= */
+
+const commentToggles =
+    document.querySelectorAll(
+        ".comment-toggle"
+    );
+
+
+commentToggles.forEach(function(button) {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            selectedPostID =
+                button.dataset.postId;
+
+
+            const sidebar =
+                document.getElementById(
+                    "rightSidebar"
+                );
+
+
+            sidebar.classList.add(
+                "active"
+            );
+
+
+            loadComments(
+                selectedPostID
+            );
+
+        }
+    );
+
+});
+
+
+
+/* =========================
+   LOAD COMMENTS
+========================= */
+
+function loadComments(postID) {
+
+    const commentList =
+        document.getElementById(
+            "sidebarCommentList"
+        );
+
+
+    const input =
+        document.getElementById(
+            "sidebarCommentInput"
+        );
+
+
+    const submitButton =
+        document.getElementById(
+            "sidebarCommentButton"
+        );
+
+
+    commentList.innerHTML =
+        "<p>Loading comments...</p>";
+
+
+    input.disabled = false;
+
+    submitButton.disabled = false;
+
+
+    fetch(
+        "getComments.php?postID=" +
+        encodeURIComponent(postID)
+    )
+
+    .then(function(response) {
+
+        return response.json();
+
+    })
+
+    .then(function(comments) {
+
+        commentList.innerHTML = "";
+
+
+        if (
+            comments.length === 0
+        ) {
+
+            commentList.innerHTML =
+                '<p class="no-comments">No comments yet.</p>';
+
+            return;
+
+        }
+
+
+        comments.forEach(function(comment) {
+
+            const commentElement =
+                document.createElement(
+                    "div"
+                );
+
+
+            commentElement.className =
+                "sidebar-comment";
+
+
+            const commentTop =
+                document.createElement(
+                    "div"
+                );
+
+
+            commentTop.className =
+                "sidebar-comment-top";
+
+
+            const username =
+                document.createElement(
+                    "strong"
+                );
+
+
+            username.textContent =
+                "@" + comment.username;
+
+
+            commentTop.appendChild(
+                username
+            );
+
+
+            /* =========================
+               DELETE BUTTON
+            ========================= */
+
+            if (
+                Number(comment.userID) ===
+                Number(currentUserID)
+            ) {
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                deleteButton.className =
+                    "delete-comment";
+
+
+                deleteButton.textContent =
+                    "Delete";
+
+
+                deleteButton.addEventListener(
+                    "click",
+                    function() {
+
+                        deleteComment(
+                            comment.commentID
+                        );
+
+                    }
+                );
+
+
+                commentTop.appendChild(
+                    deleteButton
+                );
+
+            }
+
+
+            const text =
+                document.createElement(
+                    "p"
+                );
+
+
+            text.textContent =
+                comment.commentText;
+
+
+            commentElement.appendChild(
+                commentTop
+            );
+
+
+            commentElement.appendChild(
+                text
+            );
+
+
+            commentList.appendChild(
+                commentElement
+            );
+
         });
 
-    </script>
+    })
+
+    .catch(function() {
+
+        commentList.innerHTML =
+            '<p class="no-comments">Could not load comments.</p>';
+
+    });
+
+}
+
+
+
+/* =========================
+   DELETE COMMENT
+========================= */
+
+function deleteComment(commentID) {
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "commentID",
+        commentID
+    );
+
+
+    fetch(
+        "deleteComment.php",
+        {
+            method: "POST",
+            body: formData
+        }
+    )
+
+    .then(function(response) {
+
+        return response.text();
+
+    })
+
+    .then(function(result) {
+
+        if (
+            result === "success"
+        ) {
+
+            loadComments(
+                selectedPostID
+            );
+
+
+            const selectedButton =
+                document.querySelector(
+                    '.comment-toggle[data-post-id="' +
+                    selectedPostID +
+                    '"]'
+                );
+
+
+            if (
+                selectedButton
+            ) {
+
+                const count =
+                    selectedButton.querySelector(
+                        ".comment-count"
+                    );
+
+
+                count.textContent =
+                    Math.max(
+                        0,
+                        parseInt(
+                            count.textContent
+                        ) - 1
+                    );
+
+            }
+
+        }
+
+        else {
+
+            alert(
+                "Could not delete comment."
+            );
+
+        }
+
+    });
+
+}
+
+
+
+/* =========================
+   ADD COMMENT
+========================= */
+
+document
+    .getElementById(
+        "sidebarCommentButton"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            const input =
+                document.getElementById(
+                    "sidebarCommentInput"
+                );
+
+
+            const commentText =
+                input.value.trim();
+
+
+            if (
+                selectedPostID === null
+            ) {
+
+                alert(
+                    "Please select a post first."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                commentText === ""
+            ) {
+
+                alert(
+                    "Please write a comment."
+                );
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "postID",
+                selectedPostID
+            );
+
+
+            formData.append(
+                "commentText",
+                commentText
+            );
+
+
+            fetch(
+                "addComment.php",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            )
+
+            .then(function(response) {
+
+                return response.text();
+
+            })
+
+            .then(function(result) {
+
+                if (
+                    result === "success"
+                ) {
+
+                    input.value = "";
+
+
+                    loadComments(
+                        selectedPostID
+                    );
+
+
+                    const selectedButton =
+                        document.querySelector(
+                            '.comment-toggle[data-post-id="' +
+                            selectedPostID +
+                            '"]'
+                        );
+
+
+                    if (
+                        selectedButton
+                    ) {
+
+                        const count =
+                            selectedButton.querySelector(
+                                ".comment-count"
+                            );
+
+
+                        count.textContent =
+                            parseInt(
+                                count.textContent
+                            ) + 1;
+
+                    }
+
+                }
+
+                else {
+
+                    alert(
+                        "Could not add comment."
+                    );
+
+                }
+
+            });
+
+        }
+    );
+
+
+
+/* =========================
+   CLOSE COMMENTS
+========================= */
+
+document
+    .getElementById(
+        "closeComments"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            document
+                .getElementById(
+                    "rightSidebar"
+                )
+                .classList.remove(
+                    "active"
+                );
+
+
+            selectedPostID = null;
+
+        }
+    );
+document
+    .querySelectorAll(".delete-post")
+    .forEach(function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                const postID =
+                    button.dataset.postId;
+
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "postID",
+                    postID
+                );
+
+
+                fetch(
+                    "deletePost.php",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                )
+
+                .then(function(response) {
+
+                    return response.text();
+
+                })
+
+                .then(function(result) {
+
+                    if (
+                        result === "success"
+                    ) {
+
+                        const postCard =
+                            button.closest(
+                                ".post-card"
+                            );
+
+                        if (postCard) {
+
+                            postCard.remove();
+
+                        }
+
+                    }
+
+                    else {
+
+                        alert(
+                            "Could not delete post."
+                        );
+
+                    }
+
+                });
+
+            }
+        );
+
+    });
+</script>
+
 
 </body>
 

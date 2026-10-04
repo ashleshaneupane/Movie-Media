@@ -52,10 +52,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["role"] = $user["role"];
 
 
-            // Login successful
+          // Login successful
 
-            header("Location: home.php");
-            exit;
+if ($_SESSION["role"] === "admin") {
+    header("Location: admin/index.php");
+    exit;
+}
+
+header("Location: home.php");
+exit;
 
         } else {
 

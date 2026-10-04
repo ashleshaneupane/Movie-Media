@@ -423,6 +423,26 @@ form {
 /* =========================
    LEFT PROFILE
 ========================= */
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: #333;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    overflow: hidden;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 .left-sidebar {
     width: 100%;
@@ -439,6 +459,23 @@ form {
     text-align: center;
 }
 
+.edit-profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 .profile-image {
     width: 100px;
@@ -460,6 +497,17 @@ form {
     border: 1px solid #444;
 }
 
+.profile-error {
+    width: fit-content;
+    max-width: 90%;
+    margin: 0 auto 20px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: #3a1515;
+    color: #ff8c8c;
+    font-size: 13px;
+    text-align: center;
+}
 
 .profile-card h2 {
     margin: 5px 0;
@@ -620,6 +668,13 @@ form {
 
 .top-movies li::marker {
     color: orange;
+}
+
+.top-five-card .movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 
@@ -2657,6 +2712,160 @@ form {
 
 
 
+
+
+
+/* =========================
+   MOVIE REVIEWS
+========================= */
+
+.movie-reviews {
+    margin-top: 35px;
+}
+
+
+.movie-reviews .section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.movie-reviews .section-heading h2 {
+    color: white;
+    margin: 0 0 20px;
+}
+
+
+/* NO REVIEWS */
+
+.no-reviews {
+    color: white;
+    font-size: 15px;
+}
+
+
+/* REVIEW LIST */
+
+.movie-review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* REVIEW CARD */
+
+.movie-review-card {
+    background: #292929;
+    border: 1px solid #3a3a3a;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+
+/* USER */
+
+.review-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.review-user-picture {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+.review-user h3 {
+    margin: 0;
+    color: white;
+    font-size: 15px;
+}
+
+
+.review-date {
+    margin: 3px 0 0;
+    color: #777;
+    font-size: 11px;
+}
+
+
+/* RATING */
+
+.movie-review-rating {
+    margin-top: 12px;
+    color: orange;
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+
+
+.movie-review-rating span {
+    color: #aaa;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+
+/* REVIEW TEXT */
+
+.movie-review-text {
+    margin: 12px 0 0;
+    color: #ddd;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* SPOILER */
+
+.review-spoiler {
+    margin: 10px 0 0;
+    color: orange;
+    font-size: 12px;
+}
+
+.no-reviews {
+    color: white;
+}
+
+
+/* =========================
+   SPOILER REVIEW
+========================= */
+
+.spoiler-blurred {
+    filter: blur(6px);
+    cursor: pointer;
+    user-select: none;
+    transition: filter 0.25s ease;
+}
+
+.spoiler-blurred:hover {
+    filter: blur(5px);
+}
+
+.spoiler-blurred.spoiler-revealed {
+    filter: blur(0);
+    user-select: text;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* =========================
    ACCOUNT PAGE
 ========================= */
@@ -3703,6 +3912,12 @@ form {
 
 }
 
+.empty-watchlist {
+
+    color: white;
+
+}
+
 
 /* =========================
    PAGE TITLE
@@ -3735,7 +3950,6 @@ form {
 
 }
 
-
 .watchlist-item:last-child {
 
     border-bottom: none;
@@ -3744,20 +3958,22 @@ form {
 
 
 /* =========================
-   POSTER
+   WATCHLIST POSTER
 ========================= */
 
 .watchlist-poster {
 
-    width: 130px;
+    width: 140px;
 
-    height: 180px;
+    height: 210px;
 
     flex-shrink: 0;
 
     background: #333;
 
     border-radius: 8px;
+
+    overflow: hidden;
 
     display: flex;
 
@@ -3771,9 +3987,21 @@ form {
 
 }
 
+.watchlist-poster img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
 
 /* =========================
-   INFORMATION
+   WATCHLIST INFORMATION
 ========================= */
 
 .watchlist-info {
@@ -3786,7 +4014,6 @@ form {
 
 }
 
-
 .watchlist-info h2 {
 
     margin: 0 0 10px;
@@ -3796,7 +4023,6 @@ form {
     font-size: 20px;
 
 }
-
 
 .watchlist-info p {
 
@@ -3810,7 +4036,7 @@ form {
 
 
 /* =========================
-   ACTIONS
+   WATCHLIST ACTIONS
 ========================= */
 
 .watchlist-actions {
@@ -3822,7 +4048,6 @@ form {
     margin-top: 18px;
 
 }
-
 
 .watchlist-actions button {
 
@@ -3849,7 +4074,6 @@ form {
 
 }
 
-
 .remove-btn:hover {
 
     color: orange;
@@ -3865,70 +4089,11 @@ form {
 
 }
 
-
 .watched-btn:hover {
 
     background: #ffb52e;
 
 }
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-    .watchlist-container {
-
-        width: 92%;
-
-        padding: 25px 20px 35px;
-
-    }
-
-
-    .watchlist-item {
-
-        gap: 15px;
-
-    }
-
-
-    .watchlist-poster {
-
-        width: 100px;
-
-        height: 145px;
-
-    }
-
-
-    .watchlist-info h2 {
-
-        font-size: 17px;
-
-    }
-
-
-    .watchlist-actions {
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-    }
-
-}
-
-
-
-
-
-
-
-
-
 
 
 /* =========================
@@ -3957,15 +4122,14 @@ form {
 
 
 /* =========================
-   MOVIE GRID
+   WATCHED MOVIE GRID
 ========================= */
 
 .watched-grid {
 
     display: grid;
 
-    grid-template-columns:
-        repeat(5, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 
     gap: 20px;
 
@@ -3973,7 +4137,7 @@ form {
 
 
 /* =========================
-   MOVIE CARD
+   WATCHED MOVIE CARD
 ========================= */
 
 .watched-card {
@@ -3985,15 +4149,21 @@ form {
 }
 
 
+/* =========================
+   WATCHED POSTER
+========================= */
+
 .watched-poster {
 
     width: 100%;
 
-    height: 250px;
+    aspect-ratio: 2 / 3;
 
     background: #333;
 
     border-radius: 8px;
+
+    overflow: hidden;
 
     display: flex;
 
@@ -4007,6 +4177,22 @@ form {
 
 }
 
+.watched-poster img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+
+/* =========================
+   WATCHED MOVIE TITLE
+========================= */
 
 .watched-card h2 {
 
@@ -4015,6 +4201,41 @@ form {
     font-size: 14px;
 
     font-weight: normal;
+
+}
+
+
+/* =========================
+   REMOVE WATCHED BUTTON
+========================= */
+
+.remove-watched-btn {
+
+    background: #292929;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 7px 12px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    width: fit-content;
+
+    margin-top: 10px;
+
+}
+
+.remove-watched-btn:hover {
+
+    color: orange;
 
 }
 
@@ -4031,15 +4252,59 @@ form {
 
 
 /* =========================
-   RESPONSIVE
+   WATCHLIST MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .watchlist-container {
+
+        width: 92%;
+
+        padding: 25px 20px 35px;
+
+    }
+
+    .watchlist-item {
+
+        gap: 15px;
+
+    }
+
+    .watchlist-poster {
+
+        width: 100px;
+
+        height: 150px;
+
+    }
+
+    .watchlist-info h2 {
+
+        font-size: 17px;
+
+    }
+
+    .watchlist-actions {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}
+
+
+/* =========================
+   WATCHED RESPONSIVE
 ========================= */
 
 @media (max-width: 900px) {
 
     .watched-grid {
 
-        grid-template-columns:
-            repeat(4, 1fr);
+        grid-template-columns: repeat(4, 1fr);
 
     }
 
@@ -4050,15 +4315,7 @@ form {
 
     .watched-grid {
 
-        grid-template-columns:
-            repeat(3, 1fr);
-
-    }
-
-
-    .watched-poster {
-
-        height: 210px;
+        grid-template-columns: repeat(3, 1fr);
 
     }
 
@@ -4075,25 +4332,15 @@ form {
 
     }
 
-
     .watched-grid {
 
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
 
         gap: 15px;
 
     }
 
-
-    .watched-poster {
-
-        height: 220px;
-
-    }
-
 }
-
 
 
 
@@ -4176,18 +4423,29 @@ form {
 
     border-radius: 8px;
 
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: #777;
-
-    font-size: 28px;
+    overflow: hidden;
 
 }
 
+
+/* ACTUAL MOVIE POSTER */
+
+.review-poster img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+
+/* =========================
+   MOVIE TITLE
+========================= */
 
 .review-card h2 {
 
@@ -4216,6 +4474,32 @@ form {
 
 
 /* =========================
+   SECTION HEADING
+========================= */
+
+.section-heading {
+
+    color: white;
+
+}
+
+
+/* =========================
+   EMPTY REVIEWS
+========================= */
+
+.empty-reviews {
+
+    color: white;
+
+    font-size: 16px;
+
+    margin: 20px 0;
+
+}
+
+
+/* =========================
    REVIEW TEXT
 ========================= */
 
@@ -4238,6 +4522,36 @@ form {
     border-radius: 5px;
 
     font-size: 12px;
+
+}
+
+
+/* =========================
+   REVIEW DATE
+========================= */
+
+.review-date {
+
+    color: #777;
+
+    font-size: 12px;
+
+    margin: 0 0 12px;
+
+}
+
+
+/* =========================
+   SPOILER
+========================= */
+
+.review-spoiler {
+
+    color: orange;
+
+    font-size: 12px;
+
+    margin: 5px 0 10px;
 
 }
 
@@ -4274,6 +4588,10 @@ form {
 }
 
 
+/* =========================
+   EDIT BUTTON
+========================= */
+
 .review-edit-btn {
 
     background: #292929;
@@ -4289,6 +4607,10 @@ form {
 
 }
 
+
+/* =========================
+   DELETE BUTTON
+========================= */
 
 .review-delete-btn {
 
@@ -6779,4 +7101,1294 @@ form {
     color: white;
     font-size: 13px;
     text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   REVIEW PAGE
+========================================= */
+
+.review-page-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 35px auto 60px;
+    box-sizing: border-box;
+}
+
+
+/* BACK BUTTON */
+
+.review-page-container .back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    margin-bottom: 25px;
+
+    background: #292929;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 50%;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    transition: 0.2s ease;
+}
+
+.review-page-container .back-button:hover {
+    background: #3a3a3a;
+    color: orange;
+    transform: translateX(-2px);
+}
+
+
+/* PAGE TOP */
+
+.review-page-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 25px;
+}
+
+.review-page-top h1 {
+    margin: 0 0 8px;
+    font-size: 36px;
+}
+
+.review-page-top p {
+    margin: 0;
+    color: #aaa;
+    font-size: 15px;
+}
+
+
+/* CREATE REVIEW */
+
+.create-review-page-btn {
+    display: inline-block;
+
+    padding: 13px 20px;
+
+    background: #292929;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 12px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    transition: 0.2s ease;
+}
+
+.create-review-page-btn:hover {
+    background: #3a3a3a;
+    color: orange;
+}
+
+
+/* SEARCH */
+
+.review-search {
+    display: flex;
+
+    width: 100%;
+
+    margin-bottom: 30px;
+
+    background: #1a1a1a;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+.review-search input {
+    flex: 1;
+
+    padding: 14px 16px;
+
+    background: transparent;
+
+    border: none;
+    outline: none;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+.review-search input::placeholder {
+    color: #777;
+}
+
+.review-search button {
+    width: 55px;
+
+    background: #292929;
+
+    border: none;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 17px;
+}
+
+.review-search button:hover {
+    background: #3a3a3a;
+    color: orange;
+}
+
+
+/* REVIEW FEED */
+
+.review-feed {
+    width: 100%;
+}
+
+
+/* REVIEW CARD */
+
+.review-feed-card {
+    display: flex;
+
+    gap: 25px;
+
+    width: 100%;
+
+    margin-bottom: 22px;
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    background: rgba(20, 20, 20, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 18px;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.review-feed-card:hover {
+    transform: translateY(-2px);
+    border-color: #4a4a4a;
+}
+
+
+/* POSTER */
+
+.review-feed-poster {
+    flex-shrink: 0;
+
+    width: 125px;
+    height: 180px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #292929;
+}
+
+.review-feed-poster img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* CONTENT */
+
+.review-feed-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* HEADER */
+
+.review-feed-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 5px;
+}
+
+.review-feed-header h2 {
+    margin: 0 0 5px;
+
+    font-size: 22px;
+}
+
+.review-by {
+    margin: 0;
+
+    color: #999;
+
+    font-size: 14px;
+}
+
+.review-by strong {
+    color: #ddd;
+}
+
+
+/* DATE */
+
+.review-date {
+    margin: 2px 0 0;
+
+    color: #777;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+
+/* STARS */
+
+.large-stars {
+    margin: 10px 0 12px;
+
+    color: #f5a623;
+
+    font-size: 21px;
+
+    letter-spacing: 2px;
+}
+
+.rating-number {
+    color: #ccc;
+
+    font-size: 14px;
+
+    letter-spacing: 0;
+
+    margin-left: 8px;
+}
+
+
+/* REVIEW TEXT */
+
+.review-feed-text {
+    margin: 0 0 15px;
+
+    color: #ddd;
+
+    line-height: 1.6;
+
+    font-size: 15px;
+}
+
+
+/* SPOILER */
+
+.spoiler-blurred {
+    filter: blur(6px);
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition: filter 0.25s ease;
+}
+
+.spoiler-blurred:hover {
+    filter: blur(5px);
+}
+
+.spoiler-blurred.spoiler-revealed {
+    filter: blur(0);
+
+    user-select: text;
+}
+
+.review-spoiler {
+    margin: 14px 0 15px;
+    color: #d99a3d;
+    font-size: 13px;
+}
+
+.review-spoiler span {
+    color: #777;
+}
+
+
+/* VIEW MOVIE */
+
+.view-movie-btn {
+    display: inline-block;
+
+    padding: 9px 14px;
+
+    background: #292929;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    transition: 0.2s ease;
+}
+
+.view-movie-btn:hover {
+    background: #3a3a3a;
+    color: orange;
+}
+
+
+/* EMPTY REVIEWS */
+
+.no-reviews-message {
+    text-align: center;
+
+    padding: 70px 20px;
+
+    background: rgba(20, 20, 20, 0.94);
+
+    border: 1px solid #333;
+
+    border-radius: 18px;
+}
+
+.no-reviews-message h2 {
+    margin: 0 0 10px;
+}
+
+.no-reviews-message p {
+    margin: 0;
+
+    color: #888;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .review-page-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .review-page-top h1 {
+        font-size: 30px;
+    }
+
+
+    .review-feed-card {
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+
+    .review-feed-poster {
+        width: 110px;
+        height: 160px;
+    }
+
+
+    .review-feed-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+
+    .review-date {
+        white-space: normal;
+    }
+
+}
+
+/* CREATE REVIEW BUTTON ON REVIEW PAGE */
+
+.create-review-page-btn {
+    display: inline-block !important;
+    padding: 13px 20px !important;
+
+    background: #292929 !important;
+    color: white !important;
+
+    text-decoration: none !important;
+
+    border-radius: 12px !important;
+
+    font-weight: bold !important;
+    white-space: nowrap !important;
+
+    transition: 0.2s ease !important;
+}
+
+.create-review-page-btn:hover {
+    background: #3a3a3a !important;
+    color: orange !important;
+}
+
+.reviews-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.15s ease-in-out;
+}
+
+.reviews-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #d97706;
+    /* Darker amber/orange border */
+    color: #f59e0b;
+    /* Text turns orange on hover */
+}
+
+
+
+
+.review-feed-header h2 {
+    margin: 0 0 5px;
+    font-size: 22px;
+    color: white;
+}
+
+
+
+
+
+
+.star-rating {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.star-rating span {
+    color: #666;
+    font-size: 32px;
+    cursor: pointer;
+    transition: 0.15s ease;
+}
+
+.star-rating span.selected {
+    color: orange;
+}
+
+
+
+
+
+
+
+
+/* =========================
+   HOME PROFILE IMAGE FIX
+========================= */
+
+.profile-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #333;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-image span {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+
+
+
+
+
+
+
+/* =========================
+   HOME PAGE DIMENSION FIX
+========================= */
+
+.home-layout {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 260px minmax(500px, 1fr) 260px;
+    gap: 25px;
+    align-items: start;
+}
+
+
+/* =========================
+   LEFT SIDEBAR
+========================= */
+
+.left-sidebar {
+    width: 260px;
+    min-width: 0;
+}
+
+.profile-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.profile-image {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 15px;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #333;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-image span {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+
+/* =========================
+   CENTER FEED
+========================= */
+
+.home-feed {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.create-post-link {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.create-post-link a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   POST CARD
+========================= */
+
+.post-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin-bottom: 20px;
+    padding: 20px;
+
+    overflow: hidden;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.post-profile-image {
+    width: 45px;
+    height: 45px;
+
+    min-width: 45px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #333;
+
+    color: white;
+    font-weight: bold;
+}
+
+.post-profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.post-user-info {
+    min-width: 0;
+}
+
+.post-user-info h3,
+.post-user-info p {
+    margin: 0;
+}
+
+
+/* =========================
+   POST CONTENT
+========================= */
+
+.post-content {
+    width: 100%;
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.post-content p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+/* =========================
+   MOVIE ATTACHMENT
+========================= */
+
+.movie-attachment {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    margin-top: 15px;
+    padding: 12px;
+
+    overflow: hidden;
+}
+
+.movie-attachment .movie-poster {
+    width: 70px;
+    height: 100px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.movie-attachment-info {
+    min-width: 0;
+}
+
+.movie-attachment-info h3,
+.movie-attachment-info p {
+    margin: 0;
+    overflow-wrap: break-word;
+}
+
+
+/* =========================
+   POST PHOTO
+========================= */
+
+.photo-attachment {
+    width: 100%;
+    margin-top: 15px;
+
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.post-image {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    object-fit: contain;
+}
+
+
+/* =========================
+   POST ACTIONS
+========================= */
+
+.post-actions {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    margin-top: 15px;
+}
+
+.post-actions button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    background: none;
+    border: none;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   RIGHT SIDEBAR
+========================= */
+
+.right-sidebar {
+    width: 260px;
+    min-width: 0;
+}
+
+.sidebar-search {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+}
+
+.sidebar-search input {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.comments-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin-top: 20px;
+}
+
+
+/* =========================
+   PREVENT OVERFLOW
+========================= */
+
+.home-layout *,
+.home-layout *::before,
+.home-layout *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .home-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .right-sidebar {
+        display: none;
+    }
+
+    .left-sidebar {
+        width: 220px;
+    }
+}
+
+
+@media (max-width: 750px) {
+
+    .home-layout {
+        display: block;
+        padding: 20px;
+    }
+
+    .left-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .home-feed {
+        width: 100%;
+    }
+
+    .post-card {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+/* =========================
+   POST COMMENTS
+========================= */
+
+.post-comments {
+    display: none;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    margin-top: 15px;
+    padding-top: 15px;
+
+    border-top: 1px solid #333;
+}
+
+.post-comments.active {
+    display: block;
+}
+
+.comment-list {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    padding: 8px 0;
+}
+
+.comment strong {
+    color: white;
+    font-size: 13px;
+}
+
+.comment p {
+    margin: 0;
+
+    color: #ccc;
+    font-size: 13px;
+
+    word-break: break-word;
+}
+
+
+/* COMMENT INPUT */
+
+.comment-form {
+    display: flex;
+    gap: 8px;
+
+    width: 100%;
+}
+
+.comment-input {
+    flex: 1;
+    min-width: 0;
+
+    padding: 9px 12px;
+
+    border: 1px solid #444;
+    border-radius: 18px;
+
+    background: #222;
+    color: white;
+
+    outline: none;
+
+    box-sizing: border-box;
+}
+
+.comment-input:focus {
+    border-color: orange;
+}
+
+.comment-submit {
+    padding: 9px 15px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: orange;
+    color: black;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.comment-submit:hover {
+    background: #ffb52e;
+}
+
+
+
+
+
+/* =========================
+   COMMENT SIDEBAR
+========================= */
+
+.right-sidebar {
+    width: 260px;
+    min-width: 0;
+    position: relative;
+}
+
+
+/* =========================
+   COMMENTS CARD
+========================= */
+
+.comments-card {
+    display: none;
+
+    width: 100%;
+
+    margin-top: 0;
+    padding: 18px;
+
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+
+    box-sizing: border-box;
+}
+
+
+/* SHOW ONLY WHEN ACTIVE */
+
+.right-sidebar.active .comments-card {
+    display: block;
+}
+
+
+/* =========================
+   COMMENTS HEADER
+========================= */
+
+.comments-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+
+.comments-header h2 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 18px;
+}
+
+
+.comments-header button {
+    background: none;
+    border: none;
+
+    color: #888;
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    padding: 0;
+}
+
+
+.comments-header button:hover {
+    color: white;
+}
+
+
+/* =========================
+   COMMENT LIST
+========================= */
+
+.sidebar-comment-list {
+    width: 100%;
+
+    max-height: 400px;
+
+    overflow-y: auto;
+
+    margin-bottom: 15px;
+}
+
+
+.sidebar-comment {
+    width: 100%;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #333;
+
+    box-sizing: border-box;
+}
+
+
+.sidebar-comment strong {
+    display: block;
+
+    color: white;
+
+    font-size: 13px;
+
+    margin-bottom: 4px;
+}
+
+
+.sidebar-comment p {
+    margin: 0;
+
+    color: #ccc;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    overflow-wrap: break-word;
+}
+
+
+.no-comments {
+    color: #888;
+
+    font-size: 13px;
+
+    margin: 10px 0;
+}
+
+
+/* =========================
+   COMMENT FORM
+========================= */
+
+.sidebar-comment-form {
+    display: flex;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+
+.sidebar-comment-form input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 9px 12px;
+
+    background: #222;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    border-radius: 18px;
+
+    outline: none;
+
+    box-sizing: border-box;
+}
+
+
+.sidebar-comment-form input:focus {
+    border-color: orange;
+}
+
+
+.sidebar-comment-form button {
+    padding: 9px 14px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: orange;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.sidebar-comment-form button:hover {
+    background: #ffb52e;
+}
+
+
+
+.delete-comment {
+    background: none;
+    border: none;
+    padding: 0;
+
+    color: #777;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.delete-comment:hover {
+    color: #ff6b6b;
+}
+
+
+
+
+/* =========================
+   DELETE POST BUTTON
+========================= */
+
+.delete-post {
+    margin-left: auto;
+
+    background: none;
+    border: none;
+    padding: 0;
+
+    color: #777;
+    font-size: 10px;
+    cursor: pointer;
+
+    width: auto;
+    height: auto;
+}
+
+.delete-post:hover {
+    color: #ff6b6b;
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   POST USER PROFILE LINK
+========================= */
+
+.post-user-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-decoration: none;
+    color: inherit;
+
+    min-width: 0;
+}
+
+.post-user-link:hover {
+    text-decoration: none;
+}
+
+.post-user-link .post-user-info h3 {
+    color: white;
+}
+
+.post-user-link .post-user-info p {
+    color: #888;
+}
+
+.public-top-movie-title {
+    color: white;
 }

@@ -1,6 +1,36 @@
 <?php
+
 include 'includes/auth.php';
+include 'includes/config.php';
+
+$userID = $_SESSION["userID"];
+
+
+/*
+    Get movies watched by the logged-in user
+*/
+
+$watchedQuery = $conn->prepare(
+    "SELECT
+        Watched.watchedID,
+        Watched.movieID,
+        Watched.watchedDate,
+        movie.title,
+        movie.poster
+     FROM Watched
+     INNER JOIN movie
+        ON Watched.movieID = movie.movieID
+     WHERE Watched.userID = ?
+     ORDER BY Watched.watchedDate DESC"
+);
+
+$watchedQuery->bind_param("i", $userID);
+$watchedQuery->execute();
+
+$watchedResult = $watchedQuery->get_result();
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,124 +49,132 @@ include 'includes/auth.php';
 
 <body>
 
-    <?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 
-    <main class="watched-container">
+<main class="watched-container">
 
 
-        <!-- BACK BUTTON -->
+    <!-- BACK BUTTON -->
 
-        <a
-            href="account.php"
-            class="back-button"
-        >
-            ←
-        </a>
-
-
-        <!-- TITLE -->
-
-        <h1 class="account-page-title">
-            Watched
-        </h1>
+    <a
+        href="account.php"
+        class="back-button"
+    >
+        ←
+    </a>
 
 
-        <!-- MOVIE GRID -->
+    <!-- TITLE -->
 
-        <section class="watched-grid">
-
-
-            <article class="watched-card">
-
-                <div class="watched-poster">
-                    1
-                </div>
-
-                <h2>
-                    Interstellar
-                </h2>
-
-            </article>
+    <h1 class="account-page-title">
+        Watched
+    </h1>
 
 
+    <!-- MOVIE GRID -->
 
-            <article class="watched-card">
+    <section class="watched-grid">
 
-                <div class="watched-poster">
-                    2
-                </div>
+        <?php if ($watchedResult->num_rows > 0): ?>
 
-                <h2>
-                    Inception
-                </h2>
+            <?php while ($movie = $watchedResult->fetch_assoc()): ?>
 
-            </article>
+                <article class="watched-card" data-watched-id="<?php echo $movie["watchedID"]; ?>">
 
+    <div class="watched-poster">
+        <img src="<?php echo htmlspecialchars($movie["poster"]); ?>" 
+             alt="<?php echo htmlspecialchars($movie["title"]); ?>">
+    </div>
 
+    <h2><?php echo htmlspecialchars($movie["title"]); ?></h2>
 
-            <article class="watched-card">
+    <p class="watched-date">
+        Watched: <?php echo htmlspecialchars($movie["watchedDate"]); ?>
+    </p>
 
-                <div class="watched-poster">
-                    3
-                </div>
+    <button type="button"
+            class="remove-watched-btn"
+            data-watched-id="<?php echo $movie["watchedID"]; ?>">
+        Remove
+    </button>
+
+</article>
+
+            <?php endwhile; ?>
+
+        <?php else: ?>
+
+            <div class="empty-watched">
 
                 <h2>
-                    Avatar
+                    No watched movies yet
                 </h2>
 
-            </article>
+                <p>
+                    Movies you mark as watched will appear here.
+                </p>
+
+            </div>
+
+        <?php endif; ?>
+
+    </section>
 
 
+</main>
 
-            <article class="watched-card">
+<script>
 
-                <div class="watched-poster">
-                    4
-                </div>
+const removeButtons = document.querySelectorAll(".remove-watched-btn");
 
-                <h2>
-                    Oppenheimer
-                </h2>
+removeButtons.forEach(function(button) {
 
-            </article>
+    button.addEventListener("click", function() {
 
+        const watchedID = button.dataset.watchedId;
 
+        const formData = new FormData();
+        formData.append("watchedID", watchedID);
 
-            <article class="watched-card">
+        fetch("removeWatched.php", {
+            method: "POST",
+            body: formData
+        })
 
-                <div class="watched-poster">
-                    5
-                </div>
+        .then(function(response) {
+            return response.text();
+        })
 
-                <h2>
-                    The Batman
-                </h2>
+        .then(function(result) {
 
-            </article>
+            console.log("Remove watched result:", result);
 
+            if (result === "success") {
 
+                const card = button.closest(".watched-card");
 
-            <article class="watched-card">
+                card.remove();
 
-                <div class="watched-poster">
-                    6
-                </div>
+            } else {
 
-                <h2>
-                    Dune
-                </h2>
+                console.log("Could not remove movie:", result);
 
-            </article>
+            }
 
+        })
 
+        .catch(function(error) {
 
-        </section>
+            console.log("Error:", error);
 
+        });
 
-    </main>
+    });
 
+});
 
+</script>
 </body>
 
 </html>

@@ -1,6 +1,37 @@
 <?php
+
 include 'includes/auth.php';
+include 'includes/config.php';
+
+$userID = $_SESSION["userID"];
+
+
+/*
+    Get movies in user's watchlist
+*/
+
+$watchlistQuery = $conn->prepare(
+    "SELECT
+        Watchlist.watchlistID,
+        Watchlist.movieID,
+        movie.title,
+        movie.genre,
+        movie.releaseDate,
+        movie.poster
+     FROM Watchlist
+     INNER JOIN movie
+        ON Watchlist.movieID = movie.movieID
+     WHERE Watchlist.userID = ?
+     ORDER BY Watchlist.addedDate DESC"
+);
+
+$watchlistQuery->bind_param("i", $userID);
+$watchlistQuery->execute();
+
+$watchlistResult = $watchlistQuery->get_result();
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,232 +50,239 @@ include 'includes/auth.php';
 
 <body>
 
-    <?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 
-    <main class="watchlist-container">
+<main class="watchlist-container">
 
 
-        <!-- BACK BUTTON -->
+    <!-- BACK BUTTON -->
 
-        <a
-            href="account.php"
-            class="back-button"
-        >
-            ←
-        </a>
-
-
-        <!-- TITLE -->
-
-        <h1 class="account-page-title">
-            Watchlist
-        </h1>
+    <a
+        href="account.php"
+        class="back-button"
+    >
+        ←
+    </a>
 
 
-        <!-- WATCHLIST -->
+    <!-- TITLE -->
 
-        <section class="watchlist-items">
-
-
-            <!-- MOVIE 1 -->
-
-            <article class="watchlist-item">
-
-                <div class="watchlist-poster">
-                    1
-                </div>
+    <h1 class="account-page-title">
+        Watchlist
+    </h1>
 
 
-                <div class="watchlist-info">
+    <!-- WATCHLIST -->
 
-                    <h2>
-                        Interstellar
-                    </h2>
+    <section class="watchlist-items">
 
-                    <p>
-                        Sci-Fi
-                    </p>
+        <?php if ($watchlistResult->num_rows > 0): ?>
 
-                    <p>
-                        2014
-                    </p>
+            <?php while ($movie = $watchlistResult->fetch_assoc()): ?>
 
+                <article class="watchlist-item">
 
-                    <div class="watchlist-actions">
+                    <div class="watchlist-poster">
 
-                        <button
-                            type="button"
-                            class="remove-btn"
+                        <img
+                            src="<?php echo htmlspecialchars($movie["poster"]); ?>"
+                            alt="<?php echo htmlspecialchars($movie["title"]); ?>"
                         >
-                            Remove
-                        </button>
-
-                        <button
-                            type="button"
-                            class="watched-btn"
-                        >
-                            Mark as Watched
-                        </button>
 
                     </div>
 
-                </div>
 
-            </article>
+                    <div class="watchlist-info">
 
+                        <h2>
+                            <?php echo htmlspecialchars($movie["title"]); ?>
+                        </h2>
 
+                        <p>
+                            <?php echo htmlspecialchars($movie["genre"]); ?>
+                        </p>
 
-            <!-- MOVIE 2 -->
-
-            <article class="watchlist-item">
-
-                <div class="watchlist-poster">
-                    2
-                </div>
-
-
-                <div class="watchlist-info">
-
-                    <h2>
-                        Inception
-                    </h2>
-
-                    <p>
-                        Sci-Fi / Thriller
-                    </p>
-
-                    <p>
-                        2010
-                    </p>
+                        <p>
+                            <?php
+                            echo date(
+                                "Y",
+                                strtotime($movie["releaseDate"])
+                            );
+                            ?>
+                        </p>
 
 
-                    <div class="watchlist-actions">
+                        <div class="watchlist-actions">
 
-                        <button
-                            type="button"
-                            class="remove-btn"
-                        >
-                            Remove
-                        </button>
+                            <button
+                                type="button"
+                                class="remove-btn"
+                                data-watchlist-id="<?php echo $movie["watchlistID"]; ?>"
+                            >
+                                Remove
+                            </button>
 
-                        <button
-                            type="button"
-                            class="watched-btn"
-                        >
-                            Mark as Watched
-                        </button>
+
+                            <button
+                                type="button"
+                                class="watched-btn"
+                                data-movie-id="<?php echo $movie["movieID"]; ?>"
+                            >
+                                Mark as Watched
+                            </button>
+
+                        </div>
 
                     </div>
 
-                </div>
+                </article>
 
-            </article>
+            <?php endwhile; ?>
 
+        <?php else: ?>
 
+            <div class="empty-watchlist">
 
-            <!-- MOVIE 3 -->
+                <h2>
+                    Your watchlist is empty
+                </h2>
 
-            <article class="watchlist-item">
+                <p>
+                    Add movies you want to watch later.
+                </p>
 
-                <div class="watchlist-poster">
-                    3
-                </div>
+            </div>
 
+        <?php endif; ?>
 
-                <div class="watchlist-info">
-
-                    <h2>
-                        Oppenheimer
-                    </h2>
-
-                    <p>
-                        Drama / History
-                    </p>
-
-                    <p>
-                        2023
-                    </p>
+    </section>
 
 
-                    <div class="watchlist-actions">
+</main>
+<script>
 
-                        <button
-                            type="button"
-                            class="remove-btn"
-                        >
-                            Remove
-                        </button>
-
-                        <button
-                            type="button"
-                            class="watched-btn"
-                        >
-                            Mark as Watched
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
+const watchedButtons =
+    document.querySelectorAll(".watched-btn");
 
 
-        </section>
+watchedButtons.forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        const movieID = button.dataset.movieId;
+
+        const formData = new FormData();
+
+        formData.append("movieID", movieID);
 
 
-    </main>
+        fetch("markWatched.php", {
+            method: "POST",
+            body: formData
+        })
+
+        .then(function(response) {
+            return response.text();
+        })
+
+        .then(function(result) {
+
+            console.log("Watched result:", result);
 
 
+            if (result === "success") {
 
-    <script>
+                button.textContent = "✓ Watched";
+                button.disabled = true;
 
-        const removeButtons =
-            document.querySelectorAll(".remove-btn");
+                /*
+                    Remove the movie from Watchlist
+                */
 
+                setTimeout(function() {
 
-        removeButtons.forEach(function(button) {
+                    button.closest(".watchlist-item").remove();
 
-            button.addEventListener(
-                "click",
-                function() {
+                }, 500);
 
-                    const movie =
-                        button.closest(".watchlist-item");
+            }
 
-                    movie.remove();
+            else if (result === "exists") {
 
-                }
-            );
+                button.textContent = "✓ Already Watched";
+                button.disabled = true;
+
+            }
+
+            else {
+
+                console.log("Watched error:", result);
+
+            }
+
+        })
+
+        .catch(function(error) {
+
+            console.log("Error:", error);
 
         });
 
+    });
 
+});
+const removeButtons =
+    document.querySelectorAll(".remove-btn");
 
-        const watchedButtons =
-            document.querySelectorAll(".watched-btn");
+removeButtons.forEach(function(button) {
 
+    button.addEventListener("click", function() {
 
-        watchedButtons.forEach(function(button) {
+        const watchlistID = button.dataset.watchlistId;
 
-            button.addEventListener(
-                "click",
-                function() {
+        console.log("Watchlist ID:", watchlistID);
 
-                    button.textContent =
-                        "Watched";
+        const formData = new FormData();
 
-                    button.disabled = true;
+        formData.append("watchlistID", watchlistID);
 
-                    button.style.opacity = "0.5";
+        fetch("removeWatchlist.php", {
+            method: "POST",
+            body: formData
+        })
 
-                }
-            );
+        .then(function(response) {
+            return response.text();
+        })
+
+        .then(function(result) {
+
+            console.log("Remove result:", result);
+
+            if (result === "success") {
+
+                button.closest(".watchlist-item").remove();
+
+            } else {
+
+                console.log("Remove failed:", result);
+
+            }
+
+        })
+
+        .catch(function(error) {
+
+            console.log("Error:", error);
 
         });
 
-    </script>
+    });
 
+});
+
+</script>
 
 </body>
 

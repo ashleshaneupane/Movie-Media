@@ -1,0 +1,79 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: #14141a;
+    color: #eee;
+    font-family: Arial, sans-serif;
+}
+
+.admin-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 30px;
+    background: #1e1e28;
+    border-bottom: 2px solid rgba(255, 162, 0, 0.84);
+}
+
+.admin-bar strong { color: rgb(255, 166, 0); font-size: 20px; }
+.admin-bar nav { display: flex; gap: 22px; }
+.admin-bar a { color: #fff; text-decoration: none; }
+.admin-bar a.active, .admin-bar a:hover { color: rgb(255, 166, 0); }
+
+.admin-main { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+h1 { color: rgb(255, 166, 0); margin-top: 0; }
+
+.flash {
+    background: #1f3d2a;
+    border: 1px solid #2f7a48;
+    padding: 10px 14px;
+    border-radius: 6px;
+}
+
+.flash.error { background: #4a2020; border-color: #a33; }
+
+.stats { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+.stat {
+    flex: 1 1 200px;
+    background: #1e1e28;
+    border-radius: 10px;
+    padding: 20px;
+}
+.stat span { display: block; color: #aaa; }
+.stat strong { font-size: 34px; color: rgb(255, 166, 0); }
+
+table { width: 100%; border-collapse: collapse; background: #1e1e28; border-radius: 10px; overflow: hidden; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d2d3a; vertical-align: middle; }
+th { background: #26263a; }
+td img { width: 40px; border-radius: 4px; }
+
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+
+.btn, .admin-main button {
+    display: inline-block;
+    background: rgba(255, 162, 0, 0.84);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn.danger, .admin-main button.danger { background: #b33; }
+.inline { display: inline; }
+
+form.admin-form { display: grid; gap: 14px; max-width: 600px; }
+form.admin-form label { display: grid; gap: 6px; color: #ccc; }
+input[type=text], input[type=search], select, textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #3a3a4c;
+    background: #14141a;
+    color: #fff;
+    font-size: 15px;
+}
+textarea { min-height: 120px; resize: vertical; }

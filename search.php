@@ -1,8 +1,23 @@
 <?php
+
 include 'includes/auth.php';
 include 'includes/config.php';
 
-$sql = "SELECT * FROM movie ORDER BY title ASC";
+
+/*
+    Get all movies with their average rating
+*/
+
+$sql = "
+    SELECT
+        movie.*,
+        AVG(Review.rating) AS averageRating
+    FROM movie
+    LEFT JOIN Review
+        ON movie.movieID = Review.movieID
+    GROUP BY movie.movieID
+    ORDER BY movie.title ASC
+";
 
 $result = $conn->query($sql);
 
@@ -32,379 +47,414 @@ $result = $conn->query($sql);
 
 <body>
 
-    <?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 
-    <main class="search-container">
+<main class="search-container">
 
 
-        <!-- PAGE TITLE -->
+    <!-- PAGE TITLE -->
 
-        <div class="search-heading">
+    <div class="search-heading">
 
-            <h1>
-                Discover Movies
-            </h1>
+        <h1>
+            Discover Movies
+        </h1>
 
-            <p>
-                Find movies, discover something new and share your reviews.
-            </p>
+        <p>
+            Find movies, discover something new and share your reviews.
+        </p>
+
+    </div>
+
+
+
+    <!-- SEARCH CONTROLS -->
+
+    <section class="search-controls">
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="movieSearch"
+                placeholder="Search movies..."
+            >
+
+            <button
+                type="button"
+                id="searchButton"
+            >
+                🔎
+            </button>
 
         </div>
 
 
 
-        <!-- SEARCH CONTROLS -->
+        <!-- RANDOM MOVIE -->
 
-        <section class="search-controls">
+        <a
+            href="randomMovie.php"
+            class="random-movie-btn"
+        >
+            🎲 Random Movie
+        </a>
 
 
-            <div class="search-box">
 
-                <input
-                    type="text"
-                    id="movieSearch"
-                    placeholder="Search movies..."
+        <!-- REVIEWS -->
+
+        <a
+            href="review.php"
+            class="reviews-btn"
+        >
+            ⭐ Reviews
+        </a>
+
+    </section>
+
+
+
+    <!-- GENRE -->
+
+    <div class="genre-section">
+
+        <label for="genreFilter">
+            Genre
+        </label>
+
+        <select id="genreFilter">
+
+            <option value="all">
+                All Genres
+            </option>
+
+            <option value="Sci-Fi">
+                Sci-Fi
+            </option>
+
+            <option value="Thriller">
+                Thriller
+            </option>
+
+            <option value="Drama">
+                Drama
+            </option>
+
+            <option value="Action">
+                Action
+            </option>
+
+            <option value="Romance">
+                Romance
+            </option>
+
+            <option value="Horror">
+                Horror
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <!-- SEARCH RESULTS -->
+
+    <section class="search-results">
+
+        <h2>
+            Movies
+        </h2>
+
+
+        <div
+            class="movie-grid"
+            id="movieGrid"
+        >
+
+
+            <?php
+
+            if ($result->num_rows > 0) {
+
+                while ($movie = $result->fetch_assoc()) {
+
+            ?>
+
+
+                <article
+                    class="movie-card"
+                    data-title="<?php echo htmlspecialchars($movie['title']); ?>"
+                    data-genre="<?php echo htmlspecialchars($movie['genre']); ?>"
                 >
 
-                <button
-                    type="button"
-                    id="searchButton"
-                >
-                    🔎
-                </button>
 
-            </div>
-
-
-
-            <!-- RANDOM MOVIE -->
-
-            <a
-                href="randomMovie.php"
-                class="random-movie-btn"
-            >
-                🎲 Random Movie
-            </a>
-
-
-
-            <!-- CREATE REVIEW -->
-
-            <a
-                href="createReview.php"
-                class="create-review-btn"
-            >
-                ✍️ Create Review
-            </a>
-
-
-        </section>
-
-
-
-        <!-- GENRE -->
-
-        <div class="genre-section">
-
-            <label for="genreFilter">
-                Genre
-            </label>
-
-            <select id="genreFilter">
-
-                <option value="all">
-                    All Genres
-                </option>
-
-                <option value="Sci-Fi">
-                    Sci-Fi
-                </option>
-
-                <option value="Thriller">
-                    Thriller
-                </option>
-
-                <option value="Drama">
-                    Drama
-                </option>
-
-                <option value="Action">
-                    Action
-                </option>
-
-                <option value="Romance">
-                    Romance
-                </option>
-
-                <option value="Horror">
-                    Horror
-                </option>
-
-            </select>
-
-        </div>
-
-
-
-        <!-- SEARCH RESULTS -->
-
-        <section class="search-results">
-
-            <h2>
-                Movies
-            </h2>
-
-
-            <div
-                class="movie-grid"
-                id="movieGrid"
-            >
-
-
-                <?php
-
-                if ($result->num_rows > 0) {
-
-                    while ($movie = $result->fetch_assoc()) {
-
-                ?>
-
-
-                    <article
-                        class="movie-card"
-                        data-title="<?php echo htmlspecialchars($movie['title']); ?>"
-                        data-genre="<?php echo htmlspecialchars($movie['genre']); ?>"
+                    <a
+                        href="movieDetails.php?movie=<?php echo $movie['movieID']; ?>"
                     >
 
+                        <div class="movie-poster">
 
-                        <a
-                            href="movieDetails.php?movie=<?php echo $movie['movieID']; ?>"
-                        >
-
-                            <div class="movie-poster">
-
-                                <img
-                                    src="<?php echo htmlspecialchars($movie['poster']); ?>"
-                                    alt="<?php echo htmlspecialchars($movie['title']); ?>"
-                                >
-
-                            </div>
-
-                        </a>
-
-
-                        <div class="movie-card-info">
-
-
-                            <h3>
-
-                                <?php echo htmlspecialchars($movie['title']); ?>
-
-                            </h3>
-
-
-                            <p>
-
-                                <?php echo htmlspecialchars($movie['genre']); ?>
-
-                                •
-
-                                <?php echo htmlspecialchars($movie['releaseDate']); ?>
-
-                            </p>
-
-
-                            <span>
-
-                                ⭐ No rating yet
-
-                            </span>
-
+                            <img
+                                src="<?php echo htmlspecialchars($movie['poster']); ?>"
+                                alt="<?php echo htmlspecialchars($movie['title']); ?>"
+                            >
 
                         </div>
 
+                    </a>
 
-                    </article>
+
+                    <div class="movie-card-info">
 
 
-                <?php
+                        <h3>
 
-                    }
+                            <?php echo htmlspecialchars($movie['title']); ?>
 
-                } else {
+                        </h3>
 
-                ?>
 
-                    <p>
-                        No movies found.
-                    </p>
+                        <p>
 
-                <?php
+                            <?php echo htmlspecialchars($movie['genre']); ?>
+
+                            •
+
+                            <?php echo htmlspecialchars($movie['releaseDate']); ?>
+
+                        </p>
+
+
+                        <!-- MOVIE RATING -->
+
+                        <span>
+
+                            <?php if ($movie['averageRating'] === null): ?>
+
+                                ⭐ No rating yet
+
+                            <?php else: ?>
+
+                                ⭐
+                                <?php echo number_format((float) $movie['averageRating'], 1); ?>
+                                / 10
+
+                            <?php endif; ?>
+
+                        </span>
+
+
+                    </div>
+
+
+                </article>
+
+
+            <?php
 
                 }
 
-                ?>
+            } else {
+
+            ?>
+
+                <p>
+                    No movies found.
+                </p>
+
+            <?php
+
+            }
+
+            ?>
 
 
-            </div>
-
-
-
-            <!-- NO RESULTS -->
-
-            <p
-                id="noResults"
-                class="no-results"
-            >
-                No movies found.
-            </p>
-
-
-        </section>
-
-
-    </main>
+        </div>
 
 
 
-    <script>
+        <!-- NO RESULTS -->
+
+        <p
+            id="noResults"
+            class="no-results"
+            style="display: none;"
+        >
+            No movies found.
+        </p>
 
 
-        const movieSearch =
-            document.getElementById("movieSearch");
+    </section>
 
 
-        const searchButton =
-            document.getElementById("searchButton");
-
-
-        const genreFilter =
-            document.getElementById("genreFilter");
-
-
-        const movieCards =
-            document.querySelectorAll(".movie-card");
-
-
-        const noResults =
-            document.getElementById("noResults");
+</main>
 
 
 
-        function filterMovies() {
+<script>
 
 
-            const searchValue =
-                movieSearch.value
-                .toLowerCase()
-                .trim();
+const movieSearch =
+    document.getElementById("movieSearch");
 
 
-            const selectedGenre =
-                genreFilter.value;
+const searchButton =
+    document.getElementById("searchButton");
 
 
-            let foundMovies = 0;
+const genreFilter =
+    document.getElementById("genreFilter");
 
 
-
-            movieCards.forEach(function(card) {
-
-
-                const title =
-                    card.dataset.title
-                    .toLowerCase();
+const movieCards =
+    document.querySelectorAll(".movie-card");
 
 
-                const genre =
-                    card.dataset.genre
-                    .toLowerCase();
+const noResults =
+    document.getElementById("noResults");
 
 
 
-                const matchesSearch =
-                    title.includes(searchValue);
+/*
+    FILTER MOVIES
+*/
+
+function filterMovies() {
+
+
+    const searchValue =
+        movieSearch.value
+        .toLowerCase()
+        .trim();
+
+
+    const selectedGenre =
+        genreFilter.value
+        .toLowerCase()
+        .trim();
+
+
+    let foundMovies = 0;
 
 
 
-                const matchesGenre =
-                    selectedGenre === "all" ||
-                    genre.includes(selectedGenre.toLowerCase());
+    movieCards.forEach(function(card) {
+
+
+        const title =
+            card.dataset.title
+            .toLowerCase()
+            .trim();
+
+
+        /*
+            A movie can have multiple genres.
+
+            Example:
+            "Action, Sci-Fi, Thriller"
+        */
+
+        const genres =
+            card.dataset.genre
+            .toLowerCase()
+            .split(",")
+            .map(function(genre) {
+                return genre.trim();
+            });
 
 
 
-                if (
-                    matchesSearch &&
-                    matchesGenre
-                ) {
+        const matchesSearch =
+            title.includes(searchValue);
 
 
-                    card.style.display = "block";
 
+        const matchesGenre =
+            selectedGenre === "all" ||
+            genres.some(function(genre) {
 
-                    foundMovies++;
-
-
-                } else {
-
-
-                    card.style.display = "none";
-
-
-                }
-
+                return (
+                    genre === selectedGenre ||
+                    genre.includes(selectedGenre) ||
+                    selectedGenre.includes(genre)
+                );
 
             });
 
 
 
-            if (foundMovies === 0) {
+        if (
+            matchesSearch &&
+            matchesGenre
+        ) {
 
+            card.style.display = "";
 
-                noResults.style.display = "block";
+            foundMovies++;
 
+        }
+        else {
 
-            } else {
-
-
-                noResults.style.display = "none";
-
-
-            }
-
+            card.style.display = "none";
 
         }
 
-
-
-        /* SEARCH BUTTON */
-
-        searchButton.addEventListener(
-            "click",
-            filterMovies
-        );
+    });
 
 
 
-        /* LIVE SEARCH */
+    if (foundMovies === 0) {
 
-        movieSearch.addEventListener(
-            "input",
-            filterMovies
-        );
+        noResults.style.display = "block";
 
+    }
+    else {
 
+        noResults.style.display = "none";
 
-        /* GENRE FILTER */
+    }
 
-        genreFilter.addEventListener(
-            "change",
-            filterMovies
-        );
+}
 
 
-    </script>
+
+/*
+    SEARCH BUTTON
+*/
+
+searchButton.addEventListener(
+    "click",
+    filterMovies
+);
+
+
+
+/*
+    LIVE SEARCH
+*/
+
+movieSearch.addEventListener(
+    "input",
+    filterMovies
+);
+
+
+
+/*
+    GENRE FILTER
+*/
+
+genreFilter.addEventListener(
+    "change",
+    filterMovies
+);
+
+
+</script>
 
 
 </body>
