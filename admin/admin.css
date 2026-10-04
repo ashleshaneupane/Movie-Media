@@ -319,16 +319,14 @@ form.admin-form {
 
     padding: 9px 16px;
 
-    background: rgba(255, 166, 0, 0.88);
+    background: rgba(255, 255, 255, 0.10);
+    color: #fff;
 
-    color: #151515;
-
-    border: none;
-
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 7px;
 
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
 
     text-decoration: none;
 
@@ -336,27 +334,48 @@ form.admin-form {
 
     transition:
         background 0.2s ease,
+        border-color 0.2s ease,
         transform 0.2s ease;
 }
 
 .btn:hover,
 .admin-main button:hover {
-    background: #ffb52e;
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.20);
 
     transform: translateY(-1px);
 }
 
+
+/* Main action button */
+
+.btn.primary,
+.admin-main button[type="submit"] {
+    background: rgba(255, 166, 0, 0.88);
+    color: #151515;
+    border-color: transparent;
+}
+
+.btn.primary:hover,
+.admin-main button[type="submit"]:hover {
+    background: #ffb52e;
+}
+
+
+/* Danger button */
+
 .btn.danger,
 .admin-main button.danger {
     background: rgba(190, 55, 55, 0.90);
-
     color: #fff;
+    border-color: transparent;
 }
 
 .btn.danger:hover,
 .admin-main button.danger:hover {
     background: #d34a4a;
 }
+
 
 .inline {
     display: inline;
@@ -878,6 +897,296 @@ textarea {
     .users-toolbar input[type="search"],
     .users-toolbar select {
         width: 100%;
+    }
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   MOVIES PAGE
+========================= */
+
+.movie-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 16px;
+    background: rgba(10, 10, 15, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+}
+
+.movie-toolbar input[type="search"] {
+    flex: 1;
+    min-width: 220px;
+}
+
+.movie-toolbar select {
+    min-width: 130px;
+}
+
+.movie-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 22px;
+}
+
+
+/* Movie grid */
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* Movie card */
+
+.movie-card {
+    display: flex;
+    min-height: 245px;
+    overflow: hidden;
+    background: rgba(10, 10, 15, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    transition: 0.2s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+
+/* Poster */
+
+.movie-poster {
+    width: 145px;
+    min-width: 145px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.movie-poster img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 245px;
+    object-fit: cover;
+}
+
+.poster-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 245px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+}
+
+
+/* Movie information */
+
+.movie-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 18px;
+    min-width: 0;
+}
+
+.movie-info h2 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 19px;
+}
+
+
+.movie-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 10px;
+}
+
+.movie-meta span {
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 11px;
+}
+
+
+.movie-genre {
+    margin: 0 0 10px;
+    color: #ffc15c;
+    font-size: 12px;
+}
+
+
+.movie-description {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+
+.empty-description {
+    color: rgba(255, 255, 255, 0.35);
+    font-style: italic;
+}
+
+
+/* Movie buttons */
+
+.movie-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+
+/* Empty */
+
+.movie-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 50px 20px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 900px) {
+
+    .movie-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .movie-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .movie-toolbar input[type="search"],
+    .movie-toolbar select {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .movie-card {
+        flex-direction: column;
+    }
+
+    .movie-poster {
+        width: 100%;
+        min-width: 0;
+        height: 260px;
+    }
+
+    .movie-poster img {
+        height: 260px;
+        min-height: 260px;
+    }
+
+    .poster-placeholder {
+        min-height: 260px;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   MOVIE FORM
+========================= */
+
+.movie-form {
+    max-width: 850px;
+    gap: 20px;
+}
+
+
+.form-section {
+    padding: 22px;
+    background: rgba(10, 10, 15, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+}
+
+
+.form-section h2 {
+    margin: 0 0 18px;
+    color: #fff;
+    font-size: 17px;
+}
+
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+
+.form-help {
+    margin: 8px 0 0;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+}
+
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+
+@media (max-width: 650px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
     }
 
 }
