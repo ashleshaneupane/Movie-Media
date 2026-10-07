@@ -50,6 +50,14 @@ $current = basename($_SERVER["SCRIPT_NAME"]);
             Posts
         </a>
 
+
+        <a
+    href="reviews.php"
+    class="<?php echo $current === 'reviews.php' ? 'active' : ''; ?>"
+>
+    Reviews
+</a>
+
         <a
             href="movies.php"
             class="<?php echo in_array($current, ['movies.php', 'movieForm.php']) ? 'active' : ''; ?>"

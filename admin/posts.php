@@ -1,3 +1,4 @@
+
 <?php
 
 include '../includes/adminAuth.php';
@@ -5,7 +6,7 @@ include '../includes/adminAuth.php';
 
 /*
 |--------------------------------------------------------------------------
-| Delete admin post
+| Delete post
 |--------------------------------------------------------------------------
 */
 
@@ -16,25 +17,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $postID = (int) ($_POST["postID"] ?? 0);
     $action = $_POST["action"] ?? "";
 
+
     if ($action === "delete") {
 
-        $stmt = $conn->prepare(
-            "DELETE FROM Post
-             WHERE postID = ?
-             AND userID = ?"
-        );
+        if ($postID > 0) {
 
-        $stmt->bind_param(
-            "ii",
-            $postID,
-            $_SESSION["userID"]
-        );
+            $stmt = $conn->prepare(
+                "DELETE FROM Post
+                 WHERE postID = ?"
+            );
 
-        $stmt->execute();
+            $stmt->bind_param(
+                "i",
+                $postID
+            );
 
-        $_SESSION["flash"] =
-            "Admin post deleted successfully.";
+            if ($stmt->execute()) {
+
+                $_SESSION["flash"] =
+                    "Post deleted successfully.";
+
+            } else {
+
+                $_SESSION["flash"] =
+                    "Could not delete post.";
+            }
+
+        } else {
+
+            $_SESSION["flash"] =
+                "Invalid post.";
+        }
     }
+
 
     header("Location: posts.php");
     exit;
@@ -43,30 +58,91 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 /*
 |--------------------------------------------------------------------------
-| Get admin posts
+| Pagination
+|--------------------------------------------------------------------------
+*/
+
+$postsPerPage = 8;
+
+$page = (int) ($_GET["page"] ?? 1);
+
+if ($page < 1) {
+    $page = 1;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Count posts
+|--------------------------------------------------------------------------
+*/
+
+$countStmt = $conn->prepare(
+    "SELECT COUNT(*) AS total
+     FROM Post"
+);
+
+$countStmt->execute();
+
+$countResult =
+    $countStmt->get_result();
+
+$totalPosts =
+    (int) $countResult
+        ->fetch_assoc()["total"];
+
+
+$totalPages = max(
+    1,
+    (int) ceil(
+        $totalPosts / $postsPerPage
+    )
+);
+
+
+if ($page > $totalPages) {
+    $page = $totalPages;
+}
+
+
+$offset =
+    ($page - 1) * $postsPerPage;
+
+
+/*
+|--------------------------------------------------------------------------
+| Get all posts
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare(
     "SELECT
         p.postID,
+        p.userID,
         p.caption,
         p.imageURL,
         p.watchedDate,
-        p.postDate
+        p.postDate,
+        u.name,
+        u.username,
+        u.profilePicture
      FROM Post p
-     WHERE p.userID = ?
-     ORDER BY p.postDate DESC"
+     INNER JOIN Users u
+        ON p.userID = u.userID
+     ORDER BY p.postDate DESC
+     LIMIT ? OFFSET ?"
 );
 
 $stmt->bind_param(
-    "i",
-    $_SESSION["userID"]
+    "ii",
+    $postsPerPage,
+    $offset
 );
 
 $stmt->execute();
 
-$posts = $stmt->get_result();
+$posts =
+    $stmt->get_result();
 
 
 $pageTitle = "Posts";
@@ -85,26 +161,14 @@ include 'adminHeader.php';
         </p>
 
         <h1>
-            Admin Posts
+            User Posts
         </h1>
 
         <p class="page-subtitle">
-            Create and manage posts shown on the Movie Media feed.
+            View and manage posts shared by Movie Media users.
         </p>
 
     </div>
-
-</div>
-
-
-<div class="movie-actions">
-
-    <a
-        href="postForm.php"
-        class="btn primary"
-    >
-        + Create Post
-    </a>
 
 </div>
 
@@ -114,19 +178,12 @@ include 'adminHeader.php';
     <div class="movie-empty">
 
         <h2>
-            No admin posts yet
+            No posts yet
         </h2>
 
         <p>
-            Create your first post to keep the Movie Media feed active.
+            User posts will appear here once they are created.
         </p>
-
-        <a
-            href="postForm.php"
-            class="btn primary"
-        >
-            Create First Post
-        </a>
 
     </div>
 
@@ -182,30 +239,91 @@ include 'adminHeader.php';
 
                 <div class="admin-post-header">
 
-                    <div>
+                    <div class="admin-post-author">
 
-                        <span class="admin-post-label">
-                            ADMIN POST
-                        </span>
 
-                        <small>
+                        <?php if (
+                            !empty(
+                                $post["profilePicture"]
+                            )
+                        ): ?>
 
-                            <?php
+                            <img
+                                src="../<?php
+                                    echo e(
+                                        $post["profilePicture"]
+                                    );
+                                ?>"
+                                alt="<?php
+                                    echo e(
+                                        $post["name"]
+                                    );
+                                ?>"
+                                class="admin-post-avatar"
+                            >
 
-                            echo e(
-                                date(
-                                    "M d, Y • h:i A",
-                                    strtotime(
-                                        $post["postDate"]
+                        <?php else: ?>
+
+                            <div class="admin-post-avatar-placeholder">
+                                <?php
+                                echo strtoupper(
+                                    substr(
+                                        $post["name"],
+                                        0,
+                                        1
                                     )
-                                )
-                            );
+                                );
+                                ?>
+                            </div>
 
-                            ?>
+                        <?php endif; ?>
 
-                        </small>
+
+                        <div>
+
+                            <strong>
+                                <?php
+                                echo e(
+                                    $post["name"]
+                                );
+                                ?>
+                            </strong>
+
+
+                            <small>
+                                @<?php
+                                echo e(
+                                    $post["username"]
+                                );
+                                ?>
+                            </small>
+
+
+                            <small>
+
+                                <?php
+
+                                echo e(
+                                    date(
+                                        "M d, Y • h:i A",
+                                        strtotime(
+                                            $post["postDate"]
+                                        )
+                                    )
+                                );
+
+                                ?>
+
+                            </small>
+
+                        </div>
 
                     </div>
+
+
+                    <span class="admin-post-label">
+                        USER POST
+                    </span>
 
                 </div>
 
@@ -253,6 +371,7 @@ include 'adminHeader.php';
                         ): ?>
 
                             <div class="admin-post-movie">
+
 
                                 <?php if (
                                     !empty(
@@ -323,7 +442,7 @@ include 'adminHeader.php';
                                     $post["imageURL"]
                                 );
                             ?>"
-                            alt="Admin post image"
+                            alt="User post image"
                         >
 
                     </div>
@@ -369,21 +488,11 @@ include 'adminHeader.php';
 
                 <div class="movie-card-actions">
 
-                    <a
-                        href="postForm.php?id=<?php
-                            echo (int)
-                                $post["postID"];
-                        ?>"
-                        class="btn"
-                    >
-                        Edit
-                    </a>
-
 
                     <form
                         method="post"
                         class="inline"
-                        onsubmit="return confirm('Delete this admin post permanently?');"
+                        onsubmit="return confirm('Delete this post permanently?');"
                     >
 
                         <?php echo csrfField(); ?>
@@ -424,6 +533,70 @@ include 'adminHeader.php';
         <?php endwhile; ?>
 
     </div>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    <?php if ($totalPages > 1): ?>
+
+        <div class="pagination">
+
+
+            <?php if ($page > 1): ?>
+
+                <a
+                    href="?page=<?php
+                        echo $page - 1;
+                    ?>"
+                >
+                    ← Previous
+                </a>
+
+            <?php endif; ?>
+
+
+            <?php for (
+                $i = 1;
+                $i <= $totalPages;
+                $i++
+            ): ?>
+
+                <a
+                    href="?page=<?php
+                        echo $i;
+                    ?>"
+                    class="<?php echo
+                        $i === $page
+                        ? "active"
+                        : "";
+                    ?>"
+                >
+                    <?php echo $i; ?>
+                </a>
+
+            <?php endfor; ?>
+
+
+            <?php if (
+                $page < $totalPages
+            ): ?>
+
+                <a
+                    href="?page=<?php
+                        echo $page + 1;
+                    ?>"
+                >
+                    Next →
+                </a>
+
+            <?php endif; ?>
+
+
+        </div>
+
+    <?php endif; ?>
 
 
 <?php endif; ?>

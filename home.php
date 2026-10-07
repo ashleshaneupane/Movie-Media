@@ -1,3 +1,4 @@
+
 <?php
 
 include 'includes/auth.php';
@@ -17,7 +18,8 @@ $userQuery = $conn->prepare(
         name,
         profilePicture,
         bio,
-        favoriteGenre
+        favoriteGenre,
+        role
      FROM Users
      WHERE userID = ?"
 );
@@ -133,7 +135,8 @@ $postCount =
     ->get_result()
     ->fetch_assoc()["total"];
 
-    /* =========================
+
+/* =========================
    FRIEND COUNT
 ========================= */
 
@@ -159,6 +162,7 @@ $friendCount =
     $friendCountQuery
     ->get_result()
     ->fetch_assoc()["total"];
+
 
 /* =========================
    TOP 5 MOVIES
@@ -212,102 +216,175 @@ if (!empty($user["favoriteGenre"])) {
    GET POSTS
 ========================= */
 
-$postQuery = $conn->prepare(
-    "SELECT
-        Post.postID,
-        Post.userID,
-        Post.movieID,
-        Post.caption,
-        Post.imageURL,
-        Post.watchedDate,
-        Post.postDate,
+/*
+ * ADMIN:
+ * See every post on Movie Media.
+ *
+ * NORMAL USER:
+ * See:
+ * - their own posts
+ * - accepted friends' posts
+ * - admin posts
+ */
 
-        Users.username,
-Users.name,
-Users.profilePicture,
-Users.role,
+if ($user["role"] === "admin") {
 
-movie.title AS movieTitle,
-movie.poster AS moviePoster,
-        (
-            SELECT COUNT(*)
-            FROM PostLike
-            WHERE PostLike.postID = Post.postID
-        ) AS likeCount,
+    $postQuery = $conn->prepare(
+        "SELECT
+            Post.postID,
+            Post.userID,
+            Post.movieID,
+            Post.caption,
+            Post.imageURL,
+            Post.watchedDate,
+            Post.postDate,
 
-        (
-            SELECT COUNT(*)
-            FROM PostLike
-            WHERE PostLike.postID = Post.postID
-            AND PostLike.userID = ?
-        ) AS userLiked,
+            Users.username,
+            Users.name,
+            Users.profilePicture,
+            Users.role,
 
-        (
-            SELECT COUNT(*)
-            FROM PostComment
-            WHERE PostComment.postID = Post.postID
-        ) AS commentCount
+            movie.title AS movieTitle,
+            movie.poster AS moviePoster,
 
-     FROM Post
+            (
+                SELECT COUNT(*)
+                FROM PostLike
+                WHERE PostLike.postID = Post.postID
+            ) AS likeCount,
 
-     INNER JOIN Users
-        ON Post.userID = Users.userID
+            (
+                SELECT COUNT(*)
+                FROM PostLike
+                WHERE PostLike.postID = Post.postID
+                AND PostLike.userID = ?
+            ) AS userLiked,
 
-     LEFT JOIN movie
-        ON Post.movieID = movie.movieID
+            (
+                SELECT COUNT(*)
+                FROM PostComment
+                WHERE PostComment.postID = Post.postID
+            ) AS commentCount
 
-     WHERE
-        Post.userID = ?
+         FROM Post
 
-        OR
+         INNER JOIN Users
+            ON Post.userID = Users.userID
 
-        Post.userID IN (
-            SELECT
-                CASE
-                    WHEN senderID = ? THEN receiverID
-                    ELSE senderID
-                END
+         LEFT JOIN movie
+            ON Post.movieID = movie.movieID
 
-            FROM FriendRequest
+         ORDER BY Post.postDate DESC"
+    );
 
-            WHERE
-                status = 'accepted'
+    $postQuery->bind_param(
+        "i",
+        $userID
+    );
 
-                AND (
-                    senderID = ?
-                    OR receiverID = ?
-                )
-        )
+} else {
 
-        OR
+    $postQuery = $conn->prepare(
+        "SELECT
+            Post.postID,
+            Post.userID,
+            Post.movieID,
+            Post.caption,
+            Post.imageURL,
+            Post.watchedDate,
+            Post.postDate,
 
-        Post.userID IN (
-            SELECT userID
-            FROM Users
-            WHERE role = 'admin'
-        )
+            Users.username,
+            Users.name,
+            Users.profilePicture,
+            Users.role,
 
-     ORDER BY Post.postDate DESC"
-);
+            movie.title AS movieTitle,
+            movie.poster AS moviePoster,
 
-$postQuery->bind_param(
-    "iiiii",
-    $userID,
-    $userID,
-    $userID,
-    $userID,
-    $userID
-);
+            (
+                SELECT COUNT(*)
+                FROM PostLike
+                WHERE PostLike.postID = Post.postID
+            ) AS likeCount,
+
+            (
+                SELECT COUNT(*)
+                FROM PostLike
+                WHERE PostLike.postID = Post.postID
+                AND PostLike.userID = ?
+            ) AS userLiked,
+
+            (
+                SELECT COUNT(*)
+                FROM PostComment
+                WHERE PostComment.postID = Post.postID
+            ) AS commentCount
+
+         FROM Post
+
+         INNER JOIN Users
+            ON Post.userID = Users.userID
+
+         LEFT JOIN movie
+            ON Post.movieID = movie.movieID
+
+         WHERE
+
+            Post.userID = ?
+
+            OR
+
+            Post.userID IN (
+                SELECT
+                    CASE
+                        WHEN senderID = ?
+                        THEN receiverID
+                        ELSE senderID
+                    END
+
+                FROM FriendRequest
+
+                WHERE
+                    status = 'accepted'
+
+                    AND (
+                        senderID = ?
+                        OR receiverID = ?
+                    )
+            )
+
+            OR
+
+            Post.userID IN (
+                SELECT userID
+                FROM Users
+                WHERE role = 'admin'
+            )
+
+         ORDER BY Post.postDate DESC"
+    );
+
+    $postQuery->bind_param(
+        "iiiii",
+        $userID,
+        $userID,
+        $userID,
+        $userID,
+        $userID
+    );
+}
+
 
 $postQuery->execute();
 
-$postQuery = $postQuery->get_result();
-
+$postQuery =
+    $postQuery->get_result();
 
 
 /* =========================
    GET MULTIPLE MOVIES
-   FOR ADMIN POSTS
+   FOR POSTS
 ========================= */
 
 $postMovies = [];
@@ -341,6 +418,7 @@ while (
         $movieLink["postID"]
     ][] = $movieLink;
 }
+
 
 /* =========================
    PROFILE IMAGE
@@ -494,11 +572,7 @@ $profilePicture =
                 <div class="profile-stat">
 
                     <strong>
-
-                        <?php
-                        echo $postCount;
-                        ?>
-
+                        <?php echo $postCount; ?>
                     </strong>
 
                     <span>
@@ -511,11 +585,7 @@ $profilePicture =
                 <div class="profile-stat">
 
                     <strong>
-
-                        <?php
-                        echo $watchedCount;
-                        ?>
-
+                        <?php echo $watchedCount; ?>
                     </strong>
 
                     <span>
@@ -528,11 +598,7 @@ $profilePicture =
                 <div class="profile-stat">
 
                     <strong>
-
-                        <?php
-                        echo $friendCount;
-                        ?>
-
+                        <?php echo $friendCount; ?>
                     </strong>
 
                     <span>
@@ -557,11 +623,7 @@ $profilePicture =
                     </span>
 
                     <strong>
-
-                        <?php
-                        echo $watchlistCount;
-                        ?>
-
+                        <?php echo $watchlistCount; ?>
                     </strong>
 
                 </div>
@@ -574,11 +636,7 @@ $profilePicture =
                     </span>
 
                     <strong>
-
-                        <?php
-                        echo $reviewCount;
-                        ?>
-
+                        <?php echo $reviewCount; ?>
                     </strong>
 
                 </div>
@@ -637,11 +695,9 @@ $profilePicture =
                             <span>
 
                                 <?php
-
                                 echo htmlspecialchars(
                                     $genre
                                 );
-
                                 ?>
 
                             </span>
@@ -684,11 +740,9 @@ $profilePicture =
                             <li>
 
                                 <?php
-
                                 echo htmlspecialchars(
                                     $topMovie["title"]
                                 );
-
                                 ?>
 
                             </li>
@@ -751,7 +805,7 @@ $profilePicture =
 
         <!-- =========================
              POSTS
-        ========================== -->
+        ========================= -->
 
         <?php if (
             $postQuery->num_rows === 0
@@ -786,147 +840,163 @@ $profilePicture =
                         echo $post["postID"];
                     ?>"
                 >
-<!-- =========================
-     POST HEADER
-========================= -->
-
-<div class="post-header">
-
-    <?php
-    $isAdminPost =
-        isset($post["role"]) &&
-        $post["role"] === "admin";
-    ?>
-
-    <?php if ($isAdminPost): ?>
-
-        <!-- ADMIN POST -->
-
-        <div class="post-user-link admin-post-user">
-
-            <div class="post-profile-image admin-profile-icon">
-
-                🎬
-
-            </div>
-
-            <div class="post-user-info">
-
-                <h3>
-                    Movie Media
-                </h3>
-
-                <p class="admin-badge">
-                    ADMIN
-                </p>
-
-            </div>
-
-        </div>
-
-    <?php else: ?>
-
-        <!-- NORMAL USER POST -->
-
-        <a
-            href="profile.php?user=<?php
-                echo $post["userID"];
-            ?>"
-            class="post-user-link"
-        >
-
-            <div class="post-profile-image">
-
-                <?php if (
-                    !empty(
-                        $post["profilePicture"]
-                    )
-                ): ?>
-
-                    <img
-                        src="<?php
-                            echo htmlspecialchars(
-                                $post["profilePicture"]
-                            );
-                        ?>"
-                        alt="Profile Picture"
-                    >
-
-                <?php else: ?>
-
-                    <?php
-
-                    echo strtoupper(
-                        substr(
-                            $post["name"]
-                            ?: $post["username"],
-                            0,
-                            1
-                        )
-                    );
-
-                    ?>
-
-                <?php endif; ?>
-
-            </div>
-
-            <div class="post-user-info">
-
-                <h3>
-
-                    <?php
-
-                    echo htmlspecialchars(
-                        $post["name"]
-                        ?: $post["username"]
-                    );
-
-                    ?>
-
-                </h3>
-
-                <p>
-
-                    @<?php
-
-                    echo htmlspecialchars(
-                        $post["username"]
-                    );
-
-                    ?>
-
-                </p>
-
-            </div>
-
-        </a>
-
-    <?php endif; ?>
 
 
-    <!-- DELETE ONLY OWN NORMAL POSTS -->
+                    <!-- =========================
+                         POST HEADER
+                    ========================== -->
 
-    <?php if (
-        !$isAdminPost &&
-        (int) $post["userID"] ===
-        (int) $userID
-    ): ?>
+                    <div class="post-header">
 
-        <button
-            type="button"
-            class="delete-post"
-            data-post-id="<?php
-                echo $post["postID"];
-            ?>"
-        >
-            Delete
-        </button>
+                        <?php
 
-    <?php endif; ?>
+                        $isAdminPost =
+                            isset($post["role"]) &&
+                            $post["role"] === "admin";
 
-</div>
-                    <!-- POST CONTENT -->
+                        ?>
+
+
+                        <?php if ($isAdminPost): ?>
+
+
+                            <!-- ADMIN POST -->
+
+                            <div class="post-user-link admin-post-user">
+
+                                <div class="post-profile-image admin-profile-icon">
+
+                                    🎬
+
+                                </div>
+
+                                <div class="post-user-info">
+
+                                    <h3>
+                                        Movie Media
+                                    </h3>
+
+                                    <p class="admin-badge">
+                                        ADMIN
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                        <?php else: ?>
+
+
+                            <!-- NORMAL USER POST -->
+
+                            <a
+                                href="profile.php?user=<?php
+                                    echo $post["userID"];
+                                ?>"
+                                class="post-user-link"
+                            >
+
+                                <div class="post-profile-image">
+
+                                    <?php if (
+                                        !empty(
+                                            $post["profilePicture"]
+                                        )
+                                    ): ?>
+
+                                        <img
+                                            src="<?php
+                                                echo htmlspecialchars(
+                                                    $post["profilePicture"]
+                                                );
+                                            ?>"
+                                            alt="Profile Picture"
+                                        >
+
+                                    <?php else: ?>
+
+                                        <?php
+
+                                        echo strtoupper(
+                                            substr(
+                                                $post["name"]
+                                                ?: $post["username"],
+                                                0,
+                                                1
+                                            )
+                                        );
+
+                                        ?>
+
+                                    <?php endif; ?>
+
+                                </div>
+
+
+                                <div class="post-user-info">
+
+                                    <h3>
+
+                                        <?php
+
+                                        echo htmlspecialchars(
+                                            $post["name"]
+                                            ?: $post["username"]
+                                        );
+
+                                        ?>
+
+                                    </h3>
+
+
+                                    <p>
+
+                                        @<?php
+
+                                        echo htmlspecialchars(
+                                            $post["username"]
+                                        );
+
+                                        ?>
+
+                                    </p>
+
+                                </div>
+
+                            </a>
+
+
+                        <?php endif; ?>
+
+
+                        <!-- DELETE OWN POST -->
+
+                        <?php if (
+                            !$isAdminPost &&
+                            (int) $post["userID"] ===
+                            (int) $userID
+                        ): ?>
+
+                            <button
+                                type="button"
+                                class="delete-post"
+                                data-post-id="<?php
+                                    echo $post["postID"];
+                                ?>"
+                            >
+                                Delete
+                            </button>
+
+                        <?php endif; ?>
+
+
+                    </div>
+
+
+                    <!-- =========================
+                         POST CONTENT
+                    ========================== -->
 
                     <div class="post-content">
 
@@ -956,179 +1026,181 @@ $profilePicture =
                         <?php endif; ?>
 
 
-
-                      <!-- =========================
-     MOVIES
-========================= -->
-
-<?php
-$linkedMovies =
-    $postMovies[$post["postID"]]
-    ?? [];
-?>
-
-
-<!-- MULTIPLE MOVIES FROM POSTMOVIE -->
-
-<?php if (!empty($linkedMovies)): ?>
-
-    <div class="movie-attachments">
-
-        <?php foreach (
-            $linkedMovies as $linkedMovie
-        ): ?>
-
-            <div class="movie-attachment">
-
-                <?php if (
-                    !empty(
-                        $linkedMovie["poster"]
-                    )
-                ): ?>
-
-                    <img
-                        src="<?php
-                            echo htmlspecialchars(
-                                $linkedMovie["poster"]
-                            );
-                        ?>"
-                        alt="<?php
-                            echo htmlspecialchars(
-                                $linkedMovie["title"]
-                            );
-                        ?>"
-                        class="movie-poster"
-                    >
-
-                <?php endif; ?>
-
-
-                <div class="movie-attachment-info">
-
-                    <h3>
+                        <!-- =========================
+                             MOVIES
+                        ========================== -->
 
                         <?php
-                        echo htmlspecialchars(
-                            $linkedMovie["title"]
-                        );
+
+                        $linkedMovies =
+                            $postMovies[$post["postID"]]
+                            ?? [];
+
                         ?>
 
-                    </h3>
+
+                        <!-- MULTIPLE MOVIES -->
+
+                        <?php if (!empty($linkedMovies)): ?>
+
+                            <div class="movie-attachments">
+
+                                <?php foreach (
+                                    $linkedMovies as $linkedMovie
+                                ): ?>
+
+                                    <div class="movie-attachment">
+
+                                        <?php if (
+                                            !empty(
+                                                $linkedMovie["poster"]
+                                            )
+                                        ): ?>
+
+                                            <img
+                                                src="<?php
+                                                    echo htmlspecialchars(
+                                                        $linkedMovie["poster"]
+                                                    );
+                                                ?>"
+                                                alt="<?php
+                                                    echo htmlspecialchars(
+                                                        $linkedMovie["title"]
+                                                    );
+                                                ?>"
+                                                class="movie-poster"
+                                            >
+
+                                        <?php endif; ?>
 
 
-                    <?php if (
-                        !empty(
-                            $post["watchedDate"]
-                        )
-                    ): ?>
+                                        <div class="movie-attachment-info">
 
-                        <p>
+                                            <h3>
 
-                            Watched:
+                                                <?php
+                                                echo htmlspecialchars(
+                                                    $linkedMovie["title"]
+                                                );
+                                                ?>
 
-                            <?php
-
-                            echo date(
-                                "F d, Y",
-                                strtotime(
-                                    $post["watchedDate"]
-                                )
-                            );
-
-                            ?>
-
-                        </p>
-
-                    <?php endif; ?>
-
-                </div>
-
-            </div>
-
-        <?php endforeach; ?>
-
-    </div>
-
-<?php endif; ?>
+                                            </h3>
 
 
-<!-- OLD SINGLE-MOVIE POSTS -->
+                                            <?php if (
+                                                !empty(
+                                                    $post["watchedDate"]
+                                                )
+                                            ): ?>
 
-<?php if (
-    empty($linkedMovies)
-    &&
-    !empty($post["movieID"])
-    &&
-    !empty($post["movieTitle"])
-): ?>
+                                                <p>
 
-    <div class="movie-attachment">
+                                                    Watched:
 
-        <?php if (
-            !empty($post["moviePoster"])
-        ): ?>
+                                                    <?php
 
-            <img
-                src="<?php
-                    echo htmlspecialchars(
-                        $post["moviePoster"]
-                    );
-                ?>"
-                alt="<?php
-                    echo htmlspecialchars(
-                        $post["movieTitle"]
-                    );
-                ?>"
-                class="movie-poster"
-            >
+                                                    echo date(
+                                                        "F d, Y",
+                                                        strtotime(
+                                                            $post["watchedDate"]
+                                                        )
+                                                    );
 
-        <?php endif; ?>
+                                                    ?>
 
+                                                </p>
 
-        <div class="movie-attachment-info">
+                                            <?php endif; ?>
 
-            <h3>
+                                        </div>
 
-                <?php
-                echo htmlspecialchars(
-                    $post["movieTitle"]
-                );
-                ?>
+                                    </div>
 
-            </h3>
+                                <?php endforeach; ?>
+
+                            </div>
+
+                        <?php endif; ?>
 
 
-            <?php if (
-                !empty(
-                    $post["watchedDate"]
-                )
-            ): ?>
+                        <!-- OLD SINGLE-MOVIE POSTS -->
 
-                <p>
+                        <?php if (
+                            empty($linkedMovies)
+                            &&
+                            !empty($post["movieID"])
+                            &&
+                            !empty($post["movieTitle"])
+                        ): ?>
 
-                    Watched:
+                            <div class="movie-attachment">
 
-                    <?php
+                                <?php if (
+                                    !empty(
+                                        $post["moviePoster"]
+                                    )
+                                ): ?>
 
-                    echo date(
-                        "F d, Y",
-                        strtotime(
-                            $post["watchedDate"]
-                        )
-                    );
+                                    <img
+                                        src="<?php
+                                            echo htmlspecialchars(
+                                                $post["moviePoster"]
+                                            );
+                                        ?>"
+                                        alt="<?php
+                                            echo htmlspecialchars(
+                                                $post["movieTitle"]
+                                            );
+                                        ?>"
+                                        class="movie-poster"
+                                    >
 
-                    ?>
+                                <?php endif; ?>
 
-                </p>
 
-            <?php endif; ?>
+                                <div class="movie-attachment-info">
 
-        </div>
+                                    <h3>
 
-    </div>
+                                        <?php
+                                        echo htmlspecialchars(
+                                            $post["movieTitle"]
+                                        );
+                                        ?>
 
-<?php endif; ?>
+                                    </h3>
 
+
+                                    <?php if (
+                                        !empty(
+                                            $post["watchedDate"]
+                                        )
+                                    ): ?>
+
+                                        <p>
+
+                                            Watched:
+
+                                            <?php
+
+                                            echo date(
+                                                "F d, Y",
+                                                strtotime(
+                                                    $post["watchedDate"]
+                                                )
+                                            );
+
+                                            ?>
+
+                                        </p>
+
+                                    <?php endif; ?>
+
+                                </div>
+
+                            </div>
+
+                        <?php endif; ?>
 
 
                         <!-- PHOTO -->
@@ -1139,9 +1211,7 @@ $linkedMovies =
                             )
                         ): ?>
 
-                            <div
-                                class="photo-attachment"
-                            >
+                            <div class="photo-attachment">
 
                                 <img
                                     src="<?php
@@ -1159,7 +1229,6 @@ $linkedMovies =
 
 
                     </div>
-
 
 
                     <!-- =========================
@@ -1243,60 +1312,71 @@ $linkedMovies =
 
 
 
-  <!-- =========================
-     RIGHT SIDEBAR
-========================= -->
+    <!-- =========================
+         RIGHT SIDEBAR
+    ========================== -->
 
-<aside class="right-sidebar" id="rightSidebar">
-
-    <div class="comments-card" id="commentsCard">
-
-        <div class="comments-header">
-
-            <h2>
-                Comments
-            </h2>
-
-            <button
-                type="button"
-                id="closeComments"
-            >
-                ×
-            </button>
-
-        </div>
+    <aside
+        class="right-sidebar"
+        id="rightSidebar"
+    >
 
         <div
-            class="sidebar-comment-list"
-            id="sidebarCommentList"
+            class="comments-card"
+            id="commentsCard"
         >
-            <p class="no-comments">
-                Click the comment icon on a post.
-            </p>
-        </div>
 
-        <div class="sidebar-comment-form">
+            <div class="comments-header">
 
-            <input
-                type="text"
-                id="sidebarCommentInput"
-                placeholder="Write a comment..."
-                disabled
+                <h2>
+                    Comments
+                </h2>
+
+                <button
+                    type="button"
+                    id="closeComments"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="sidebar-comment-list"
+                id="sidebarCommentList"
             >
 
-            <button
-                type="button"
-                id="sidebarCommentButton"
-                disabled
-            >
-                Post
-            </button>
+                <p class="no-comments">
+                    Click the comment icon on a post.
+                </p>
+
+            </div>
+
+
+            <div class="sidebar-comment-form">
+
+                <input
+                    type="text"
+                    id="sidebarCommentInput"
+                    placeholder="Write a comment..."
+                    disabled
+                >
+
+                <button
+                    type="button"
+                    id="sidebarCommentButton"
+                    disabled
+                >
+                    Post
+                </button>
+
+            </div>
 
         </div>
 
-    </div>
+    </aside>
 
-</aside>
 
 </main>
 
@@ -1412,13 +1492,11 @@ likeButtons.forEach(function(button) {
 });
 
 
-
 /* =========================
    COMMENTS
 ========================= */
 
 let selectedPostID = null;
-
 
 
 /* =========================
@@ -1460,7 +1538,6 @@ commentToggles.forEach(function(button) {
     );
 
 });
-
 
 
 /* =========================
@@ -1547,27 +1624,30 @@ function loadComments(postID) {
 
 
             const username =
-    document.createElement(
-        "strong"
-    );
+                document.createElement(
+                    "strong"
+                );
 
 
-if (comment.role === "admin") {
+            if (
+                comment.role === "admin"
+            ) {
 
-    username.textContent =
-        "🎬 Movie Media • ADMIN";
+                username.textContent =
+                    "🎬 Movie Media • ADMIN";
 
-} else {
+            } else {
 
-    username.textContent =
-        "@" + comment.username;
+                username.textContent =
+                    "@" + comment.username;
 
-}
+            }
 
 
-commentTop.appendChild(
-    username
-);
+            commentTop.appendChild(
+                username
+            );
+
 
             /* =========================
                DELETE BUTTON
@@ -1647,7 +1727,6 @@ commentTop.appendChild(
     });
 
 }
-
 
 
 /* =========================
@@ -1732,7 +1811,6 @@ function deleteComment(commentID) {
     });
 
 }
-
 
 
 /* =========================
@@ -1868,7 +1946,6 @@ document
     );
 
 
-
 /* =========================
    CLOSE COMMENTS
 ========================= */
@@ -1894,6 +1971,12 @@ document
 
         }
     );
+
+
+/* =========================
+   DELETE POST
+========================= */
+
 document
     .querySelectorAll(".delete-post")
     .forEach(function(button) {
@@ -1908,6 +1991,7 @@ document
 
                 const formData =
                     new FormData();
+
 
                 formData.append(
                     "postID",
@@ -1940,6 +2024,7 @@ document
                                 ".post-card"
                             );
 
+
                         if (postCard) {
 
                             postCard.remove();
@@ -1962,6 +2047,7 @@ document
         );
 
     });
+
 </script>
 
 

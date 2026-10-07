@@ -20,7 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Find user by username
 
     $userCheck = $conn->prepare(
-        "SELECT userID, username, name, password, role
+        "SELECT
+            userID,
+            username,
+            name,
+            password,
+            role,
+            isBlocked
          FROM Users
          WHERE username = ?"
     );
@@ -44,23 +50,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (password_verify($password, $user["password"])) {
 
-            // Create session
+            /*
+            |--------------------------------------------------------------------------
+            | Check whether the account is blocked
+            |--------------------------------------------------------------------------
+            */
 
-            $_SESSION["userID"] = $user["userID"];
-            $_SESSION["username"] = $user["username"];
-            $_SESSION["name"] = $user["name"];
-            $_SESSION["role"] = $user["role"];
+            if ((int) $user["isBlocked"] === 1) {
+
+                $loginError =
+                    "Your account has been blocked by the administrator.";
+
+            } else {
+
+                /*
+                |--------------------------------------------------------------------------
+                | Create session
+                |--------------------------------------------------------------------------
+                */
+
+                $_SESSION["userID"] = $user["userID"];
+                $_SESSION["username"] = $user["username"];
+                $_SESSION["name"] = $user["name"];
+                $_SESSION["role"] = $user["role"];
 
 
-          // Login successful
+                // Login successful
 
-if ($_SESSION["role"] === "admin") {
-    header("Location: admin/index.php");
-    exit;
-}
+                if ($_SESSION["role"] === "admin") {
 
-header("Location: home.php");
-exit;
+                    header("Location: admin/index.php");
+                    exit;
+
+                }
+
+                header("Location: home.php");
+                exit;
+            }
 
         } else {
 
@@ -104,11 +130,16 @@ exit;
     LOGIN
 </h1>
 
+
 <?php if ($loginMessage !== ""): ?>
+
     <p class="login-server-message">
         <?php echo htmlspecialchars($loginMessage); ?>
     </p>
+
 <?php endif; ?>
+
+
 <?php if ($loginError !== ""): ?>
 
     <p class="login-server-error">

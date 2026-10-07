@@ -1,3 +1,4 @@
+
 <?php
 include '../includes/adminAuth.php';
 
@@ -88,14 +89,90 @@ if ($yearFilter !== "") {
 
 /*
 |--------------------------------------------------------------------------
-| Build movie query
+| Pagination
+|--------------------------------------------------------------------------
+*/
+
+$moviesPerPage = 8;
+
+$page = (int) ($_GET["page"] ?? 1);
+
+if ($page < 1) {
+    $page = 1;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Count matching movies
+|--------------------------------------------------------------------------
+*/
+
+$countSql =
+    "SELECT COUNT(*) AS total
+     FROM movie";
+
+if (!empty($conditions)) {
+
+    $countSql .=
+        " WHERE " .
+        implode(" AND ", $conditions);
+}
+
+
+$countStmt = $conn->prepare($countSql);
+
+if (!empty($params)) {
+
+    $countStmt->bind_param(
+        $types,
+        ...$params
+    );
+}
+
+$countStmt->execute();
+
+$countResult = $countStmt->get_result();
+
+$totalMovies =
+    (int) $countResult->fetch_assoc()["total"];
+
+
+$totalPages = max(
+    1,
+    (int) ceil(
+        $totalMovies / $moviesPerPage
+    )
+);
+
+
+if ($page > $totalPages) {
+    $page = $totalPages;
+}
+
+
+$offset =
+    ($page - 1) * $moviesPerPage;
+
+
+/*
+|--------------------------------------------------------------------------
+| Get movies for current page
 |--------------------------------------------------------------------------
 */
 
 $sql =
-    "SELECT movieID, title, poster, releaseDate,
-            genre, language, runtime, description
+    "SELECT
+        movieID,
+        title,
+        poster,
+        releaseDate,
+        genre,
+        language,
+        runtime,
+        description
      FROM movie";
+
 
 if (!empty($conditions)) {
 
@@ -104,18 +181,38 @@ if (!empty($conditions)) {
         implode(" AND ", $conditions);
 }
 
-$sql .= " ORDER BY title ASC";
+
+$sql .=
+    " ORDER BY title ASC
+      LIMIT ? OFFSET ?";
 
 
-$stmt = $conn->prepare($sql);
+$movieParams = $params;
 
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
-}
+$movieTypes =
+    $types . "ii";
+
+$movieParams[] =
+    $moviesPerPage;
+
+$movieParams[] =
+    $offset;
+
+
+$stmt =
+    $conn->prepare($sql);
+
+
+$stmt->bind_param(
+    $movieTypes,
+    ...$movieParams
+);
+
 
 $stmt->execute();
 
-$movies = $stmt->get_result();
+$movies =
+    $stmt->get_result();
 
 
 /*
@@ -136,19 +233,25 @@ $genres = [];
 
 while ($g = $genreResult->fetch_assoc()) {
 
-    $parts = explode(",", $g["genre"]);
+    $parts =
+        explode(",", $g["genre"]);
 
     foreach ($parts as $part) {
 
-        $part = trim($part);
+        $part =
+            trim($part);
 
         if ($part !== "") {
-            $genres[$part] = true;
+
+            $genres[$part] =
+                true;
         }
     }
 }
 
-$genres = array_keys($genres);
+$genres =
+    array_keys($genres);
+
 sort($genres);
 
 
@@ -171,13 +274,17 @@ $years = [];
 while ($y = $yearResult->fetch_assoc()) {
 
     if (!empty($y["movieYear"])) {
-        $years[] = $y["movieYear"];
+
+        $years[] =
+            $y["movieYear"];
     }
 }
 
 
 $pageTitle = "Movies";
+
 include 'adminHeader.php';
+
 ?>
 
 
@@ -189,7 +296,9 @@ include 'adminHeader.php';
             MOVIE LIBRARY
         </p>
 
-        <h1>Movies</h1>
+        <h1>
+            Movies
+        </h1>
 
         <p class="page-subtitle">
             Manage the movies available throughout Movie Media.
@@ -202,7 +311,10 @@ include 'adminHeader.php';
 
 <!-- Search and filters -->
 
-<form class="movie-toolbar" method="get">
+<form
+    class="movie-toolbar"
+    method="get"
+>
 
     <input
         type="search"
@@ -222,7 +334,11 @@ include 'adminHeader.php';
 
             <option
                 value="<?php echo e($genre); ?>"
-                <?php echo $genreFilter === $genre ? "selected" : ""; ?>
+                <?php echo
+                    $genreFilter === $genre
+                    ? "selected"
+                    : "";
+                ?>
             >
                 <?php echo e($genre); ?>
             </option>
@@ -242,7 +358,11 @@ include 'adminHeader.php';
 
             <option
                 value="<?php echo (int) $year; ?>"
-                <?php echo $yearFilter == $year ? "selected" : ""; ?>
+                <?php echo
+                    $yearFilter == $year
+                    ? "selected"
+                    : "";
+                ?>
             >
                 <?php echo (int) $year; ?>
             </option>
@@ -263,7 +383,10 @@ include 'adminHeader.php';
         $yearFilter !== ""
     ): ?>
 
-        <a href="movies.php" class="clear-filter">
+        <a
+            href="movies.php"
+            class="clear-filter"
+        >
             Clear
         </a>
 
@@ -294,7 +417,9 @@ include 'adminHeader.php';
 
         <div class="empty-state movie-empty">
 
-            <strong>No movies found.</strong>
+            <strong>
+                No movies found.
+            </strong>
 
             <span>
                 Try changing your search or filters.
@@ -345,14 +470,18 @@ include 'adminHeader.php';
                         <?php if (!empty($m["releaseDate"])): ?>
 
                             <span>
+
                                 <?php
                                 echo e(
                                     date(
                                         "Y",
-                                        strtotime($m["releaseDate"])
+                                        strtotime(
+                                            $m["releaseDate"]
+                                        )
                                     )
                                 );
                                 ?>
+
                             </span>
 
                         <?php endif; ?>
@@ -392,10 +521,16 @@ include 'adminHeader.php';
                         <p class="movie-description">
 
                             <?php
-                            $description =
-                                trim($m["description"]);
 
-                            if (strlen($description) > 150) {
+                            $description =
+                                trim(
+                                    $m["description"]
+                                );
+
+                            if (
+                                strlen($description) > 150
+                            ) {
+
                                 $description =
                                     substr(
                                         $description,
@@ -404,14 +539,19 @@ include 'adminHeader.php';
                                     ) . "...";
                             }
 
-                            echo e($description);
+                            echo e(
+                                $description
+                            );
+
                             ?>
 
                         </p>
 
                     <?php else: ?>
 
-                        <p class="movie-description empty-description">
+                        <p
+                            class="movie-description empty-description"
+                        >
                             No description added.
                         </p>
 
@@ -438,11 +578,15 @@ include 'adminHeader.php';
 
                             <?php echo csrfField(); ?>
 
+
                             <input
                                 type="hidden"
                                 name="movieID"
-                                value="<?php echo (int) $m["movieID"]; ?>"
+                                value="<?php echo
+                                    (int) $m["movieID"];
+                                ?>"
                             >
+
 
                             <button
                                 type="submit"
@@ -466,4 +610,78 @@ include 'adminHeader.php';
 </div>
 
 
+<!-- Pagination -->
+
+<?php if ($totalPages > 1): ?>
+
+    <div class="pagination">
+
+        <?php if ($page > 1): ?>
+
+            <a
+                href="?<?php
+                    echo http_build_query([
+                        "q" => $search,
+                        "genre" => $genreFilter,
+                        "year" => $yearFilter,
+                        "page" => $page - 1
+                    ]);
+                ?>"
+            >
+                ← Previous
+            </a>
+
+        <?php endif; ?>
+
+
+        <?php for (
+            $i = 1;
+            $i <= $totalPages;
+            $i++
+        ): ?>
+
+            <a
+                href="?<?php
+                    echo http_build_query([
+                        "q" => $search,
+                        "genre" => $genreFilter,
+                        "year" => $yearFilter,
+                        "page" => $i
+                    ]);
+                ?>"
+                class="<?php echo
+                    $i === $page
+                    ? "active"
+                    : "";
+                ?>"
+            >
+                <?php echo $i; ?>
+            </a>
+
+        <?php endfor; ?>
+
+
+        <?php if ($page < $totalPages): ?>
+
+            <a
+                href="?<?php
+                    echo http_build_query([
+                        "q" => $search,
+                        "genre" => $genreFilter,
+                        "year" => $yearFilter,
+                        "page" => $page + 1
+                    ]);
+                ?>"
+            >
+                Next →
+            </a>
+
+        <?php endif; ?>
+
+    </div>
+
+<?php endif; ?>
+
+
 <?php include 'adminFooter.php'; ?>
+
