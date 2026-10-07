@@ -16,30 +16,49 @@ $userQuery = $conn->prepare(
     Users.userID,
     Users.name,
     Users.username,
-    Users.profilePicture,
-    FriendRequest.requestID,
-    FriendRequest.senderID,
-    FriendRequest.receiverID,
-    FriendRequest.status
+    Users.profilePicture
+
 FROM Users
-LEFT JOIN FriendRequest
-ON (
-    (FriendRequest.senderID = ? AND FriendRequest.receiverID = Users.userID)
-    OR
-    (FriendRequest.senderID = Users.userID AND FriendRequest.receiverID = ?)
-)
+
 WHERE Users.userID != ?
 AND Users.role != 'admin'
+
+/* EXCLUDE ACCEPTED FRIENDS */
 AND NOT EXISTS (
     SELECT 1
     FROM FriendRequest AS AcceptedFriend
     WHERE AcceptedFriend.status = 'accepted'
     AND (
-        (AcceptedFriend.senderID = ? AND AcceptedFriend.receiverID = Users.userID)
+        (
+            AcceptedFriend.senderID = ?
+            AND AcceptedFriend.receiverID = Users.userID
+        )
         OR
-        (AcceptedFriend.senderID = Users.userID AND AcceptedFriend.receiverID = ?)
+        (
+            AcceptedFriend.senderID = Users.userID
+            AND AcceptedFriend.receiverID = ?
+        )
     )
 )
+
+/* EXCLUDE ALL PENDING REQUESTS */
+AND NOT EXISTS (
+    SELECT 1
+    FROM FriendRequest AS PendingRequest
+    WHERE PendingRequest.status = 'pending'
+    AND (
+        (
+            PendingRequest.senderID = ?
+            AND PendingRequest.receiverID = Users.userID
+        )
+        OR
+        (
+            PendingRequest.senderID = Users.userID
+            AND PendingRequest.receiverID = ?
+        )
+    )
+)
+
 ORDER BY Users.name ASC"
 );
 
@@ -51,6 +70,10 @@ $userQuery->bind_param(
     $currentUserID,
     $currentUserID
 );
+
+$userQuery->execute();
+
+$users = $userQuery->get_result();
 
 $userQuery->execute();
 $users = $userQuery->get_result();
@@ -457,21 +480,23 @@ addFriendButtons.forEach(
                             result.trim();
 
 
-                        if (
-                            result ===
-                                "success" ||
-                            result ===
-                                "sent"
-                        ) {
+                    if (
+    result ===
+        "success" ||
+    result ===
+        "sent"
+) {
 
-                            button.textContent =
-                                "Request Sent";
+    const friendCard =
+        button.closest(".friend-card");
 
-                            button.classList.add(
-                                "request-sent"
-                            );
+    if (friendCard) {
 
-                        }
+        friendCard.remove();
+
+    }
+
+}
 
 
                         else if (
