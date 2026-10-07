@@ -24,7 +24,10 @@ nav a {
 }
 
 body {
-    background-image: url("../images/bg.jpg");
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.45),
+            rgba(0, 0, 0, 0.45)),
+        url("../images/bg.jpg");
 
     background-size: cover;
     background-position: center top;
@@ -32,10 +35,6 @@ body {
     background-attachment: fixed;
 
     margin: 0;
-
-    min-height: 100vh;
-
-    overflow: hidden;
 }
 
 #heading {
@@ -9037,38 +9036,47 @@ form {
 
 
 
-
 /* =========================================================
-   FINAL HOME PAGE SCROLL LAYOUT
+   HOME PAGE SCROLL LAYOUT
    A = LEFT SIDEBAR
    B = CENTER FEED
    C = RIGHT SIDEBAR
 ========================================================= */
 
+/* NORMAL PAGES */
 html {
-    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 
-body {
-    height: 100%;
+/* =========================================================
+   HOME PAGE ONLY
+========================================================= */
+
+body:has(.home-layout) {
+    height: 100vh;
     min-height: 100vh;
-
-    margin: 0;
-
     overflow: hidden;
 }
 
 
-/* =========================
+/* =========================================================
    MAIN THREE-COLUMN AREA
-========================= */
+========================================================= */
 
-.home-layout {
+body:has(.home-layout) .home-layout {
     width: 100%;
     max-width: 1400px;
 
     height: calc(100vh - 70px);
+    min-height: 0;
 
     margin: 0 auto;
 
@@ -9093,7 +9101,7 @@ body {
    A: LEFT SIDEBAR
 ========================================================= */
 
-.left-sidebar {
+body:has(.home-layout) .left-sidebar {
     width: 260px;
     min-width: 0;
     min-height: 0;
@@ -9117,7 +9125,7 @@ body {
    B: CENTER FEED
 ========================================================= */
 
-.home-feed {
+body:has(.home-layout) .home-feed {
     width: 100%;
     min-width: 0;
     min-height: 0;
@@ -9141,7 +9149,7 @@ body {
    C: RIGHT SIDEBAR
 ========================================================= */
 
-.right-sidebar {
+body:has(.home-layout) .right-sidebar {
     width: 260px;
     min-width: 0;
     min-height: 0;
@@ -9165,56 +9173,39 @@ body {
    DARK TRANSPARENT SCROLLBARS
 ========================================================= */
 
-.left-sidebar::-webkit-scrollbar,
-.home-feed::-webkit-scrollbar,
-.right-sidebar::-webkit-scrollbar {
+body:has(.home-layout) .left-sidebar::-webkit-scrollbar,
+body:has(.home-layout) .home-feed::-webkit-scrollbar,
+body:has(.home-layout) .right-sidebar::-webkit-scrollbar {
     width: 6px;
 }
 
-
-.left-sidebar::-webkit-scrollbar-track,
-.home-feed::-webkit-scrollbar-track,
-.right-sidebar::-webkit-scrollbar-track {
+body:has(.home-layout) .left-sidebar::-webkit-scrollbar-track,
+body:has(.home-layout) .home-feed::-webkit-scrollbar-track,
+body:has(.home-layout) .right-sidebar::-webkit-scrollbar-track {
     background: transparent;
 }
 
-
-.left-sidebar::-webkit-scrollbar-thumb,
-.home-feed::-webkit-scrollbar-thumb,
-.right-sidebar::-webkit-scrollbar-thumb {
+body:has(.home-layout) .left-sidebar::-webkit-scrollbar-thumb,
+body:has(.home-layout) .home-feed::-webkit-scrollbar-thumb,
+body:has(.home-layout) .right-sidebar::-webkit-scrollbar-thumb {
     background: rgba(255, 159, 28, 0.35);
-
     border-radius: 10px;
 }
 
-
-.left-sidebar::-webkit-scrollbar-thumb:hover,
-.home-feed::-webkit-scrollbar-thumb:hover,
-.right-sidebar::-webkit-scrollbar-thumb:hover {
+body:has(.home-layout) .left-sidebar::-webkit-scrollbar-thumb:hover,
+body:has(.home-layout) .home-feed::-webkit-scrollbar-thumb:hover,
+body:has(.home-layout) .right-sidebar::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 159, 28, 0.70);
 }
 
 
 /* =========================================================
-   KEEP PROFILE CARD INSIDE LEFT SCROLL AREA
+   CARD WIDTH SAFETY
 ========================================================= */
 
-.left-sidebar .profile-card {
+body:has(.home-layout) .profile-card,
+body:has(.home-layout) .comments-card {
     width: 100%;
-
-    box-sizing: border-box;
-
-    margin-bottom: 20px;
-}
-
-
-/* =========================================================
-   KEEP COMMENTS CARD INSIDE RIGHT SCROLL AREA
-========================================================= */
-
-.right-sidebar .comments-card {
-    width: 100%;
-
     box-sizing: border-box;
 }
 
@@ -9225,18 +9216,16 @@ body {
 
 @media (max-width: 1100px) {
 
-    .home-layout {
+    body:has(.home-layout) .home-layout {
         grid-template-columns:
             220px minmax(0, 1fr);
     }
 
-
-    .left-sidebar {
+    body:has(.home-layout) .left-sidebar {
         width: 220px;
     }
 
-
-    .right-sidebar {
+    body:has(.home-layout) .right-sidebar {
         display: none;
     }
 
@@ -9245,19 +9234,17 @@ body {
 
 @media (max-width: 750px) {
 
-    html,
-    body {
+    body:has(.home-layout) {
         height: auto;
-        min-height: 100%;
-        overflow: auto;
+        min-height: 100vh;
+        overflow-y: auto;
     }
 
-
-    .home-layout {
+    body:has(.home-layout) .home-layout {
         width: 92%;
 
         height: auto;
-        max-height: none;
+        min-height: 100vh;
 
         display: block;
 
@@ -9266,28 +9253,23 @@ body {
         overflow: visible;
     }
 
-
-    .left-sidebar {
-        width: 100%;
-
+    body:has(.home-layout) .left-sidebar,
+    body:has(.home-layout) .home-feed,
+    body:has(.home-layout) .right-sidebar {
         height: auto;
-
         overflow: visible;
+    }
 
+    body:has(.home-layout) .left-sidebar {
+        width: 100%;
         margin-bottom: 20px;
     }
 
-
-    .home-feed {
+    body:has(.home-layout) .home-feed {
         width: 100%;
-
-        height: auto;
-
-        overflow: visible;
     }
 
-
-    .right-sidebar {
+    body:has(.home-layout) .right-sidebar {
         display: none;
     }
 

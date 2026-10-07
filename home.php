@@ -378,7 +378,7 @@ $profilePicture =
 </head>
 
 
-<body>
+<body class="home-page">
 
 <?php include 'includes/header.php'; ?>
 
