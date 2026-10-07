@@ -9,9 +9,32 @@ include 'includes/config.php';
  * Get one random movie from the database
  */
 
-$sql = "SELECT * FROM movie ORDER BY RAND() LIMIT 1";
+$userID = (int) $_SESSION["userID"];
 
-$result = $conn->query($sql);
+$sql = "
+    SELECT
+        movie.*,
+        COALESCE(AVG(review.rating), 0) AS averageRating,
+        COUNT(review.reviewID) AS reviewCount
+    FROM movie
+    LEFT JOIN review
+        ON movie.movieID = review.movieID
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM Watched
+        WHERE Watched.movieID = movie.movieID
+        AND Watched.userID = ?
+    )
+    GROUP BY movie.movieID
+    ORDER BY RAND()
+    LIMIT 1
+";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+
+$result = $stmt->get_result();
 
 
 if (!$result) {
@@ -159,11 +182,23 @@ if ($result->num_rows === 0) {
 
 
 
-                    <div class="random-movie-rating">
+                   <div class="random-movie-rating">
 
-                        ⭐ No rating yet
+    <?php if ((int)$movie['reviewCount'] > 0): ?>
 
-                    </div>
+        ⭐ <?php echo number_format((float)$movie['averageRating'], 1); ?> / 10
+        <span>
+            (<?php echo (int)$movie['reviewCount']; ?>
+            <?php echo ((int)$movie['reviewCount'] === 1) ? 'review' : 'reviews'; ?>)
+        </span>
+
+    <?php else: ?>
+
+        ⭐ No rating yet
+
+    <?php endif; ?>
+
+</div>
 
 
 
