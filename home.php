@@ -1266,13 +1266,14 @@ $linkedMovies =
 
         </div>
 
-
         <div
             class="sidebar-comment-list"
             id="sidebarCommentList"
         >
+            <p class="no-comments">
+                Click the comment icon on a post.
+            </p>
         </div>
-
 
         <div class="sidebar-comment-form">
 
@@ -1280,11 +1281,13 @@ $linkedMovies =
                 type="text"
                 id="sidebarCommentInput"
                 placeholder="Write a comment..."
+                disabled
             >
 
             <button
                 type="button"
                 id="sidebarCommentButton"
+                disabled
             >
                 Post
             </button>
@@ -1294,59 +1297,6 @@ $linkedMovies =
     </div>
 
 </aside>
-
-
-
-        <!-- =========================
-             COMMENTS
-        ========================== -->
-
-        <div class="comments-card">
-
-            <h2>
-                Comments
-            </h2>
-
-
-            <div
-                class="sidebar-comment-list"
-                id="sidebarCommentList"
-            >
-
-                <p class="no-comments">
-                    Click the comment icon on a post.
-                </p>
-
-            </div>
-
-
-            <div
-                class="sidebar-comment-form"
-            >
-
-                <input
-                    type="text"
-                    id="sidebarCommentInput"
-                    placeholder="Write a comment..."
-                    disabled
-                >
-
-                <button
-                    type="button"
-                    id="sidebarCommentButton"
-                    disabled
-                >
-                    Post
-                </button>
-
-            </div>
-
-
-        </div>
-
-
-    </aside>
-
 
 </main>
 

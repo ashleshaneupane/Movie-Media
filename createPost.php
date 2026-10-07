@@ -300,29 +300,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <main class="create-post-container">
 
+    <div class="create-post-header">
+        <p class="create-post-label">SHARE YOUR MOVIE EXPERIENCE</p>
 
-    <!-- =========================
-         PAGE TITLE
-    ========================== -->
+        <h1 id="page-title">
+            Create Post
+        </h1>
 
-    <h1 id="page-title">
-        Create Post
-    </h1>
+        <p class="create-post-description">
+            Share your thoughts, add a movie, or tell others what you watched.
+        </p>
+    </div>
 
 
     <?php if ($error !== ""): ?>
 
-        <p
-            style="
-                color: #ff6b6b;
-                text-align: center;
-                margin-bottom: 20px;
-            "
-        >
+        <div class="create-post-error">
             <?php
             echo htmlspecialchars($error);
             ?>
-        </p>
+        </div>
 
     <?php endif; ?>
 
@@ -337,11 +334,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         method="POST"
         enctype="multipart/form-data"
     >
-
-
-        <!-- =========================
-             POST CONTENT
-        ========================== -->
 
         <textarea
             id="postContent"
@@ -360,47 +352,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="post-options">
 
-
-            <!-- ADD MOVIE -->
-
             <button
                 type="button"
                 class="post-option"
                 id="addMovieBtn"
             >
-
-                <span>
-                    Add Movie
-                </span>
-
+                🎬
+                <span>Add Movie</span>
             </button>
 
-
-            <!-- ADD PHOTO -->
 
             <button
                 type="button"
                 class="post-option"
                 id="addPhotoBtn"
             >
-
-                <span>
-                    Add Photo
-                </span>
-
+                📷
+                <span>Add Photo</span>
             </button>
 
-
-            <!-- WATCHED DATE -->
 
             <label
                 for="watchedDate"
                 class="post-option"
             >
-
-                <span>
-                    Watched Date
-                </span>
+                📅
+                <span>Watched Date</span>
 
                 <input
                     type="date"
@@ -412,9 +389,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         );
                     ?>"
                 >
-
             </label>
-
 
         </div>
 
@@ -428,6 +403,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             id="movieSelection"
         >
 
+            <label for="movieID">
+                Select Movie
+            </label>
+
             <select
                 id="movieID"
                 name="movieID"
@@ -436,7 +415,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <option value="">
                     Select a movie
                 </option>
-
 
                 <?php while (
                     $movie = $movieQuery->fetch_assoc()
@@ -453,9 +431,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             $_POST["movieID"] ==
                                 $movie["movieID"]
                         ) {
-
                             echo "selected";
-
                         }
 
                         ?>
@@ -485,6 +461,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             id="photoSelection"
         >
 
+            <label for="photoInput">
+                Choose a photo
+            </label>
+
             <input
                 type="file"
                 id="photoInput"
@@ -507,9 +487,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         </div>
 
-
     </form>
-
 
 </main>
 

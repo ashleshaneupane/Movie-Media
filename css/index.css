@@ -32,7 +32,10 @@ body {
     background-attachment: fixed;
 
     margin: 0;
+
     min-height: 100vh;
+
+    overflow: hidden;
 }
 
 #heading {
@@ -406,19 +409,30 @@ form {
 /* =========================
    HOME PAGE
 ========================= */
-
 .home-layout {
-    width: 94%;
-    max-width: 1450px;
-    margin: 30px auto;
+    width: 100%;
+    max-width: 1400px;
+
+    height: calc(100vh - 70px);
+    max-height: calc(100vh - 70px);
+
+    margin: 0 auto;
+
+    padding: 25px 30px 30px;
+
+    box-sizing: border-box;
 
     display: grid;
-    grid-template-columns: 320px minmax(450px, 650px) 320px;
 
-    justify-content: center;
-    gap: 40px;
+    grid-template-columns:
+        260px minmax(500px, 1fr) 260px;
+
+    gap: 25px;
+
+    align-items: stretch;
+
+    overflow: hidden;
 }
-
 
 /* =========================
    LEFT PROFILE
@@ -445,7 +459,24 @@ form {
 }
 
 .left-sidebar {
-    width: 100%;
+    width: 260px;
+
+    min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    padding: 0 4px 80px 0;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255, 159, 28, 0.45) transparent;
 }
 
 .profile-card {
@@ -716,6 +747,16 @@ form {
 
 .home-feed {
     width: 100%;
+    min-width: 0;
+
+    height: 100%;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
 }
 
 
@@ -1015,7 +1056,15 @@ form {
 ========================= */
 
 .right-sidebar {
-    width: 100%;
+    width: 260px;
+    min-width: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
 }
 
 
@@ -1210,33 +1259,101 @@ form {
 
 
 
+
+
+
+
 /* =========================
    CREATE POST PAGE
 ========================= */
+
 #page-title {
     color: #ffb52e;
 }
 
-.create-post-container {
 
+.create-post-container {
     width: 90%;
     max-width: 750px;
-
-    margin: 50px auto;
-
+    margin: 45px auto 60px;
 }
 
 
 /* =========================
-   PAGE TITLE
+   CREATE POST HEADER
 ========================= */
 
+.create-post-header {
+    margin-bottom: 20px;
+
+    padding: 24px 26px;
+
+    background: rgba(17, 17, 17, 0.92);
+
+    border: 1px solid #2c2c2c;
+
+    border-radius: 16px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
+}
+
+
+.create-post-label {
+    margin: 0 0 8px;
+
+    color: orange;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
 .create-post-container h1 {
+    margin: 0 0 8px;
 
-    font-size: 32px;
+    color: #fff;
 
-    margin-bottom: 25px;
+    font-size: 34px;
 
+    font-weight: 700;
+}
+
+
+.create-post-description {
+    margin: 0;
+
+    max-width: 600px;
+
+    color: gainsboro;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+
+.create-post-error {
+    margin-bottom: 18px;
+
+    padding: 12px 15px;
+
+    background: rgba(255, 70, 70, 0.08);
+
+    border: 1px solid rgba(255, 90, 90, 0.35);
+
+    border-radius: 10px;
+
+    color: #ff7777;
+
+    font-size: 14px;
 }
 
 
@@ -1245,15 +1362,17 @@ form {
 ========================= */
 
 .create-post-form {
+    background: #0d0d0d;
 
-    background: #111;
+    border: 1px solid #2c2c2c;
 
-    border-radius: 20px;
+    border-radius: 18px;
 
-    padding: 30px;
+    padding: 24px;
 
     color: white;
 
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -1262,7 +1381,6 @@ form {
 ========================= */
 
 .create-post-form textarea {
-
     width: 100%;
 
     min-height: 180px;
@@ -1271,36 +1389,41 @@ form {
 
     resize: vertical;
 
-    background: #1c1c1c;
+    background: #171717;
 
     color: white;
 
-    border: 1px solid #444;
+    border: 1px solid #333;
 
-    border-radius: 15px;
+    border-radius: 13px;
 
-    padding: 18px;
+    padding: 17px;
 
-    font-size: 17px;
+    font-size: 16px;
 
     font-family: inherit;
 
+    line-height: 1.5;
+
     outline: none;
 
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
 
 
 .create-post-form textarea::placeholder {
-
-    color: #999;
-
+    color: #777;
 }
 
 
 .create-post-form textarea:focus {
+    background: #191919;
 
-    border-color: orange;
+    border-color: #ff9f1c;
 
+    box-shadow: 0 0 0 2px rgba(255, 159, 28, 0.08);
 }
 
 
@@ -1309,51 +1432,52 @@ form {
 ========================= */
 
 .post-options {
-
     display: flex;
 
     align-items: center;
 
-    gap: 15px;
+    gap: 10px;
 
-    margin-top: 20px;
+    margin-top: 18px;
 
     flex-wrap: wrap;
-
 }
 
 
 .post-option {
-
     display: flex;
 
     align-items: center;
 
     gap: 7px;
 
-    background: #1c1c1c;
+    background: #171717;
 
-    color: white;
+    color: #ddd;
 
-    border: 1px solid #444;
+    border: 1px solid #333;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
-    padding: 10px 14px;
+    padding: 9px 13px;
 
     cursor: pointer;
 
     font-size: 14px;
 
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
 
 
 .post-option:hover {
+    background: #202020;
 
-    border-color: orange;
+    border-color: #ff9f1c;
 
-    color: orange;
-
+    color: #ffb52e;
 }
 
 
@@ -1362,10 +1486,9 @@ form {
 ========================= */
 
 .post-option input {
-
     background: transparent;
 
-    color: white;
+    color: #ddd;
 
     border: none;
 
@@ -1373,6 +1496,7 @@ form {
 
     cursor: pointer;
 
+    font-family: inherit;
 }
 
 
@@ -1381,46 +1505,64 @@ form {
 ========================= */
 
 .movie-selection {
-
     display: none;
 
-    margin-top: 20px;
+    margin-top: 15px;
 
+    padding: 15px;
+
+    background: #171717;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
 }
 
 
 .movie-selection.active {
-
     display: block;
-
 }
 
 
-.movie-selection input {
+.movie-selection label,
+.photo-selection label {
+    display: block;
 
+    margin-bottom: 8px;
+
+    color: #bbb;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.movie-selection select {
     width: 100%;
 
     box-sizing: border-box;
 
-    padding: 12px 15px;
+    padding: 11px 13px;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
-    border: 1px solid #444;
+    border: 1px solid #3a3a3a;
 
-    background: #1c1c1c;
+    background: #101010;
 
     color: white;
 
     outline: none;
 
+    font-family: inherit;
+
+    cursor: pointer;
 }
 
 
-.movie-selection input:focus {
-
-    border-color: orange;
-
+.movie-selection select:focus {
+    border-color: #ff9f1c;
 }
 
 
@@ -1429,31 +1571,31 @@ form {
 ========================= */
 
 .photo-selection {
-
     display: none;
 
-    margin-top: 20px;
+    margin-top: 15px;
 
     padding: 15px;
 
-    background: #1c1c1c;
+    background: #171717;
 
-    border-radius: 10px;
+    border: 1px solid #333;
 
+    border-radius: 12px;
 }
 
 
 .photo-selection.active {
-
     display: block;
-
 }
 
 
 .photo-selection input {
+    width: 100%;
 
-    color: white;
+    color: #bbb;
 
+    font-size: 13px;
 }
 
 
@@ -1462,41 +1604,45 @@ form {
 ========================= */
 
 .post-submit {
-
     display: flex;
 
     justify-content: flex-end;
 
-    margin-top: 25px;
+    margin-top: 22px;
 
+    padding-top: 18px;
+
+    border-top: 1px solid #292929;
 }
 
 
 .post-submit button {
+    background: #ff9f1c;
 
-    background: orange;
-
-    color: black;
+    color: #151515;
 
     border: none;
 
-    border-radius: 20px;
+    border-radius: 9px;
 
-    padding: 10px 28px;
+    padding: 10px 25px;
 
-    font-size: 16px;
+    font-size: 15px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     cursor: pointer;
 
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
 
 .post-submit button:hover {
-
     background: #ffb52e;
 
+    transform: translateY(-1px);
 }
 
 
@@ -1507,44 +1653,59 @@ form {
 @media (max-width: 600px) {
 
     .create-post-container {
-
         width: 92%;
 
-        margin: 30px auto;
+        margin: 30px auto 45px;
+    }
 
+
+    .create-post-container h1 {
+        font-size: 29px;
     }
 
 
     .create-post-form {
-
-        padding: 20px;
-
+        padding: 18px;
     }
 
 
     .post-options {
-
         flex-direction: column;
 
         align-items: stretch;
-
     }
 
 
     .post-option {
-
         justify-content: center;
-
     }
 
 
     .post-submit {
-
         justify-content: center;
+    }
 
+
+    .post-submit button {
+        width: 100%;
+    }
+
+    .create-post-header {
+        padding: 20px;
+    }
+
+    .create-post-container h1 {
+        font-size: 29px;
     }
 
 }
+
+
+
+
+
+
+
 
 
 
@@ -7670,6 +7831,9 @@ form {
 
 
 
+/* =========================
+   HOME PAGE DIMENSION FIX
+========================= */
 
 /* =========================
    HOME PAGE DIMENSION FIX
@@ -7678,14 +7842,26 @@ form {
 .home-layout {
     width: 100%;
     max-width: 1400px;
+
+    height: calc(100vh - 70px);
+    min-height: 0;
+
     margin: 0 auto;
-    padding: 30px;
+
+    padding: 25px 30px 30px;
+
     box-sizing: border-box;
 
     display: grid;
-    grid-template-columns: 260px minmax(500px, 1fr) 260px;
+
+    grid-template-columns:
+        260px minmax(500px, 1fr) 260px;
+
     gap: 25px;
-    align-items: start;
+
+    align-items: stretch;
+
+    overflow: hidden;
 }
 
 
@@ -7696,20 +7872,39 @@ form {
 .left-sidebar {
     width: 260px;
     min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    padding-bottom: 20px;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 159, 28, 0.45) transparent;
 }
+
 
 .profile-card {
     width: 100%;
+
     box-sizing: border-box;
+
     padding: 20px;
 }
+
 
 .profile-image {
     width: 90px;
     height: 90px;
+
     margin: 0 auto 15px;
 
     border-radius: 50%;
+
     overflow: hidden;
 
     display: flex;
@@ -7719,16 +7914,22 @@ form {
     background: #333;
 }
 
+
 .profile-image img {
     width: 100%;
     height: 100%;
+
     object-fit: cover;
+
     display: block;
 }
 
+
 .profile-image span {
     font-size: 32px;
+
     font-weight: bold;
+
     color: white;
 }
 
@@ -7740,21 +7941,109 @@ form {
 .home-feed {
     width: 100%;
     min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
     box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-bottom: 20px;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 159, 28, 0.45) transparent;
 }
+
+
+/* =========================
+   RIGHT SIDEBAR
+========================= */
+.right-sidebar {
+    width: 260px;
+    min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    padding-bottom: 20px;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 159, 28, 0.45) transparent;
+}
+
+
+
+/* =========================
+   CUSTOM SCROLLBARS
+========================= */
+
+.left-sidebar::-webkit-scrollbar,
+.home-feed::-webkit-scrollbar,
+.right-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.left-sidebar::-webkit-scrollbar-track,
+.home-feed::-webkit-scrollbar-track,
+.right-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+.left-sidebar::-webkit-scrollbar-thumb,
+.home-feed::-webkit-scrollbar-thumb,
+.right-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 159, 28, 0.35);
+
+    border-radius: 10px;
+}
+
+
+.left-sidebar::-webkit-scrollbar-thumb:hover,
+.home-feed::-webkit-scrollbar-thumb:hover,
+.right-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 159, 28, 0.70);
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   CREATE POST
+========================= */
 
 .create-post-link {
     width: 100%;
+
     box-sizing: border-box;
+
     margin-bottom: 20px;
 }
 
+
 .create-post-link a {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 
     width: 100%;
+
     box-sizing: border-box;
 }
 
@@ -7765,53 +8054,69 @@ form {
 
 .post-card {
     width: 100%;
+
     box-sizing: border-box;
 
     margin-bottom: 20px;
+
     padding: 20px;
 
     overflow: hidden;
 }
 
+
 .post-header {
     display: flex;
+
     align-items: center;
+
     gap: 12px;
 
     width: 100%;
+
     box-sizing: border-box;
 }
+
 
 .post-profile-image {
     width: 45px;
     height: 45px;
 
     min-width: 45px;
+
     flex-shrink: 0;
 
     border-radius: 50%;
+
     overflow: hidden;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     background: #333;
 
     color: white;
+
     font-weight: bold;
 }
+
 
 .post-profile-image img {
     width: 100%;
     height: 100%;
+
     object-fit: cover;
+
     display: block;
 }
+
 
 .post-user-info {
     min-width: 0;
 }
+
 
 .post-user-info h3,
 .post-user-info p {
@@ -7825,16 +8130,18 @@ form {
 
 .post-content {
     width: 100%;
+
     box-sizing: border-box;
 
     overflow: hidden;
 }
 
+
 .post-content p {
     word-wrap: break-word;
+
     overflow-wrap: break-word;
 }
-
 
 /* =========================
    MOVIE ATTACHMENT
@@ -8714,4 +9021,274 @@ form {
 .account-profile .edit-profile-btn:hover {
     background: rgba(255, 255, 255, 0.16);
     border-color: rgba(255, 255, 255, 0.22);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   FINAL HOME PAGE SCROLL LAYOUT
+   A = LEFT SIDEBAR
+   B = CENTER FEED
+   C = RIGHT SIDEBAR
+========================================================= */
+
+html {
+    height: 100%;
+}
+
+
+body {
+    height: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   MAIN THREE-COLUMN AREA
+========================= */
+
+.home-layout {
+    width: 100%;
+    max-width: 1400px;
+
+    height: calc(100vh - 70px);
+
+    margin: 0 auto;
+
+    padding: 25px 30px 30px;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        260px minmax(500px, 1fr) 260px;
+
+    gap: 25px;
+
+    align-items: stretch;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   A: LEFT SIDEBAR
+========================================================= */
+
+.left-sidebar {
+    width: 260px;
+    min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    padding: 0 5px 30px 0;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255, 159, 28, 0.45) transparent;
+}
+
+
+/* =========================================================
+   B: CENTER FEED
+========================================================= */
+
+.home-feed {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    padding-bottom: 30px;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255, 159, 28, 0.45) transparent;
+}
+
+
+/* =========================================================
+   C: RIGHT SIDEBAR
+========================================================= */
+
+.right-sidebar {
+    width: 260px;
+    min-width: 0;
+    min-height: 0;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+
+    padding: 0 5px 30px 0;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255, 159, 28, 0.45) transparent;
+}
+
+
+/* =========================================================
+   DARK TRANSPARENT SCROLLBARS
+========================================================= */
+
+.left-sidebar::-webkit-scrollbar,
+.home-feed::-webkit-scrollbar,
+.right-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.left-sidebar::-webkit-scrollbar-track,
+.home-feed::-webkit-scrollbar-track,
+.right-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+.left-sidebar::-webkit-scrollbar-thumb,
+.home-feed::-webkit-scrollbar-thumb,
+.right-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 159, 28, 0.35);
+
+    border-radius: 10px;
+}
+
+
+.left-sidebar::-webkit-scrollbar-thumb:hover,
+.home-feed::-webkit-scrollbar-thumb:hover,
+.right-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 159, 28, 0.70);
+}
+
+
+/* =========================================================
+   KEEP PROFILE CARD INSIDE LEFT SCROLL AREA
+========================================================= */
+
+.left-sidebar .profile-card {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   KEEP COMMENTS CARD INSIDE RIGHT SCROLL AREA
+========================================================= */
+
+.right-sidebar .comments-card {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .home-layout {
+        grid-template-columns:
+            220px minmax(0, 1fr);
+    }
+
+
+    .left-sidebar {
+        width: 220px;
+    }
+
+
+    .right-sidebar {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    html,
+    body {
+        height: auto;
+        min-height: 100%;
+        overflow: auto;
+    }
+
+
+    .home-layout {
+        width: 92%;
+
+        height: auto;
+        max-height: none;
+
+        display: block;
+
+        padding: 20px;
+
+        overflow: visible;
+    }
+
+
+    .left-sidebar {
+        width: 100%;
+
+        height: auto;
+
+        overflow: visible;
+
+        margin-bottom: 20px;
+    }
+
+
+    .home-feed {
+        width: 100%;
+
+        height: auto;
+
+        overflow: visible;
+    }
+
+
+    .right-sidebar {
+        display: none;
+    }
+
 }

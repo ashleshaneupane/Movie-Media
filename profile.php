@@ -3,7 +3,7 @@
 include 'includes/auth.php';
 include 'includes/config.php';
 
-$currentUserID = $_SESSION["userID"];
+$currentUserID = (int) $_SESSION["userID"];
 
 
 /* =========================
@@ -43,12 +43,9 @@ $userQuery->bind_param(
 
 $userQuery->execute();
 
-$userResult =
-    $userQuery
-    ->get_result();
+$userResult = $userQuery->get_result();
 
-$profileUser =
-    $userResult->fetch_assoc();
+$profileUser = $userResult->fetch_assoc();
 
 
 if (!$profileUser) {
@@ -189,7 +186,28 @@ $postCount =
    FRIEND COUNT
 ========================= */
 
-$friendCount = 0;
+$friendCountQuery = $conn->prepare(
+    "SELECT COUNT(*) AS total
+     FROM FriendRequest
+     WHERE status = 'accepted'
+     AND (
+        senderID = ?
+        OR receiverID = ?
+     )"
+);
+
+$friendCountQuery->bind_param(
+    "ii",
+    $profileUserID,
+    $profileUserID
+);
+
+$friendCountQuery->execute();
+
+$friendCount =
+    $friendCountQuery
+    ->get_result()
+    ->fetch_assoc()["total"];
 
 
 /* =========================
@@ -227,9 +245,7 @@ $topMovieResult =
 $favoriteGenres = [];
 
 if (
-    !empty(
-        $profileUser["favoriteGenre"]
-    )
+    !empty($profileUser["favoriteGenre"])
 ) {
 
     $favoriteGenres =
@@ -242,7 +258,6 @@ if (
                 )
             )
         );
-
 }
 
 
@@ -251,9 +266,7 @@ if (
 ========================= */
 
 $profilePicture =
-    !empty(
-        $profileUser["profilePicture"]
-    )
+    !empty($profileUser["profilePicture"])
     ? $profileUser["profilePicture"]
     : "";
 
@@ -295,508 +308,783 @@ $isOwnProfile =
         href="css/index.css"
     >
 
-    <style>
 
-        /* =========================
-           PUBLIC PROFILE
-        ========================= */
+<style>
 
-        .public-profile-container {
-            width: 100%;
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 25px;
-            box-sizing: border-box;
-        }
+/* =========================
+   PUBLIC PROFILE CONTAINER
+========================= */
 
+.public-profile-container {
+    width: 100%;
+    max-width: 1180px;
 
-        .public-profile-card {
-            background:
-                linear-gradient(
-                    145deg,
-                    #171717,
-                    #21172b,
-                    #171717
-                );
+    margin: 30px auto 60px;
 
-            border: 1px solid #49335f;
-            border-radius: 20px;
+    padding: 0 25px;
 
-            padding: 35px;
-
-            box-sizing: border-box;
-
-            box-shadow:
-                0 15px 40px rgba(
-                    0,
-                    0,
-                    0,
-                    0.35
-                );
-        }
-
-
-        /* =========================
-           PROFILE HEADER
-        ========================= */
-
-        .public-profile-top {
-            display: flex;
-            align-items: center;
-
-            gap: 28px;
-
-            padding-bottom: 30px;
-        }
-
-
-        .public-profile-image {
-    width: 125px;
-    height: 125px;
-
-    min-width: 125px;
-
-    border-radius: 50%;
-
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #ff7a00;
-
-    color: white;
-
-    font-size: 45px;
-    font-weight: bold;
-
-    border: 4px solid #ff9f1c;
-
-    box-shadow:
-        0 0 25px rgba(
-            255,
-            122,
-            0,
-            0.3
-        );
+    box-sizing: border-box;
 }
 
 
-        .public-profile-image img {
-            width: 100%;
-            height: 100%;
+/* =========================
+   BACK BUTTON
+========================= */
 
-            object-fit: cover;
+.back-home-btn {
+    display: inline-flex;
 
-            display: block;
-        }
+    align-items: center;
 
+    gap: 7px;
 
-        .public-profile-info {
-            min-width: 0;
-        }
+    margin-bottom: 20px;
 
+    padding: 9px 15px;
 
-        .public-profile-info h1 {
-            margin: 0 0 5px;
+    border-radius: 7px;
 
-            color: white;
+    background:
+        rgba(255,255,255,0.06);
 
-            font-size: 32px;
-        }
+    border:
+        1px solid rgba(255,255,255,0.12);
 
+    color: #ddd;
 
-        .public-profile-username {
-            margin: 0 0 14px;
+    text-decoration: none;
 
-            color: #b88cff;
+    font-size: 13px;
 
-            font-size: 14px;
-        }
+    font-weight: 500;
 
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
 
-        .public-profile-bio {
-            margin: 0;
+.back-home-btn:hover {
+    background:
+        rgba(255,255,255,0.10);
 
-            color: #ddd;
+    border-color:
+        rgba(255,159,28,0.45);
 
-            line-height: 1.6;
+    color: #fff;
+}
 
-            max-width: 650px;
-        }
 
+/* =========================
+   MAIN PROFILE CARD
+========================= */
 
-        /* =========================
-           STATS
-        ========================= */
+.public-profile-card {
+    position: relative;
 
-        .public-profile-stats {
-            display: grid;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(27,27,27,0.98),
+            rgba(13,13,13,0.99)
+        );
 
-            grid-template-columns:
-                repeat(3, 1fr);
+    border:
+        1px solid rgba(255,159,28,0.18);
 
-            gap: 15px;
+    border-radius: 14px;
 
-            margin-bottom: 25px;
-        }
+    padding: 32px;
 
+    box-sizing: border-box;
 
-        .public-profile-stat {
-            background:
-                linear-gradient(
-                    135deg,
-                    #252033,
-                    #1d1d1d
-                );
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.50);
 
-            border: 1px solid #39304b;
+    overflow: hidden;
+}
 
-            border-radius: 13px;
 
-            padding: 18px;
+/* =========================
+   CINEMATIC ORANGE GLOW
+========================= */
 
-            text-align: center;
-        }
+.public-profile-card::before {
+    content: "";
 
+    position: absolute;
 
-        .public-profile-stat strong {
-            display: block;
+    top: -190px;
 
-            color: #ff9f1c;
+    right: -130px;
 
-            font-size: 24px;
+    width: 450px;
 
-            margin-bottom: 5px;
-        }
+    height: 450px;
 
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,140,0,0.16),
+            rgba(255,140,0,0.05) 35%,
+            transparent 70%
+        );
 
-        .public-profile-stat span {
-            color: #aaa;
+    pointer-events: none;
+}
 
-            font-size: 12px;
-        }
 
+/* =========================
+   PROFILE HEADER
+========================= */
 
-        /* =========================
-           SECTIONS
-        ========================= */
+.public-profile-top {
+    position: relative;
 
-        .public-profile-section {
-            border-top: 1px solid #3a3045;
+    display: flex;
 
-            padding-top: 25px;
+    align-items: center;
 
-            margin-top: 25px;
-        }
+    gap: 25px;
 
+    padding-bottom: 30px;
 
-        .public-profile-section h2 {
-            margin: 0 0 18px;
+    border-bottom:
+        1px solid rgba(255,255,255,0.08);
+}
 
-            color: white;
 
-            font-size: 20px;
-        }
+/* =========================
+   PROFILE IMAGE
+========================= */
 
+.public-profile-image {
+    width: 145px;
+    height: 145px;
+    min-width: 145px;
+    min-height: 145px;
 
-        /* =========================
-           MOVIE STATS
-        ========================= */
+    border-radius: 50%;
+    overflow: hidden;
 
-        .public-movie-stats {
-            display: grid;
+    display: block;
 
-            grid-template-columns:
-                repeat(3, 1fr);
+    background: #151515;
 
-            gap: 15px;
-        }
+    border: 3px solid #ff9f1c;
 
+    box-shadow:
+        0 0 0 3px rgba(255,159,28,0.10),
+        0 0 22px rgba(255,159,28,0.18),
+        0 8px 30px rgba(0,0,0,0.50);
 
-        .public-movie-stat {
-            background: #202020;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
 
-            border-radius: 12px;
 
-            padding: 16px;
+/* IMAGE MUST FILL THE ENTIRE CIRCLE */
 
-            border-left:
-                3px solid #ff7a00;
-        }
+.public-profile-image img {
+    width: 100%;
+    height: 100%;
 
+    min-width: 100%;
+    min-height: 100%;
 
-        .public-movie-stat:nth-child(2) {
-            border-left-color:
-                #b84cff;
-        }
+    max-width: none;
+    max-height: none;
 
+    margin: 0;
+    padding: 0;
 
-        .public-movie-stat:nth-child(3) {
-            border-left-color:
-                #36cfff;
-        }
+    display: block;
 
+    object-fit: cover;
+    object-position: center;
 
-        .public-movie-stat span {
-            display: block;
+    border: none;
+    border-radius: 50%;
 
-            color: #888;
+    box-sizing: border-box;
+}
 
-            font-size: 12px;
 
-            margin-bottom: 6px;
-        }
+/* =========================
+   PROFILE INFORMATION
+========================= */
 
+.public-profile-info {
+    min-width: 0;
 
-        .public-movie-stat strong {
-            color: white;
+    position: relative;
 
-            font-size: 20px;
-        }
+    z-index: 1;
+}
 
 
-        /* =========================
-           GENRES
-        ========================= */
+.public-profile-info h1 {
+    margin: 0 0 5px;
 
-        .public-genre-list {
-            display: flex;
+    color: #fff;
 
-            flex-wrap: wrap;
+    font-size: 30px;
 
-            gap: 9px;
-        }
+    font-weight: 700;
 
+    letter-spacing: -0.3px;
+}
 
-        .public-genre-list span {
-            padding: 8px 13px;
 
-            border-radius: 18px;
+.public-profile-username {
+    margin: 0 0 12px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #37234d,
-                    #27204a
-                );
+    color: #ff9f1c;
 
-            border:
-                1px solid #67468a;
+    font-size: 13px;
 
-            color: #d9c6ff;
+    font-weight: 500;
+}
 
-            font-size: 12px;
-        }
 
+.public-profile-bio {
+    margin: 0;
 
-        /* =========================
-           TOP 5
-        ========================= */
+    color: #ccc;
 
-        .public-top-movies {
-            display: grid;
+    line-height: 1.6;
 
-            grid-template-columns:
-                repeat(5, 1fr);
+    max-width: 680px;
 
-            gap: 15px;
+    font-size: 14px;
+}
 
-            margin: 0;
 
-            padding: 0;
+/* =========================
+   PROFILE STATS
+========================= */
 
-            list-style: none;
-        }
+.public-profile-stats {
+    display: grid;
 
+    grid-template-columns:
+        repeat(3, 1fr);
 
-        .public-top-movies li {
-            background: #202020;
+    gap: 1px;
 
-            border-radius: 10px;
+    margin-top: 25px;
 
-            overflow: hidden;
+    background:
+        rgba(255,159,28,0.16);
 
-            color: white;
+    border:
+        1px solid rgba(255,159,28,0.18);
 
-            font-size: 13px;
-        }
+    border-radius: 10px;
 
+    overflow: hidden;
+}
 
-        .public-top-movies img {
-            width: 100%;
 
-            height: 180px;
+.public-profile-stat {
+    background:
+        rgba(255,255,255,0.035);
 
-            object-fit: cover;
+    padding: 18px;
 
-            display: block;
-        }
+    text-align: center;
 
+    transition:
+        background 0.2s ease;
+}
 
-        .public-top-movie-title {
-            padding: 10px;
 
-            line-height: 1.3;
-        }
+.public-profile-stat:hover {
+    background:
+        rgba(255,159,28,0.08);
+}
 
 
-        /* =========================
-           WATCHED MOVIES
-        ========================= */
+.public-profile-stat strong {
+    display: block;
 
-        .watched-movies-grid {
-            display: grid;
+    color: #ff9f1c;
 
-            grid-template-columns:
-                repeat(5, 1fr);
+    font-size: 22px;
 
-            gap: 15px;
-        }
+    font-weight: 700;
 
+    margin-bottom: 4px;
+}
 
-        .watched-movie-card {
-            background: #202020;
 
-            border-radius: 10px;
+.public-profile-stat span {
+    color: #999;
 
-            overflow: hidden;
+    font-size: 11px;
 
-            border: 1px solid #333;
+    text-transform: uppercase;
 
-            transition:
-                transform 0.2s ease,
-                border-color 0.2s ease;
-        }
+    letter-spacing: 0.8px;
+}
 
 
-        .watched-movie-card:hover {
-            transform:
-                translateY(-4px);
+/* =========================
+   SECTIONS
+========================= */
 
-            border-color:
-                #ff7a00;
-        }
+.public-profile-section {
+    position: relative;
 
+    border-top:
+        1px solid rgba(255,255,255,0.08);
 
-        .watched-movie-card img {
-            width: 100%;
+    padding-top: 25px;
 
-            height: 190px;
+    margin-top: 30px;
+}
 
-            object-fit: cover;
 
-            display: block;
-        }
+.public-profile-section h2 {
+    margin: 0 0 18px;
 
+    color: #fff;
 
-        .watched-movie-info {
-            padding: 10px;
-        }
+    font-size: 18px;
 
+    font-weight: 600;
 
-        .watched-movie-info h3 {
-            margin: 0 0 5px;
+    letter-spacing: -0.1px;
+}
 
-            color: white;
 
-            font-size: 13px;
+/* =========================
+   ORANGE SECTION MARKER
+========================= */
 
-            line-height: 1.3;
-        }
+.public-profile-section h2::before {
+    content: "";
 
+    display: inline-block;
 
-        .watched-movie-info p {
-            margin: 0;
+    width: 4px;
 
-            color: #888;
+    height: 17px;
 
-            font-size: 10px;
-        }
+    margin-right: 9px;
 
+    vertical-align: -2px;
 
-        .no-watched {
-            color: #888;
+    background:
+        #ff9f1c;
 
-            font-size: 13px;
-        }
+    border-radius: 3px;
 
+    box-shadow:
+        0 0 8px rgba(255,159,28,0.35);
+}
 
-        /* =========================
-           BACK BUTTON
-        ========================= */
 
-        .back-home-btn {
-            display: inline-block;
+/* =========================
+   MOVIE STATS
+========================= */
 
-            margin-bottom: 20px;
+.public-movie-stats {
+    display: grid;
 
-            padding: 9px 16px;
+    grid-template-columns:
+        repeat(3, 1fr);
 
-            border-radius: 18px;
+    gap: 12px;
+}
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #ff7a00,
-                    #ff4d6d
-                );
 
-            color: white;
+.public-movie-stat {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,159,28,0.08),
+            rgba(255,255,255,0.035)
+        );
 
-            text-decoration: none;
+    border:
+        1px solid rgba(255,159,28,0.15);
 
-            font-size: 12px;
+    border-radius: 9px;
 
-            font-weight: bold;
-        }
+    padding: 16px;
 
+    border-left:
+        3px solid #ff9f1c;
 
-        .back-home-btn:hover {
-            opacity: 0.9;
-        }
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
 
 
-        /* =========================
-           RESPONSIVE
-        ========================= */
+.public-movie-stat:hover {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,159,28,0.13),
+            rgba(255,255,255,0.05)
+        );
 
-        @media (max-width: 800px) {
+    transform:
+        translateY(-2px);
 
-            .public-top-movies,
-            .watched-movies-grid {
-                grid-template-columns:
-                    repeat(3, 1fr);
-            }
+    border-color:
+        rgba(255,159,28,0.35);
+}
 
-        }
 
+.public-movie-stat:nth-child(2) {
+    border-left-color:
+        #ffb52e;
+}
 
-        @media (max-width: 600px) {
 
-            .public-profile-top {
-                flex-direction: column;
+.public-movie-stat:nth-child(3) {
+    border-left-color:
+        #ffcc70;
+}
 
-                text-align: center;
-            }
 
+.public-movie-stat span {
+    display: block;
 
-            .public-profile-stats,
-            .public-movie-stats {
-                grid-template-columns: 1fr;
-            }
+    color: #888;
 
+    font-size: 11px;
 
-            .public-top-movies,
-            .watched-movies-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
+    margin-bottom: 7px;
 
-        }
+    text-transform: uppercase;
 
-    </style>
+    letter-spacing: 0.6px;
+}
+
+
+.public-movie-stat strong {
+    color: #fff;
+
+    font-size: 20px;
+}
+
+
+/* =========================
+   FAVORITE GENRES
+========================= */
+
+.public-genre-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.public-genre-list span {
+    padding: 7px 12px;
+
+    border-radius: 5px;
+
+    background:
+        rgba(255,159,28,0.08);
+
+    border:
+        1px solid rgba(255,159,28,0.22);
+
+    color: #ffcf91;
+
+    font-size: 12px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.public-genre-list span:hover {
+    background:
+        rgba(255,159,28,0.16);
+
+    border-color:
+        rgba(255,159,28,0.45);
+
+    color: #fff;
+}
+
+
+/* =========================
+   TOP 5 MOVIES
+========================= */
+
+.public-top-movies {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 14px;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.public-top-movies > div {
+    position: relative;
+
+    background:
+        #181818;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.public-top-movies > div:hover {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(255,159,28,0.55);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.35),
+        0 0 15px rgba(255,159,28,0.08);
+}
+
+
+.public-top-movies img {
+    width: 100%;
+
+    height: 210px;
+
+    object-fit: cover;
+
+    display: block;
+
+    background:
+        #222;
+}
+
+
+.public-top-movie-title {
+    padding: 10px;
+
+    color: #eee;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    min-height: 48px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   WATCHED MOVIES
+========================= */
+
+.watched-movies-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 14px;
+}
+
+
+.watched-movie-card {
+    background:
+        #181818;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.watched-movie-card:hover {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(255,159,28,0.55);
+
+    background:
+        #1d1d1d;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.35),
+        0 0 15px rgba(255,159,28,0.08);
+}
+
+
+.watched-movie-card img {
+    width: 100%;
+
+    height: 210px;
+
+    object-fit: cover;
+
+    display: block;
+
+    background:
+        #222;
+}
+
+
+.watched-movie-info {
+    padding: 11px;
+}
+
+
+.watched-movie-info h3 {
+    margin: 0 0 6px;
+
+    color: #eee;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+}
+
+
+.watched-movie-info p {
+    margin: 0;
+
+    color: #777;
+
+    font-size: 10px;
+}
+
+
+.no-watched {
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .public-top-movies,
+    .watched-movies-grid {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .public-profile-card {
+        padding: 22px;
+    }
+
+
+    .public-profile-top {
+        gap: 18px;
+    }
+
+
+    .public-profile-image {
+        width: 95px;
+
+        height: 95px;
+
+        min-width: 95px;
+
+        min-height: 95px;
+    }
+
+
+    .public-profile-info h1 {
+        font-size: 25px;
+    }
+
+
+    .public-top-movies,
+    .watched-movies-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .public-profile-container {
+        padding: 0 14px;
+    }
+
+
+    .public-profile-top {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+
+    .public-profile-bio {
+        max-width: 100%;
+    }
+
+
+    .public-profile-stats,
+    .public-movie-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .public-top-movies,
+    .watched-movies-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -829,28 +1117,17 @@ $isOwnProfile =
 
             <div class="public-profile-image">
 
-                <?php if (
-                    $profilePicture !== ""
-                ): ?>
+                <?php if ($profilePicture !== ""): ?>
 
-<img
-    class="profile-picture"
-    src="<?php
-        echo htmlspecialchars(
-            $profilePicture
-        );
-    ?>"
-    alt="Profile Picture"
-    style="
-        width: 90px !important;
-        height: 90px !important;
-        max-width: 90px !important;
-        max-height: 90px !important;
-        object-fit: cover !important;
-        border-radius: 50%;
-        display: block;
-    "
->
+                    <img
+                        class="profile-picture"
+                        src="<?php
+                            echo htmlspecialchars(
+                                $profilePicture
+                            );
+                        ?>"
+                        alt="Profile Picture"
+                    >
 
                 <?php else: ?>
 
@@ -905,11 +1182,7 @@ $isOwnProfile =
 
                     <?php
 
-                    if (
-                        !empty(
-                            $profileUser["bio"]
-                        )
-                    ) {
+                    if (!empty($profileUser["bio"])) {
 
                         echo htmlspecialchars(
                             $profileUser["bio"]
@@ -928,7 +1201,6 @@ $isOwnProfile =
             </div>
 
         </div>
-
 
 
         <!-- =========================
@@ -978,7 +1250,6 @@ $isOwnProfile =
 
 
         </div>
-
 
 
         <!-- =========================
@@ -1050,7 +1321,6 @@ $isOwnProfile =
         </div>
 
 
-
         <!-- =========================
              FAVORITE GENRES
         ========================== -->
@@ -1064,9 +1334,7 @@ $isOwnProfile =
 
             <div class="public-genre-list">
 
-                <?php if (
-                    !empty($favoriteGenres)
-                ): ?>
+                <?php if (!empty($favoriteGenres)): ?>
 
                     <?php foreach (
                         $favoriteGenres as $genre
@@ -1097,7 +1365,6 @@ $isOwnProfile =
             </div>
 
         </div>
-
 
 
         <!-- =========================
@@ -1177,7 +1444,6 @@ $isOwnProfile =
         </div>
 
 
-
         <!-- =========================
              WATCHED MOVIES
         ========================== -->
@@ -1197,7 +1463,7 @@ $isOwnProfile =
 
                     <?php while (
                         $watchedMovie =
-                        $watchedMoviesResult->fetch_assoc()
+                            $watchedMoviesResult->fetch_assoc()
                     ): ?>
 
                         <div
@@ -1213,16 +1479,12 @@ $isOwnProfile =
                                 <img
                                     src="<?php
                                         echo htmlspecialchars(
-                                            $watchedMovie[
-                                                "poster"
-                                            ]
+                                            $watchedMovie["poster"]
                                         );
                                     ?>"
                                     alt="<?php
                                         echo htmlspecialchars(
-                                            $watchedMovie[
-                                                "title"
-                                            ]
+                                            $watchedMovie["title"]
                                         );
                                     ?>"
                                 >
@@ -1239,9 +1501,7 @@ $isOwnProfile =
                                     <?php
 
                                     echo htmlspecialchars(
-                                        $watchedMovie[
-                                            "title"
-                                        ]
+                                        $watchedMovie["title"]
                                     );
 
                                     ?>
@@ -1251,9 +1511,7 @@ $isOwnProfile =
 
                                 <?php if (
                                     !empty(
-                                        $watchedMovie[
-                                            "watchedDate"
-                                        ]
+                                        $watchedMovie["watchedDate"]
                                     )
                                 ): ?>
 
@@ -1266,9 +1524,7 @@ $isOwnProfile =
                                         echo date(
                                             "M d, Y",
                                             strtotime(
-                                                $watchedMovie[
-                                                    "watchedDate"
-                                                ]
+                                                $watchedMovie["watchedDate"]
                                             )
                                         );
 
