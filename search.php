@@ -1,3 +1,4 @@
+
 <?php
 
 include 'includes/auth.php';
@@ -35,7 +36,9 @@ $result = $conn->query($sql);
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Search Movies - Movie Media</title>
+    <title>
+        Search Movies - Movie Media
+    </title>
 
     <link
         rel="stylesheet"
@@ -187,20 +190,38 @@ $result = $conn->query($sql);
 
                 <article
                     class="movie-card"
-                    data-title="<?php echo htmlspecialchars($movie['title']); ?>"
-                    data-genre="<?php echo htmlspecialchars($movie['genre']); ?>"
+                    data-title="<?php
+                        echo htmlspecialchars(
+                            $movie['title']
+                        );
+                    ?>"
+                    data-genre="<?php
+                        echo htmlspecialchars(
+                            $movie['genre']
+                        );
+                    ?>"
                 >
 
 
                     <a
-                        href="movieDetails.php?movie=<?php echo $movie['movieID']; ?>"
+                        href="movieDetails.php?movie=<?php
+                            echo $movie['movieID'];
+                        ?>"
                     >
 
                         <div class="movie-poster">
 
                             <img
-                                src="<?php echo htmlspecialchars($movie['poster']); ?>"
-                                alt="<?php echo htmlspecialchars($movie['title']); ?>"
+                                src="<?php
+                                    echo htmlspecialchars(
+                                        $movie['poster']
+                                    );
+                                ?>"
+                                alt="<?php
+                                    echo htmlspecialchars(
+                                        $movie['title']
+                                    );
+                                ?>"
                             >
 
                         </div>
@@ -213,18 +234,30 @@ $result = $conn->query($sql);
 
                         <h3>
 
-                            <?php echo htmlspecialchars($movie['title']); ?>
+                            <?php
+                            echo htmlspecialchars(
+                                $movie['title']
+                            );
+                            ?>
 
                         </h3>
 
 
                         <p>
 
-                            <?php echo htmlspecialchars($movie['genre']); ?>
+                            <?php
+                            echo htmlspecialchars(
+                                $movie['genre']
+                            );
+                            ?>
 
                             •
 
-                            <?php echo htmlspecialchars($movie['releaseDate']); ?>
+                            <?php
+                            echo htmlspecialchars(
+                                $movie['releaseDate']
+                            );
+                            ?>
 
                         </p>
 
@@ -233,14 +266,24 @@ $result = $conn->query($sql);
 
                         <span>
 
-                            <?php if ($movie['averageRating'] === null): ?>
+                            <?php if (
+                                $movie['averageRating'] === null
+                            ): ?>
 
                                 ⭐ No rating yet
 
                             <?php else: ?>
 
                                 ⭐
-                                <?php echo number_format((float) $movie['averageRating'], 1); ?>
+
+                                <?php
+                                echo number_format(
+                                    (float)
+                                    $movie['averageRating'],
+                                    1
+                                );
+                                ?>
+
                                 / 10
 
                             <?php endif; ?>
@@ -288,6 +331,15 @@ $result = $conn->query($sql);
         </p>
 
 
+
+        <!-- PAGINATION -->
+
+        <div
+            class="user-pagination"
+            id="moviePagination"
+        ></div>
+
+
     </section>
 
 
@@ -298,30 +350,68 @@ $result = $conn->query($sql);
 <script>
 
 
+/* =========================
+   PAGINATION SETTINGS
+========================= */
+
+const moviesPerPage = 8;
+
+let currentPage = 1;
+
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
 const movieSearch =
-    document.getElementById("movieSearch");
+    document.getElementById(
+        "movieSearch"
+    );
 
 
 const searchButton =
-    document.getElementById("searchButton");
+    document.getElementById(
+        "searchButton"
+    );
 
 
 const genreFilter =
-    document.getElementById("genreFilter");
+    document.getElementById(
+        "genreFilter"
+    );
+
+
+const movieGrid =
+    document.getElementById(
+        "movieGrid"
+    );
 
 
 const movieCards =
-    document.querySelectorAll(".movie-card");
+    Array.from(
+        document.querySelectorAll(
+            ".movie-card"
+        )
+    );
 
 
 const noResults =
-    document.getElementById("noResults");
+    document.getElementById(
+        "noResults"
+    );
+
+
+const moviePagination =
+    document.getElementById(
+        "moviePagination"
+    );
 
 
 
-/*
-    FILTER MOVIES
-*/
+/* =========================
+   FILTER + PAGINATION
+========================= */
 
 function filterMovies() {
 
@@ -338,83 +428,383 @@ function filterMovies() {
         .trim();
 
 
-    let foundMovies = 0;
+    const matchingMovies =
+        movieCards.filter(
+            function(card) {
 
 
-
-    movieCards.forEach(function(card) {
-
-
-        const title =
-            card.dataset.title
-            .toLowerCase()
-            .trim();
+                const title =
+                    card.dataset.title
+                    .toLowerCase()
+                    .trim();
 
 
-        /*
-            A movie can have multiple genres.
+                /*
+                    A movie can have multiple genres.
 
-            Example:
-            "Action, Sci-Fi, Thriller"
-        */
+                    Example:
+                    "Action, Sci-Fi, Thriller"
+                */
 
-        const genres =
-            card.dataset.genre
-            .toLowerCase()
-            .split(",")
-            .map(function(genre) {
-                return genre.trim();
-            });
+                const genres =
+                    card.dataset.genre
+                    .toLowerCase()
+                    .split(",")
+                    .map(
+                        function(genre) {
 
+                            return genre.trim();
 
-
-        const matchesSearch =
-            title.includes(searchValue);
-
+                        }
+                    );
 
 
-        const matchesGenre =
-            selectedGenre === "all" ||
-            genres.some(function(genre) {
+                const matchesSearch =
+                    title.includes(
+                        searchValue
+                    );
+
+
+                const matchesGenre =
+                    selectedGenre === "all" ||
+                    genres.some(
+                        function(genre) {
+
+                            return (
+                                genre === selectedGenre ||
+                                genre.includes(
+                                    selectedGenre
+                                ) ||
+                                selectedGenre.includes(
+                                    genre
+                                )
+                            );
+
+                        }
+                    );
+
 
                 return (
-                    genre === selectedGenre ||
-                    genre.includes(selectedGenre) ||
-                    selectedGenre.includes(genre)
+                    matchesSearch &&
+                    matchesGenre
                 );
 
-            });
+            }
+        );
 
+
+    /*
+        Start from page 1
+        whenever the filter changes.
+    */
+
+    currentPage = 1;
+
+
+    displayMovies(
+        matchingMovies
+    );
+
+}
+
+
+
+/* =========================
+   DISPLAY MOVIES
+========================= */
+
+function displayMovies(
+    matchingMovies
+) {
+
+
+    /*
+        Hide every movie first.
+    */
+
+    movieCards.forEach(
+        function(card) {
+
+            card.style.display =
+                "none";
+
+        }
+    );
+
+
+    /*
+        Show no-results message
+        when nothing matches.
+    */
+
+    if (
+        matchingMovies.length === 0
+    ) {
+
+        noResults.style.display =
+            "block";
+
+        moviePagination.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    noResults.style.display =
+        "none";
+
+
+    /*
+        Calculate total pages.
+    */
+
+    const totalPages =
+        Math.ceil(
+            matchingMovies.length /
+            moviesPerPage
+        );
+
+
+    /*
+        Make sure current page
+        always exists.
+    */
+
+    if (
+        currentPage > totalPages
+    ) {
+
+        currentPage =
+            totalPages;
+
+    }
+
+
+    /*
+        Calculate which movies
+        belong to this page.
+    */
+
+    const startIndex =
+        (
+            currentPage - 1
+        ) *
+        moviesPerPage;
+
+
+    const endIndex =
+        startIndex +
+        moviesPerPage;
+
+
+    const moviesToShow =
+        matchingMovies.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    /*
+        Display current page movies.
+    */
+
+    moviesToShow.forEach(
+        function(card) {
+
+            card.style.display =
+                "";
+
+        }
+    );
+
+
+    /*
+        Create pagination.
+    */
+
+    createPagination(
+        totalPages
+    );
+
+}
+
+
+
+/* =========================
+   CREATE PAGINATION
+========================= */
+
+function createPagination(
+    totalPages
+) {
+
+
+    moviePagination.innerHTML =
+        "";
+
+
+    /*
+        No pagination needed
+        for a single page.
+    */
+
+    if (
+        totalPages <= 1
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+        PREVIOUS BUTTON
+    */
+
+    if (
+        currentPage > 1
+    ) {
+
+        const previous =
+            document.createElement(
+                "button"
+            );
+
+
+        previous.type =
+            "button";
+
+
+        previous.textContent =
+            "←";
+
+
+        previous.className =
+            "user-page-btn";
+
+
+        previous.addEventListener(
+            "click",
+            function() {
+
+                currentPage--;
+
+                showCurrentFilter();
+
+            }
+        );
+
+
+        moviePagination.appendChild(
+            previous
+        );
+
+    }
+
+
+    /*
+        PAGE NUMBERS
+    */
+
+    for (
+        let page = 1;
+        page <= totalPages;
+        page++
+    ) {
+
+
+        const pageButton =
+            document.createElement(
+                "button"
+            );
+
+
+        pageButton.type =
+            "button";
+
+
+        pageButton.textContent =
+            page;
+
+
+        pageButton.className =
+            "user-page-btn";
 
 
         if (
-            matchesSearch &&
-            matchesGenre
+            page === currentPage
         ) {
 
-            card.style.display = "";
-
-            foundMovies++;
-
-        }
-        else {
-
-            card.style.display = "none";
+            pageButton.classList.add(
+                "active"
+            );
 
         }
 
-    });
+
+        pageButton.addEventListener(
+            "click",
+            function() {
+
+                currentPage =
+                    page;
+
+                showCurrentFilter();
+
+            }
+        );
 
 
-
-    if (foundMovies === 0) {
-
-        noResults.style.display = "block";
+        moviePagination.appendChild(
+            pageButton
+        );
 
     }
-    else {
 
-        noResults.style.display = "none";
+
+    /*
+        NEXT BUTTON
+    */
+
+    if (
+        currentPage < totalPages
+    ) {
+
+        const next =
+            document.createElement(
+                "button"
+            );
+
+
+        next.type =
+            "button";
+
+
+        next.textContent =
+            "→";
+
+
+        next.className =
+            "user-page-btn";
+
+
+        next.addEventListener(
+            "click",
+            function() {
+
+                currentPage++;
+
+                showCurrentFilter();
+
+            }
+        );
+
+
+        moviePagination.appendChild(
+            next
+        );
 
     }
 
@@ -422,37 +812,149 @@ function filterMovies() {
 
 
 
-/*
-    SEARCH BUTTON
-*/
+/* =========================
+   SHOW CURRENT FILTER
+========================= */
+
+function showCurrentFilter() {
+
+
+    const searchValue =
+        movieSearch.value
+        .toLowerCase()
+        .trim();
+
+
+    const selectedGenre =
+        genreFilter.value
+        .toLowerCase()
+        .trim();
+
+
+    const matchingMovies =
+        movieCards.filter(
+            function(card) {
+
+
+                const title =
+                    card.dataset.title
+                    .toLowerCase()
+                    .trim();
+
+
+                const genres =
+                    card.dataset.genre
+                    .toLowerCase()
+                    .split(",")
+                    .map(
+                        function(genre) {
+
+                            return genre.trim();
+
+                        }
+                    );
+
+
+                const matchesSearch =
+                    title.includes(
+                        searchValue
+                    );
+
+
+                const matchesGenre =
+                    selectedGenre === "all" ||
+                    genres.some(
+                        function(genre) {
+
+                            return (
+                                genre === selectedGenre ||
+                                genre.includes(
+                                    selectedGenre
+                                ) ||
+                                selectedGenre.includes(
+                                    genre
+                                )
+                            );
+
+                        }
+                    );
+
+
+                return (
+                    matchesSearch &&
+                    matchesGenre
+                );
+
+            }
+        );
+
+
+    displayMovies(
+        matchingMovies
+    );
+
+}
+
+
+
+/* =========================
+   SEARCH BUTTON
+========================= */
 
 searchButton.addEventListener(
     "click",
-    filterMovies
+    function() {
+
+        currentPage = 1;
+
+        filterMovies();
+
+    }
 );
 
 
 
-/*
-    LIVE SEARCH
-*/
+/* =========================
+   LIVE SEARCH
+========================= */
 
 movieSearch.addEventListener(
     "input",
-    filterMovies
+    function() {
+
+        currentPage = 1;
+
+        filterMovies();
+
+    }
 );
 
 
 
-/*
-    GENRE FILTER
-*/
+/* =========================
+   GENRE FILTER
+========================= */
 
 genreFilter.addEventListener(
     "change",
-    filterMovies
+    function() {
+
+        currentPage = 1;
+
+        filterMovies();
+
+    }
 );
 
+
+
+/* =========================
+   INITIAL DISPLAY
+========================= */
+
+displayMovies(
+    movieCards
+);
 
 </script>
 

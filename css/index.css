@@ -9370,3 +9370,47 @@ body:has(.home-layout) .comments-card {
 .no-friends {
     color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.user-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 32px 0 10px;
+    flex-wrap: wrap;
+}
+
+.user-page-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #181818;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.user-page-btn:hover {
+    background: #252525;
+}
+
+.user-page-btn.active {
+    background: #fff;
+    color: #111;
+    border-color: #fff;
+    font-weight: 600;
+}
