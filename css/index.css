@@ -9274,3 +9274,99 @@ body:has(.home-layout) .comments-card {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   ACCOUNT NAVIGATION
+   ========================================= */
+
+.account-nav {
+    display: flex;
+    gap: 16px;
+    margin: 25px 0;
+    width: 100%;
+}
+
+.account-nav a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 75px;
+    padding: 16px 20px;
+    box-sizing: border-box;
+
+    background: rgba(20, 20, 20, 0.92);
+    border: 1px solid #303030;
+    border-radius: 14px;
+
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.account-nav a:hover {
+    background: rgba(35, 35, 35, 0.98);
+    border-color: #ff9f1c;
+    color: #ff9f1c;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.30),
+        0 0 12px rgba(255, 159, 28, 0.10);
+}
+
+.account-nav a:active {
+    transform: translateY(-1px);
+}
+
+
+/* Mobile */
+@media (max-width: 650px) {
+
+    .account-nav {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .account-nav a {
+        min-height: 60px;
+    }
+
+}
+
+
+
+
+
+
+
+/*acc nofriends text*/
+
+.no-friends {
+    color: white;
+}
