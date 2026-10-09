@@ -9414,3 +9414,38 @@ body:has(.home-layout) .comments-card {
     border-color: #fff;
     font-weight: 600;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   NOTIFICATION PROFILE IMAGE
+========================= */
+
+.notification-profile {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification-profile img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}

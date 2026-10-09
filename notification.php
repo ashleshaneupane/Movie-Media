@@ -24,6 +24,7 @@ $notificationQuery = $conn->prepare(
      LEFT JOIN Users
         ON Notification.senderID = Users.userID
      WHERE Notification.userID = ?
+     AND Notification.isRead = 0
      ORDER BY Notification.createdAt DESC"
 );
 
@@ -419,15 +420,24 @@ acceptButtons.forEach(function(button) {
 
             .then(function(result) {
 
-                if (result.trim() === "accepted") {
+                result = result.trim();
+
+                console.log(
+                    "Accept friend request result:",
+                    result
+                );
+
+
+                if (
+                    result === "accepted" ||
+                    result === "not_found"
+                ) {
 
                     notification.remove();
 
-                    alert(
-                        "Friend request accepted!"
-                    );
+                }
 
-                } else {
+                else {
 
                     alert(
                         "Something went wrong."
@@ -435,13 +445,25 @@ acceptButtons.forEach(function(button) {
 
                 }
 
+            })
+
+            .catch(function(error) {
+
+                console.log(
+                    "Accept error:",
+                    error
+                );
+
+                alert(
+                    "Something went wrong."
+                );
+
             });
 
         }
     );
 
 });
-
 
 /* =========================
    DECLINE FRIEND REQUEST
