@@ -14,11 +14,11 @@ $userID = (int) $_SESSION["userID"];
 $sql = "
     SELECT
         movie.*,
-        COALESCE(AVG(review.rating), 0) AS averageRating,
-        COUNT(review.reviewID) AS reviewCount
+        COALESCE(AVG(Review.rating), 0) AS averageRating,
+        COUNT(Review.reviewID) AS reviewCount
     FROM movie
-    LEFT JOIN review
-        ON movie.movieID = review.movieID
+    LEFT JOIN Review
+        ON movie.movieID = Review.movieID
     WHERE NOT EXISTS (
         SELECT 1
         FROM Watched

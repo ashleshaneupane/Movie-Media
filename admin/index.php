@@ -22,7 +22,7 @@ $movieCount = $conn->query(
 
 $postCount = $conn->query(
     "SELECT COUNT(*) AS c
-     FROM post"
+     FROM Post"
 )->fetch_assoc()["c"];
 
 
