@@ -309,781 +309,538 @@ $isOwnProfile =
     >
 
 
-<style>
 
-/* =========================
-   PUBLIC PROFILE CONTAINER
-========================= */
+<style>
+/* =========================================
+   MOVIE MEDIA | PUBLIC PROFILE
+========================================= */
 
 .public-profile-container {
     width: 100%;
     max-width: 1180px;
-
-    margin: 30px auto 60px;
-
-    padding: 0 25px;
-
+    margin: 28px auto 60px;
+    padding: 0 24px;
     box-sizing: border-box;
+    color: #ededed;
 }
 
-
-/* =========================
-   BACK BUTTON
-========================= */
+/* BACK BUTTON */
 
 .back-home-btn {
     display: inline-flex;
-
     align-items: center;
-
-    gap: 7px;
-
+    gap: 8px;
     margin-bottom: 20px;
-
-    padding: 9px 15px;
-
+    padding: 9px 13px;
+    border: 1px solid #303030;
     border-radius: 7px;
-
-    background:
-        rgba(255,255,255,0.06);
-
-    border:
-        1px solid rgba(255,255,255,0.12);
-
-    color: #ddd;
-
+    background: #191919;
+    color: #bdbdbd;
     text-decoration: none;
-
     font-size: 13px;
-
-    font-weight: 500;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+    transition: background .2s, color .2s, border-color .2s;
 }
 
 .back-home-btn:hover {
-    background:
-        rgba(255,255,255,0.10);
-
-    border-color:
-        rgba(255,159,28,0.45);
-
+    background: #242424;
+    border-color: #555;
     color: #fff;
 }
 
-
-/* =========================
-   MAIN PROFILE CARD
-========================= */
+/* MAIN PROFILE CARD */
 
 .public-profile-card {
     position: relative;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(27,27,27,0.98),
-            rgba(13,13,13,0.99)
-        );
-
-    border:
-        1px solid rgba(255,159,28,0.18);
-
-    border-radius: 14px;
-
-    padding: 32px;
-
-    box-sizing: border-box;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.50);
-
+    isolation: isolate;
     overflow: hidden;
+    padding: 32px;
+    box-sizing: border-box;
+    background: #121212;
+    border: 1px solid #292929;
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .22);
 }
 
-
-/* =========================
-   CINEMATIC ORANGE GLOW
-========================= */
+/* Subtle cinematic highlight */
 
 .public-profile-card::before {
     content: "";
-
     position: absolute;
-
-    top: -190px;
-
-    right: -130px;
-
-    width: 450px;
-
-    height: 450px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,140,0,0.16),
-            rgba(255,140,0,0.05) 35%,
-            transparent 70%
-        );
-
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        #d7a64a 0%,
+        #a77b32 28%,
+        #393027 65%,
+        transparent 100%
+    );
     pointer-events: none;
 }
 
-
-/* =========================
-   PROFILE HEADER
-========================= */
+/* PROFILE HEADER */
 
 .public-profile-top {
     position: relative;
-
     display: flex;
-
     align-items: center;
-
     gap: 25px;
-
-    padding-bottom: 30px;
-
-    border-bottom:
-        1px solid rgba(255,255,255,0.08);
+    padding-bottom: 28px;
+    border-bottom: 1px solid #292929;
 }
 
-
-/* =========================
-   PROFILE IMAGE
-========================= */
+/* PROFILE IMAGE */
 
 .public-profile-image {
-    width: 145px;
-    height: 145px;
-    min-width: 145px;
-    min-height: 145px;
-
-    border-radius: 50%;
-    overflow: hidden;
-
-    display: block;
-
-    background: #151515;
-
-    border: 3px solid #ff9f1c;
-
-    box-shadow:
-        0 0 0 3px rgba(255,159,28,0.10),
-        0 0 22px rgba(255,159,28,0.18),
-        0 8px 30px rgba(0,0,0,0.50);
-
+    width: 132px;
+    height: 132px;
+    min-width: 132px;
+    min-height: 132px;
     flex-shrink: 0;
+    display: block;
+    overflow: hidden;
     box-sizing: border-box;
+    border: 2px solid #39352e;
+    border-radius: 50%;
+    background: #202020;
 }
-
-
-/* IMAGE MUST FILL THE ENTIRE CIRCLE */
 
 .public-profile-image img {
+    display: block;
     width: 100%;
     height: 100%;
-
     min-width: 100%;
     min-height: 100%;
-
     max-width: none;
     max-height: none;
-
     margin: 0;
     padding: 0;
-
-    display: block;
-
+    border: 0;
+    border-radius: 50%;
     object-fit: cover;
     object-position: center;
-
-    border: none;
-    border-radius: 50%;
-
     box-sizing: border-box;
 }
 
-
-/* =========================
-   PROFILE INFORMATION
-========================= */
+/* PROFILE INFORMATION */
 
 .public-profile-info {
-    min-width: 0;
-
     position: relative;
-
     z-index: 1;
+    min-width: 0;
 }
-
 
 .public-profile-info h1 {
-    margin: 0 0 5px;
-
-    color: #fff;
-
-    font-size: 30px;
-
+    margin: 0 0 7px;
+    color: #f5f5f5;
+    font-size: 29px;
     font-weight: 700;
-
-    letter-spacing: -0.3px;
+    line-height: 1.25;
+    letter-spacing: -.6px;
+    overflow-wrap: anywhere;
 }
 
-
 .public-profile-username {
-    margin: 0 0 12px;
-
-    color: #ff9f1c;
-
+    margin: 0 0 13px;
+    color: #c9a86a;
     font-size: 13px;
-
     font-weight: 500;
 }
 
-
 .public-profile-bio {
-    margin: 0;
-
-    color: #ccc;
-
-    line-height: 1.6;
-
     max-width: 680px;
-
+    margin: 0;
+    color: #a9a9a9;
     font-size: 14px;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
 }
 
-
-/* =========================
-   PROFILE STATS
-========================= */
+/* PROFILE STATS */
 
 .public-profile-stats {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
-
-    margin-top: 25px;
-
-    background:
-        rgba(255,159,28,0.16);
-
-    border:
-        1px solid rgba(255,159,28,0.18);
-
-    border-radius: 10px;
-
+    margin-top: 24px;
     overflow: hidden;
+    border: 1px solid #2b2b2b;
+    border-radius: 9px;
+    background: #2b2b2b;
 }
-
 
 .public-profile-stat {
-    background:
-        rgba(255,255,255,0.035);
-
-    padding: 18px;
-
+    min-width: 0;
+    padding: 19px 12px;
+    background: #191919;
     text-align: center;
-
-    transition:
-        background 0.2s ease;
+    transition: background .2s ease;
 }
-
 
 .public-profile-stat:hover {
-    background:
-        rgba(255,159,28,0.08);
+    background: #202020;
 }
-
 
 .public-profile-stat strong {
     display: block;
-
-    color: #ff9f1c;
-
-    font-size: 22px;
-
+    margin-bottom: 6px;
+    color: #e2bf7a;
+    font-size: 23px;
     font-weight: 700;
-
-    margin-bottom: 4px;
+    line-height: 1.2;
 }
-
 
 .public-profile-stat span {
-    color: #999;
-
-    font-size: 11px;
-
+    color: #8d8d8d;
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
-
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
 }
 
-
-/* =========================
-   SECTIONS
-========================= */
+/* PROFILE SECTIONS */
 
 .public-profile-section {
     position: relative;
-
-    border-top:
-        1px solid rgba(255,255,255,0.08);
-
-    padding-top: 25px;
-
     margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #292929;
 }
-
 
 .public-profile-section h2 {
-    margin: 0 0 18px;
-
-    color: #fff;
-
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 19px;
+    color: #f1f1f1;
     font-size: 18px;
-
-    font-weight: 600;
-
-    letter-spacing: -0.1px;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: -.2px;
 }
-
-
-/* =========================
-   ORANGE SECTION MARKER
-========================= */
 
 .public-profile-section h2::before {
     content: "";
-
-    display: inline-block;
-
-    width: 4px;
-
-    height: 17px;
-
-    margin-right: 9px;
-
-    vertical-align: -2px;
-
-    background:
-        #ff9f1c;
-
+    display: block;
+    width: 3px;
+    height: 19px;
+    flex-shrink: 0;
     border-radius: 3px;
-
-    box-shadow:
-        0 0 8px rgba(255,159,28,0.35);
+    background: #c9a15b;
 }
 
-
-/* =========================
-   MOVIE STATS
-========================= */
+/* MOVIE STATS */
 
 .public-movie-stats {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
 }
 
-
 .public-movie-stat {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,159,28,0.08),
-            rgba(255,255,255,0.035)
-        );
-
-    border:
-        1px solid rgba(255,159,28,0.15);
-
-    border-radius: 9px;
-
-    padding: 16px;
-
-    border-left:
-        3px solid #ff9f1c;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        border-color 0.2s ease;
+    min-width: 0;
+    padding: 17px;
+    border: 1px solid #2b2b2b;
+    border-radius: 8px;
+    border-left: 2px solid #77603a;
+    background: #191919;
+    transition: background .2s ease, border-color .2s ease;
 }
-
 
 .public-movie-stat:hover {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,159,28,0.13),
-            rgba(255,255,255,0.05)
-        );
-
-    transform:
-        translateY(-2px);
-
-    border-color:
-        rgba(255,159,28,0.35);
+    background: #202020;
+    border-color: #45403a;
 }
-
 
 .public-movie-stat:nth-child(2) {
-    border-left-color:
-        #ffb52e;
+    border-left-color: #88734f;
 }
-
 
 .public-movie-stat:nth-child(3) {
-    border-left-color:
-        #ffcc70;
+    border-left-color: #a18b67;
 }
-
 
 .public-movie-stat span {
     display: block;
-
-    color: #888;
-
-    font-size: 11px;
-
-    margin-bottom: 7px;
-
+    margin-bottom: 9px;
+    color: #8c8c8c;
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
-
-    letter-spacing: 0.6px;
+    letter-spacing: .9px;
 }
-
 
 .public-movie-stat strong {
-    color: #fff;
-
-    font-size: 20px;
+    color: #e8e5df;
+    font-size: 21px;
+    font-weight: 650;
+    overflow-wrap: anywhere;
 }
 
-
-/* =========================
-   FAVORITE GENRES
-========================= */
+/* FAVORITE GENRES */
 
 .public-genre-list {
     display: flex;
-
     flex-wrap: wrap;
-
-    gap: 8px;
+    gap: 9px;
 }
-
 
 .public-genre-list span {
+    display: inline-flex;
+    align-items: center;
     padding: 7px 12px;
-
+    border: 1px solid #333;
     border-radius: 5px;
-
-    background:
-        rgba(255,159,28,0.08);
-
-    border:
-        1px solid rgba(255,159,28,0.22);
-
-    color: #ffcf91;
-
+    background: #1b1b1b;
+    color: #c9c9c9;
     font-size: 12px;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+    transition: background .2s, border-color .2s, color .2s;
 }
-
 
 .public-genre-list span:hover {
-    background:
-        rgba(255,159,28,0.16);
-
-    border-color:
-        rgba(255,159,28,0.45);
-
-    color: #fff;
+    background: #25221c;
+    border-color: #796442;
+    color: #e4c58d;
 }
 
-
-/* =========================
-   TOP 5 MOVIES
-========================= */
+/* TOP 5 MOVIES */
 
 .public-top-movies {
     display: grid;
-
-    grid-template-columns:
-        repeat(5, 1fr);
-
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 14px;
-
     margin: 0;
-
     padding: 0;
-
     list-style: none;
 }
 
-
 .public-top-movies > div {
-    position: relative;
-
-    background:
-        #181818;
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    border-radius: 8px;
-
+    min-width: 0;
     overflow: hidden;
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    background: #191919;
+    transition: transform .22s ease, border-color .22s ease;
 }
-
 
 .public-top-movies > div:hover {
-    transform:
-        translateY(-5px);
-
-    border-color:
-        rgba(255,159,28,0.55);
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,0.35),
-        0 0 15px rgba(255,159,28,0.08);
+    transform: translateY(-3px);
+    border-color: #77603a;
 }
-
 
 .public-top-movies img {
-    width: 100%;
-
-    height: 210px;
-
-    object-fit: cover;
-
     display: block;
-
-    background:
-        #222;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    background: #222;
 }
-
 
 .public-top-movie-title {
-    padding: 10px;
-
-    color: #eee;
-
-    font-size: 12px;
-
-    line-height: 1.4;
-
     min-height: 48px;
-
+    padding: 11px;
     box-sizing: border-box;
+    color: #e5e5e5;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
-
-/* =========================
-   WATCHED MOVIES
-========================= */
+/* WATCHED MOVIES */
 
 .watched-movies-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(5, 1fr);
-
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 14px;
 }
 
-
 .watched-movie-card {
-    background:
-        #181818;
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    border-radius: 8px;
-
+    min-width: 0;
     overflow: hidden;
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        background 0.25s ease,
-        box-shadow 0.25s ease;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    background: #191919;
+    transition: transform .22s ease, border-color .22s ease;
 }
-
 
 .watched-movie-card:hover {
-    transform:
-        translateY(-5px);
-
-    border-color:
-        rgba(255,159,28,0.55);
-
-    background:
-        #1d1d1d;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,0.35),
-        0 0 15px rgba(255,159,28,0.08);
+    transform: translateY(-3px);
+    border-color: #77603a;
 }
-
 
 .watched-movie-card img {
-    width: 100%;
-
-    height: 210px;
-
-    object-fit: cover;
-
     display: block;
-
-    background:
-        #222;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    background: #222;
 }
-
 
 .watched-movie-info {
-    padding: 11px;
+    padding: 12px;
 }
-
 
 .watched-movie-info h3 {
-    margin: 0 0 6px;
-
-    color: #eee;
-
+    margin: 0 0 7px;
+    color: #e8e8e8;
     font-size: 12px;
-
     font-weight: 600;
-
-    line-height: 1.4;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
-
 
 .watched-movie-info p {
     margin: 0;
-
-    color: #777;
-
-    font-size: 10px;
+    color: #888;
+    font-size: 11px;
+    line-height: 1.5;
 }
-
 
 .no-watched {
-    color: #777;
-
+    color: #888;
     font-size: 13px;
+    line-height: 1.6;
 }
 
-
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
 
 @media (max-width: 900px) {
-
     .public-top-movies,
     .watched-movies-grid {
-        grid-template-columns:
-            repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
+    .public-top-movies img,
+    .watched-movie-card img {
+        height: 200px;
+    }
 }
 
-
 @media (max-width: 700px) {
-
     .public-profile-card {
-        padding: 22px;
+        padding: 24px;
     }
-
 
     .public-profile-top {
-        gap: 18px;
+        gap: 19px;
     }
-
 
     .public-profile-image {
-        width: 95px;
-
-        height: 95px;
-
-        min-width: 95px;
-
-        min-height: 95px;
+        width: 105px;
+        height: 105px;
+        min-width: 105px;
+        min-height: 105px;
     }
-
 
     .public-profile-info h1 {
         font-size: 25px;
     }
 
-
     .public-top-movies,
     .watched-movies-grid {
-        grid-template-columns:
-            repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .public-top-movies img,
+    .watched-movie-card img {
+        height: 190px;
+    }
 }
 
-
 @media (max-width: 550px) {
-
     .public-profile-container {
-        padding: 0 14px;
+        margin-top: 18px;
+        padding: 0 13px;
     }
 
+    .public-profile-card {
+        padding: 19px;
+        border-radius: 10px;
+    }
 
     .public-profile-top {
         flex-direction: column;
-
+        align-items: center;
+        gap: 16px;
         text-align: center;
     }
 
+    .public-profile-image {
+        width: 112px;
+        height: 112px;
+        min-width: 112px;
+        min-height: 112px;
+    }
+
+    .public-profile-info h1 {
+        font-size: 24px;
+    }
 
     .public-profile-bio {
         max-width: 100%;
+        font-size: 13px;
     }
 
+    .public-profile-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 
-    .public-profile-stats,
+    .public-profile-stat {
+        padding: 15px 5px;
+    }
+
+    .public-profile-stat strong {
+        font-size: 20px;
+    }
+
+    .public-profile-stat span {
+        font-size: 9px;
+        letter-spacing: .5px;
+    }
+
     .public-movie-stats {
         grid-template-columns: 1fr;
     }
 
-
     .public-top-movies,
     .watched-movies-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
     }
 
+    .public-top-movies img,
+    .watched-movie-card img {
+        height: 210px;
+    }
+
+    .public-profile-section {
+        margin-top: 25px;
+        padding-top: 21px;
+    }
+
+    .public-profile-section h2 {
+        font-size: 17px;
+    }
 }
 
+@media (max-width: 350px) {
+    .public-profile-card {
+        padding: 15px;
+    }
+
+    .public-top-movies img,
+    .watched-movie-card img {
+        height: 175px;
+    }
+}
 </style>
 
 </head>
